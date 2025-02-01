@@ -26,6 +26,34 @@ class App extends Component<{}, AppState> {
 
   fetchPokemons = async (search: string) => {
     this.setState({ isLoading: true, error: null });
+
+    try {
+      const apiUrl = search
+        ? `https://pokeapi.co/api/v2/pokemon/${search.trim().toLowerCase()}`
+        : 'https://pokeapi.co/api/v2/pokemon?limit=20';
+
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const results = data.results ? data.results : [data];
+
+      this.setState({
+        pokemons: results.map((p: any) => ({
+          name: p.name,
+          url: p.url || apiUrl,
+        })),
+        isLoading: false,
+      });
+    } catch (error) {
+      this.setState({
+        error: error.message || 'Failed to fetch Pokemon',
+        isLoading: false,
+      });
+    }
   };
 
   handleSearch = (term: string) => {
@@ -56,7 +84,7 @@ class App extends Component<{}, AppState> {
           ) : this.state.error ? (
             <div className="error-message">Error: {this.state.error}</div>
           ) : (
-            <PokemonList />
+            <PokemonList pokemons={this.state.pokemons} />
           )}
         </div>
 
