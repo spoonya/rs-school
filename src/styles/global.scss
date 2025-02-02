@@ -15,8 +15,7 @@ html {
 body {
   font-size: 1.6rem;
   font-family: $ff-primary;
-
-  background-color: $cl-light-beta;
+  background-color: var(--color-gray-100);
 }
 
 button {
@@ -48,114 +47,114 @@ button {
 }
 
 .app {
-  max-width: 1200px;
+  max-width: 120rem;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2rem;
 }
 
 .top-section {
-  margin-bottom: 30px;
-  padding: 20px;
-  background: #f5f5f5;
-  border-radius: 8px;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: var(--color-gray-100);
+  border-radius: 0.8rem;
 }
 
 .main-section {
-  min-height: 400px;
-  padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-height: 40rem;
+  padding: 2rem;
+  background: var(--color-white);
+  border-radius: 0.8rem;
+  box-shadow: var(--shadow-card);
 }
 
 .search-container {
   display: flex;
-  gap: 10px;
+  gap: 1rem;
 }
 
 .search-container input {
   flex: 1;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
+  padding: 1rem;
+  border: 0.1rem solid var(--color-gray-200);
+  border-radius: 0.4rem;
+  font-size: 1.6rem;
 }
 
 .search-container button {
-  padding: 10px 20px;
-  background: #2a75bb;
-  color: white;
+  padding: 1rem 2rem;
+  background: var(--color-primary);
+  color: var(--color-white);
   border: none;
-  border-radius: 4px;
+  border-radius: 0.4rem;
   cursor: pointer;
   transition: background 0.3s;
 }
 
 .search-container button:hover {
-  background: #1a5a9a;
+  background: var(--color-primary-dark);
 }
 
 .loader {
-  padding: 20px;
+  padding: 2rem;
   text-align: center;
-  font-size: 18px;
-  color: #666;
+  font-size: 1.8rem;
+  color: var(--color-gray-300);
 }
 
 .error-message {
-  padding: 20px;
-  color: #dc3545;
-  background: #f8d7da;
-  border-radius: 4px;
+  padding: 2rem;
+  color: var(--color-error);
+  background: var(--color-error-bg);
+  border-radius: 0.4rem;
 }
 
 .pokemon-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+  gap: 2rem;
 }
 
 .pokemon-card {
-  padding: 15px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  padding: 1.5rem;
+  background: var(--color-white);
+  border: 0.1rem solid var(--color-gray-200);
+  border-radius: 0.8rem;
   transition: transform 0.2s;
 }
 
 .pokemon-name {
-  margin: 0 0 10px 0;
-  color: #2a75bb;
+  margin: 0 0 1rem 0;
+  color: var(--color-primary);
   text-transform: capitalize;
 }
 
 .pokemon-url {
   margin: 0;
   font-size: 0.9em;
-  color: #666;
+  color: var(--color-gray-300);
   word-break: break-all;
 }
 
 .error-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background: #dc3545;
-  color: white;
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  background: var(--color-error);
+  color: var(--color-white);
   border: none;
-  border-radius: 4px;
+  border-radius: 0.4rem;
   cursor: pointer;
 }
 
 .error-fallback {
-  padding: 40px;
+  padding: 4rem;
   text-align: center;
 }
 
 .error-fallback button {
-  padding: 10px 20px;
-  background: #2a75bb;
-  color: white;
+  padding: 1rem 2rem;
+  background: var(--color-primary);
+  color: var(--color-white);
   border: none;
-  border-radius: 4px;
+  border-radius: 0.4rem;
   cursor: pointer;
 }

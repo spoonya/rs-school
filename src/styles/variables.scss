@@ -1,17 +1,17 @@
-//Colors
-$cl-spec-alpha: #5d5d5d;
-$cl-spec-beta: #f9372c;
-$cl-spec-gamma: #1c9a13;
-$cl-spec-psi: #019ec1;
-$cl-spec-omega: #e95721;
-
-$cl-light-alpha: #ffffff;
-$cl-light-beta: #f5f5f5;
-$cl-light-gamma: #dbdbdb;
-
-$cl-dark-alpha: #000000;
-$cl-dark-beta: #444444;
-$cl-dark-gamma: #222222;
-
 //Fonts
-$ff-primary: "Roboto", sans-serif;
+$ff-primary: 'Roboto', sans-serif;
+
+:root {
+  // Colors
+  --color-primary: #2a75bb;
+  --color-primary-dark: #1a5a9a;
+  --color-white: #fff;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #ddd;
+  --color-gray-300: #666;
+  --color-error: #dc3545;
+  --color-error-bg: #f8d7da;
+
+  // Shadows
+  --shadow-card: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+}
