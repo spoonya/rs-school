@@ -1,1 +1,1 @@
-export { AppRoutes } from './constants';
+export { AppRoutes } from '@/services/constants';

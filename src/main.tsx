@@ -1,3 +1,4 @@
+import './styles/global.scss';
 import 'normalize.css';
 import './styles/app.scss';
 import '@fontsource/poppins/300.css';
@@ -5,16 +6,16 @@ import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/700.css';
 
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-import App from './App.tsx';
-import { ErrorBoundary } from './components';
+import App from '@/App';
+import { ErrorBoundary } from '@/components/shared';
 
-createRoot(document.getElementById('root') as HTMLElement).render(
-  <StrictMode>
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  <React.StrictMode>
     <ErrorBoundary>
       <App />
     </ErrorBoundary>
-  </StrictMode>
+  </React.StrictMode>
 );

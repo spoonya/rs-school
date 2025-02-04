@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Footer, Header } from '../components';
+import { Header } from '@/components/shared';
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,7 +11,6 @@ export function RootLayout({ children }: Readonly<LayoutProps>) {
     <div className="layout">
       <Header />
       <main className="main">{children}</main>
-      <Footer />
     </div>
   );
 }
