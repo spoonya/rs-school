@@ -1,4 +1,3 @@
 export { ErrorBoundary } from './ErrorBoundary';
-export { Search } from './Search';
-export { PokemonCard } from './PokemonCard';
-export { PokemonList } from './PokemonList';
+export { Header } from './Header';
+export { Footer } from './Footer';

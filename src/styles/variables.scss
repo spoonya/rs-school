@@ -1,17 +1,64 @@
 //Fonts
-$ff-primary: 'Roboto', sans-serif;
+$ff-primary: 'Poppins', sans-serif;
 
 :root {
-  // Colors
-  --color-primary: #2a75bb;
-  --color-primary-dark: #1a5a9a;
-  --color-white: #fff;
-  --color-gray-100: #f5f5f5;
-  --color-gray-200: #ddd;
-  --color-gray-300: #666;
-  --color-error: #dc3545;
-  --color-error-bg: #f8d7da;
+  // Brand Colors
+  --color-primary: #5d7fff;
+  --color-primary-dark: #4c6fff;
+  --color-secondary: #8b4fed;
+  --color-accent: #00d4ff;
 
-  // Shadows
-  --shadow-card: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+  // Functional Colors
+  --color-success: #00c853;
+  --color-warning: #ffd600;
+  --color-error: #ff3d71;
+  --color-error-bg: rgba(255, 61, 113, 0.1);
+
+  // Crypto Specific
+  --color-profit: #00dc82;
+  --color-loss: #ff3d71;
+  --color-volume: #aa00ff;
+  --color-chart-grid: rgba(255, 255, 255, 0.1);
+
+  // Default Dark Theme
+  --background-primary: #0f1429;
+  --background-secondary: #151b35;
+  --background-tertiary: #1c2447;
+  --surface-card: #1a1f36;
+  --text-primary: #ffffff;
+  --text-secondary: #b4c2d3;
+  --text-tertiary: #8792a2;
+  --border-color: #2a3558;
+  --shadow-color: rgba(13, 16, 45, 0.5);
+
+  // Charts & Graphs
+  --chart-grid: #2a3558;
+  --chart-line: var(--color-primary);
+  --chart-fill: rgba(93, 127, 255, 0.15);
+}
+
+// Light theme
+[data-theme='light'] {
+  // Brand Colors
+  --color-primary: #4c6fff;
+  --color-primary-dark: #3d5ce0;
+
+  // Backgrounds
+  --background-primary: #ffffff;
+  --background-secondary: #f8faff;
+  --background-tertiary: #edf1fc;
+  --surface-card: #ffffff;
+
+  // Text
+  --text-primary: #1a1f36;
+  --text-secondary: #4e5d78;
+  --text-tertiary: #8792a2;
+
+  // UI Elements
+  --border-color: #e6e8f0;
+  --shadow-color: rgba(76, 111, 255, 0.1);
+
+  // Charts & Graphs
+  --chart-grid: #f0f3fa;
+  --chart-fill: rgba(76, 111, 255, 0.1);
 }

@@ -1,11 +1,17 @@
-import { Component } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import { PokemonContainer } from './components/PokemonContainer';
+import { RootLayout } from './layout';
+import { HomePage } from './pages';
+import { AppRoutes } from './services';
 
-class App extends Component {
-  render() {
-    return <PokemonContainer />;
-  }
+export default function App() {
+  return (
+    <Router>
+      <RootLayout>
+        <Routes>
+          <Route index path={AppRoutes.HOME} element={<HomePage />} />
+        </Routes>
+      </RootLayout>
+    </Router>
+  );
 }
-
-export default App;
