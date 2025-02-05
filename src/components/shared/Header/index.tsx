@@ -1,6 +1,6 @@
 import cn from 'classnames';
 
-import { Container, Search } from '@/components/shared';
+import { Container, Logo, Search } from '@/components/shared';
 
 import classes from './header.module.scss';
 
@@ -12,7 +12,10 @@ export function Header({ className }: Readonly<HeaderProps>) {
   return (
     <header className={cn(classes.root, className)}>
       <Container>
-        <Search />
+        <div className={classes.top}>
+          <Logo className={classes.logo} />
+          <Search placeholder="BTC, ETH, SOL, etc." />
+        </div>
       </Container>
     </header>
   );
