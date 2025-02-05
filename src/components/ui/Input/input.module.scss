@@ -1,13 +1,12 @@
 .root {
   width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 1.6rem;
-  line-height: 1.5;
-  color: var(--text-primary);
+  padding: 1rem 1.5rem;
   background-color: var(--background-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
-  transition: all 0.2s ease-in-out;
+  border-radius: var(--border-radius-medium);
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  transition: border-color 0.2s ease;
 
   &::placeholder {
     color: var(--text-tertiary);
@@ -16,8 +15,6 @@
   &:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 2px var(--color-primary-dark);
-    background-color: var(--background-primary);
   }
 
   &:disabled {

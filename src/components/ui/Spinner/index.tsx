@@ -9,7 +9,7 @@ interface SpinnerProps {
 export function Spinner({ className }: Readonly<SpinnerProps>) {
   return (
     <div className={cn(classes.root, className)}>
-      <div className={classes.spinner}></div>
+      <div className={classes.spinner} />
     </div>
   );
 }

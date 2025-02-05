@@ -1,0 +1,38 @@
+.root {
+  background-color: var(--background-primary);
+  padding: 1.6rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.8rem;
+}
+
+tr {
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+th {
+  padding: 0 1.6rem;
+  color: var(--color-text-secondary);
+  font-size: 1.2rem;
+  text-align: right;
+  font-weight: 500;
+}
+
+td {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
+}

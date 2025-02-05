@@ -1,5 +1,9 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 
+import { Button } from '@/components/ui';
+
+import classes from './error.boundary.module.scss';
+
 interface ErrorBoundaryProps {
   children: ReactNode;
 }
@@ -30,9 +34,9 @@ export class ErrorBoundary extends Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="error-fallback">
+        <div className={classes.root}>
           <h2>Something went wrong!</h2>
-          <button onClick={this.handleRefresh}>Try Again</button>
+          <Button onClick={this.handleRefresh}>Try Again</Button>
         </div>
       );
     }

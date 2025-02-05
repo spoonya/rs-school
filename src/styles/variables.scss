@@ -13,6 +13,12 @@ $ff-primary: 'Poppins', sans-serif;
   --color-warning: #ffd600;
   --color-error: #ff3d71;
   --color-error-bg: rgba(255, 61, 113, 0.1);
+  --color-success-bg: rgba(0, 200, 83, 0.1);
+
+  // Border Radius
+  --border-radius-small: 6px;
+  --border-radius-medium: 12px;
+  --border-radius-large: 16px;
 
   // Crypto Specific
   --color-profit: #00dc82;
