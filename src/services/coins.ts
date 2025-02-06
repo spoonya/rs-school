@@ -10,7 +10,7 @@ interface GetCoinsParams {
 
 const defaultParams: GetCoinsParams = {
   vs_currency: 'usd',
-  per_page: '20',
+  per_page: '10',
 };
 
 export const getAll = async (params?: GetCoinsParams): Promise<Coin[]> => {

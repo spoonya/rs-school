@@ -6,3 +6,4 @@ export { CoinItem } from '@/components/shared/CoinItem';
 export { CoinTable } from '@/components/shared/CoinTable';
 export { Logo } from '@/components/shared/Logo';
 export { Preloader } from '@/components/shared/Preloader';
+export { Pagination } from '@/components/shared/Pagination';
