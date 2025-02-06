@@ -7,7 +7,9 @@ export const formatNumber = (num: number) => {
   }).format(num);
 };
 
-export const formatPercent = (num: number) => {
+export const formatPercent = (num: number | null) => {
+  if (num === null) return '0.00%';
+
   return `${num > 0 ? '+' : ''}${num.toFixed(2)}%`;
 };
 

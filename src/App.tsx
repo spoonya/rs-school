@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import { Header } from '@/components/shared/Header';
+import { Header } from '@/components/shared';
 import { RootLayout } from '@/layout';
 import { HomePage, Page404 } from '@/pages';
 import { AppRoutes } from '@/services';

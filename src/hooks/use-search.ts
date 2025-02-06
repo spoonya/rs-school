@@ -16,8 +16,12 @@ export const useSearch = () => {
 
     try {
       setIsSearchLoading(true);
-      const coins = await Api.coins.getByName([query]);
-      setSearchResults(coins);
+
+      const searchResult = await Api.coins.search(query);
+      const coinNames = searchResult.coins.map((coin) => coin.id);
+      const detailedCoins = await Api.coins.getByName(coinNames);
+
+      setSearchResults(detailedCoins);
       setSearchError(null);
     } catch (error) {
       setSearchError(

@@ -1,4 +1,4 @@
-import { Coin } from '@/types';
+import { Coin, SearchResponse } from '@/types';
 
 import { ApiEndpoints } from './constants';
 import { apiInstance } from './instance';
@@ -33,6 +33,16 @@ export const getByName = async (
       ...defaultParams,
       ...params,
       ids: names.join(','),
+    },
+  });
+
+  return data;
+};
+
+export const search = async (name: string): Promise<SearchResponse> => {
+  const { data } = await apiInstance.get(ApiEndpoints.COINS_SEARCH, {
+    params: {
+      query: name,
     },
   });
 

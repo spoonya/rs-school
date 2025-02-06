@@ -13,7 +13,7 @@ export function HomePage() {
       <Container>
         <Search
           className={classes.search}
-          placeholder="Bitcoin, Solana, etc."
+          placeholder="Bitcoin, ETH, PEPE etc."
           onSearch={handleSearch}
         />
         {(error || searchError) && <div>{error ?? searchError}</div>}

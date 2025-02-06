@@ -30,3 +30,19 @@ export interface Coin {
     price: number[];
   };
 }
+
+export interface SearchResponse {
+  coins: {
+    id: string;
+    name: string;
+    api_symbol: string;
+    symbol: string;
+    market_cap_rank: number | null;
+    thumb: string;
+    large: string;
+  }[];
+  exchanges: [];
+  icos: [];
+  categories: [];
+  nfts: [];
+}

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import { AppRoutes } from '@/services';
 
 import classes from './404.module.scss';
