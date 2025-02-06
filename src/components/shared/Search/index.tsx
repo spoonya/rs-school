@@ -3,6 +3,7 @@ import { Search as SearchIcon } from 'lucide-react';
 import React from 'react';
 
 import { Button, Input } from '@/components/ui';
+import { useLocalStorage } from '@/hooks';
 import { SEARCH_QUERY_KEY } from '@/services/constants';
 
 import classes from './search.module.scss';
@@ -18,7 +19,8 @@ export function Search({
   placeholder,
   onSearch,
 }: Readonly<SearchProps>) {
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = useLocalStorage(SEARCH_QUERY_KEY, '');
+  const isFirstRender = React.useRef(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -27,16 +29,14 @@ export function Search({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSearch(searchQuery);
-    localStorage.setItem(SEARCH_QUERY_KEY, searchQuery);
   };
 
   React.useEffect(() => {
-    const query = localStorage.getItem(SEARCH_QUERY_KEY);
-    if (query) {
-      setSearchQuery(query);
-      onSearch(query);
+    if (isFirstRender.current && searchQuery) {
+      onSearch(searchQuery);
+      isFirstRender.current = false;
     }
-  }, [onSearch]);
+  }, [onSearch, searchQuery]);
 
   return (
     <form className={cn(classes.root, className)} onSubmit={handleSubmit}>
