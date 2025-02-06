@@ -1,41 +1,25 @@
-import React from 'react';
+import { CoinTable, Container, Preloader, Search } from '@/components/shared';
+import { useAllCoins, useSearch } from '@/hooks';
 
-import { CoinTable, Container } from '@/components/shared';
-import { Spinner } from '@/components/ui';
-import { apiClient } from '@/services';
-import { Coin } from '@/types';
+import classes from './home.module.scss';
 
 export function HomePage() {
-  const [coins, setCoins] = React.useState<Coin[]>([]);
-  const [error, setError] = React.useState<string | null>(null);
-  const [isLoading, setIsLoading] = React.useState(false);
-
-  React.useEffect(() => {
-    fetchCoins();
-  }, []);
-
-  const fetchCoins = async () => {
-    try {
-      setIsLoading(true);
-      const data = await apiClient.coins.getAll();
-      setCoins(data);
-    } catch (err) {
-      setError('The data was not loaded');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { coins, isLoading, error } = useAllCoins();
+  const { searchResults, isSearchLoading, searchError, handleSearch } =
+    useSearch();
 
   return (
     <div>
       <Container>
-        {error ? (
-          <div>{error}</div>
-        ) : isLoading ? (
-          <Spinner />
-        ) : (
-          <CoinTable items={coins} />
+        <Search
+          className={classes.search}
+          placeholder="Bitcoin, Solana, etc."
+          onSearch={handleSearch}
+        />
+        {(error || searchError) && <div>{error ?? searchError}</div>}
+        {(isLoading || isSearchLoading) && <Preloader />}
+        {!error && !isLoading && !isSearchLoading && (
+          <CoinTable items={searchResults.length > 0 ? searchResults : coins} />
         )}
       </Container>
     </div>

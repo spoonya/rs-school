@@ -1,5 +1,5 @@
 import * as coins from './coins';
 
-export const apiClient = {
+export const Api = {
   coins,
 } as const;
