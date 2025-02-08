@@ -17,39 +17,39 @@ export const useSearch = () => {
   const [totalSearchResults, setTotalSearchResults] = React.useState(0);
   const [currentSearchPage, setCurrentSearchPage] = React.useState(initialPage);
 
+  const clearSearch = useCallback(() => {
+    setSearchQuery('');
+    setSearchResults([]);
+    setTotalSearchResults(0);
+    setCurrentSearchPage(1);
+    setSearchParams(new URLSearchParams(), { replace: true });
+  }, [setSearchParams]);
+
   const updateSearchParams = useCallback(
     (query: string, page: number) => {
-      setSearchParams(
-        (prev) => {
-          const newParams = new URLSearchParams(prev);
-          if (query) {
-            newParams.set('search', query);
-          } else {
-            newParams.delete('search');
-          }
-          newParams.set('page', page.toString());
-          return newParams;
-        },
-        { replace: true }
-      );
+      if (!query.trim()) {
+        clearSearch();
+        return;
+      }
+
+      const newParams = new URLSearchParams();
+      newParams.set('search', query);
+      newParams.set('page', page.toString());
+      setSearchParams(newParams, { replace: true });
     },
-    [setSearchParams]
+    [setSearchParams, clearSearch]
   );
 
   const handleSearch = React.useCallback(
     async (query: string, itemsPerPage: number = 10, page: number = 1) => {
-      setSearchQuery(query);
       if (!query.trim()) {
-        setTotalSearchResults(0);
-        setCurrentSearchPage(1);
-        setSearchResults([]);
-        updateSearchParams('', 1);
-
+        clearSearch();
         return;
       }
+
+      setSearchQuery(query);
       try {
         setIsSearchLoading(true);
-
         const searchResponse = await Api.coins.search(query);
         const coinIds = searchResponse.coins.map((coin) => coin.id);
         setTotalSearchResults(coinIds.length);
@@ -69,21 +69,25 @@ export const useSearch = () => {
         setIsSearchLoading(false);
       }
     },
-    [updateSearchParams]
+    [updateSearchParams, clearSearch]
   );
 
   React.useEffect(() => {
-    if (initialSearch && !searchResults.length) {
+    if (initialSearch) {
       handleSearch(initialSearch, 10, initialPage);
     }
-  }, [initialSearch, initialPage, searchResults.length, handleSearch]);
+  }, []);
 
   const changeSearchPage = useCallback(
     (page: number, itemsPerPage: number) => {
+      if (!searchQuery.trim()) {
+        clearSearch();
+        return;
+      }
       setCurrentSearchPage(page);
       handleSearch(searchQuery, itemsPerPage, page);
     },
-    [searchQuery, handleSearch]
+    [searchQuery, handleSearch, clearSearch]
   );
 
   return {

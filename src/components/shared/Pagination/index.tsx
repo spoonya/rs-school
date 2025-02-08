@@ -10,8 +10,13 @@ interface PaginationProps {
   paginate: (pageNumber: number) => void;
 }
 
-export function Pagination({ itemsPerPage, totalItems, currentPage, paginate }: Readonly<PaginationProps>) {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+export function Pagination({ itemsPerPage, totalItems, currentPage, paginate }: PaginationProps) {
+  const pageCount = Math.ceil(totalItems / itemsPerPage);
+
+  if (pageCount <= 1) {
+    return null;
+  }
+
   const maxVisiblePages = 3;
 
   const getPageNumbers = () => {
@@ -20,14 +25,14 @@ export function Pagination({ itemsPerPage, totalItems, currentPage, paginate }: 
     pages.add(1);
 
     const startPage = Math.max(2, currentPage - Math.floor(maxVisiblePages / 2));
-    const endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
+    const endPage = Math.min(pageCount - 1, startPage + maxVisiblePages - 1);
 
     for (let i = startPage; i <= endPage; i++) {
       pages.add(i);
     }
 
-    if (totalPages > 1) {
-      pages.add(totalPages);
+    if (pageCount > 1) {
+      pages.add(pageCount);
     }
 
     return Array.from(pages).sort((a, b) => a - b);
@@ -38,7 +43,7 @@ export function Pagination({ itemsPerPage, totalItems, currentPage, paginate }: 
   };
 
   const handleNext = () => {
-    if (currentPage < totalPages) paginate(currentPage + 1);
+    if (currentPage < pageCount) paginate(currentPage + 1);
   };
 
   return (
@@ -58,7 +63,7 @@ export function Pagination({ itemsPerPage, totalItems, currentPage, paginate }: 
           </React.Fragment>
         ))}
       </ul>
-      <button className={classes.navButton} onClick={handleNext} disabled={currentPage === totalPages}>
+      <button className={classes.navButton} onClick={handleNext} disabled={currentPage === pageCount}>
         <ChevronRight size={20} />
       </button>
     </nav>

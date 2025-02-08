@@ -22,3 +22,8 @@ export enum DefaultCoinsApiParams {
   PER_PAGE = '15',
   PAGE = '1',
 }
+
+export enum SearchParams {
+  SEARCH = 'search',
+  PAGE = 'page',
+}

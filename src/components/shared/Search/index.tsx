@@ -18,16 +18,23 @@ export function Search({ className, placeholder, onSearch }: Readonly<SearchProp
   const [searchQuery, setSearchQuery] = useLocalStorage(SEARCH_QUERY_KEY, '');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+    const value = e.target.value;
+    setSearchQuery(value);
+
+    if (!value.trim()) {
+      onSearch('');
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch(searchQuery);
+    if (searchQuery.trim()) {
+      onSearch(searchQuery);
+    }
   };
 
   React.useEffect(() => {
-    if (searchQuery) {
+    if (searchQuery.trim()) {
       onSearch(searchQuery);
     }
   }, []);
