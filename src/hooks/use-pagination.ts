@@ -1,14 +1,15 @@
 import { useCallback, useState } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
+import { useQueryParams } from '@/hooks';
 import { DefaultCoinsApiParams } from '@/services';
 
 export const usePagination = (itemsPerPage: number, totalItems: number) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { getParam, setParam } = useQueryParams();
 
-  const initialPage = parseInt(searchParams.get('page') ?? DefaultCoinsApiParams.PAGE);
+  const initialPage = Number(getParam('page', DefaultCoinsApiParams.PAGE));
 
   const [currentPage, setCurrentPage] = useState(initialPage);
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -17,15 +18,11 @@ export const usePagination = (itemsPerPage: number, totalItems: number) => {
     (pageNumber: number) => {
       if (pageNumber > 0 && pageNumber <= totalPages) {
         setCurrentPage(pageNumber);
-        setSearchParams((prev) => {
-          prev.set('page', pageNumber.toString());
-
-          return prev;
-        });
-        navigate(`${location.pathname}?${searchParams.toString()}`);
+        setParam('page', pageNumber);
+        navigate(`${location.pathname}?page=${pageNumber}`);
       }
     },
-    [location, navigate, totalPages, searchParams, setSearchParams]
+    [location, navigate, totalPages, setParam]
   );
 
   return {

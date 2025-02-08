@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
+import { useQueryParams } from '@/hooks';
 import { Api, DefaultCoinsApiParams } from '@/services';
 import { Coin } from '@/types';
 
 export const useSearch = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { getParam, setMultipleParams, clearParams } = useQueryParams();
 
-  const initialPage = parseInt(searchParams.get('page') ?? DefaultCoinsApiParams.PAGE);
-  const initialSearch = searchParams.get('search') ?? '';
+  const initialPage = Number(getParam('page', DefaultCoinsApiParams.PAGE));
+  const initialSearch = String(getParam('search', ''));
 
   const [searchQuery, setSearchQuery] = React.useState(initialSearch);
   const [searchResults, setSearchResults] = React.useState<Coin[]>([]);
@@ -22,8 +22,8 @@ export const useSearch = () => {
     setSearchResults([]);
     setTotalSearchResults(0);
     setCurrentSearchPage(1);
-    setSearchParams(new URLSearchParams(), { replace: true });
-  }, [setSearchParams]);
+    clearParams();
+  }, [clearParams]);
 
   const updateSearchParams = useCallback(
     (query: string, page: number) => {
@@ -32,12 +32,12 @@ export const useSearch = () => {
         return;
       }
 
-      const newParams = new URLSearchParams();
-      newParams.set('search', query);
-      newParams.set('page', page.toString());
-      setSearchParams(newParams, { replace: true });
+      setMultipleParams({
+        search: query,
+        page: page,
+      });
     },
-    [setSearchParams, clearSearch]
+    [setMultipleParams, clearSearch]
   );
 
   const handleSearch = React.useCallback(
