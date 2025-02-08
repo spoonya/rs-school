@@ -23,6 +23,7 @@
   --pagination-bg: var(--background-primary);
   --pagination-hover-bg: var(--background-secondary);
 
+  padding-top: 0.2rem;
   min-width: 3.6rem;
   height: 3.6rem;
   border: 1px solid var(--border-color);
@@ -30,7 +31,9 @@
   background: var(--pagination-bg);
   color: var(--text-primary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-colorr 0.2s ease;
   text-align: center;
 
   &:hover:not(:disabled) {

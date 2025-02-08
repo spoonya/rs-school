@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 
 import { useQueryParams, useSearchState } from '@/hooks';
-import { Api, DefaultCoinsApiParams } from '@/services';
+import { Api, DefaultCoinsApiParams, getMarkets } from '@/services';
 
 export const useSearch = () => {
   const { setMultipleParams, clearParams } = useQueryParams();
@@ -11,13 +11,13 @@ export const useSearch = () => {
     async (
       query: string,
       itemsPerPage: number = Number(DefaultCoinsApiParams.PER_PAGE),
-      page: number = Number(DefaultCoinsApiParams.PAGE)
+      page: number = Number(DefaultCoinsApiParams.PAGE_NUM)
     ) => {
       setSearch(query, page);
 
       try {
         if (!query.trim()) {
-          const coins = await Api.coins.getCoinsMarkets({
+          const coins = await getMarkets({
             page: String(page),
             per_page: String(itemsPerPage),
           });

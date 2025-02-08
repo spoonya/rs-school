@@ -21,7 +21,7 @@ export const useSearchState = () => {
     isLoading: false,
     error: null,
     total: 0,
-    page: Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE)),
+    page: Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM)),
     query: String(getParam(SearchParams.SEARCH, '')),
   };
 

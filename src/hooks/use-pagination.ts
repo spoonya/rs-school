@@ -9,7 +9,7 @@ export const usePagination = (itemsPerPage: number, totalItems: number) => {
   const navigate = useNavigate();
   const { getParam, setParam } = useQueryParams();
 
-  const initialPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE));
+  const initialPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
 
   const [currentPage, setCurrentPage] = useState(initialPage);
   const totalPages = Math.ceil(totalItems / itemsPerPage);

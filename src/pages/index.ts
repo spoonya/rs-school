@@ -1,2 +1,3 @@
-export { HomePage } from '@/pages/Home';
-export { Page404 } from '@/pages/404';
+export { HomePage } from './Home';
+export { Page404 } from './404';
+export { CoinDetailsPage } from './CoinDetails';

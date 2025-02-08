@@ -1,5 +1,7 @@
 import cn from 'classnames';
+import { useLocation, useNavigate } from 'react-router-dom';
 
+import { AppRoutes } from '@/services';
 import { Coin } from '@/types';
 import { formatNumber, formatPercent } from '@/utils';
 
@@ -11,8 +13,23 @@ interface CoinItemProps {
 }
 
 export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleClick = () => {
+    const searchParams = new URLSearchParams(location.search);
+    const currentPage = searchParams.get('page');
+
+    let url = `${AppRoutes.HOME}details/${data.id}`;
+    if (currentPage) {
+      url += `?page=${currentPage}`;
+    }
+
+    navigate(url);
+  };
+
   return (
-    <tr className={cn(classes.root, className)}>
+    <tr className={cn(classes.root, className)} onClick={handleClick} style={{ cursor: 'pointer' }}>
       <td className={classes.center}>{data.market_cap_rank}</td>
       <td className={classes.mainInfo}>
         <img src={data.image} alt={data.name} className={classes.logo} />

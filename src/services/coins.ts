@@ -12,10 +12,10 @@ export interface GetCoinsParams {
 const defaultParams: GetCoinsParams = {
   vs_currency: DefaultCoinsApiParams.CURRENCY,
   per_page: DefaultCoinsApiParams.PER_PAGE,
-  page: DefaultCoinsApiParams.PAGE,
+  page: DefaultCoinsApiParams.PAGE_NUM,
 };
 
-export const getCoinsMarkets = async (params?: GetCoinsParams): Promise<Coin[]> => {
+export const getMarkets = async (params?: GetCoinsParams): Promise<Coin[]> => {
   const { data } = await apiInstance.get(ApiEndpoints.COINS_MARKETS, {
     params: {
       ...defaultParams,
@@ -44,6 +44,12 @@ export const search = async (name: string): Promise<SearchResponse> => {
       query: name,
     },
   });
+
+  return data;
+};
+
+export const getDetails = async (id: string) => {
+  const { data } = await apiInstance.get(ApiEndpoints.COINS_DETAILS.replace(':id', id), {});
 
   return data;
 };

@@ -13,7 +13,7 @@ export const useCoinsMarkets = (page: string, itemsPerPage: number, totalCoins: 
       try {
         setIsLoading(true);
 
-        const coinsData = await Api.coins.getCoinsMarkets({ page });
+        const coinsData = await Api.coins.getMarkets({ page });
         const pageNumber = Number(page);
         const totalPages = Math.ceil(totalCoins / itemsPerPage);
 

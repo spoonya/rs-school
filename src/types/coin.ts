@@ -46,3 +46,17 @@ export interface SearchResponse {
   categories: [];
   nfts: [];
 }
+
+export interface CoinDetails {
+  id: string;
+  name: string;
+  symbol: string;
+  description: { en: string };
+  market_data: {
+    current_price: { usd: number };
+    price_change_percentage_24h: number;
+    market_cap: { usd: number };
+    total_volume: { usd: number };
+  };
+  image: { large: string };
+}
