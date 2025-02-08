@@ -11,11 +11,12 @@ export const useCoinsMarkets = (page: string, itemsPerPage: number, totalCoins: 
   React.useEffect(() => {
     const fetchCoins = async () => {
       try {
+        setIsLoading(true);
+
         const coinsData = await Api.coins.getCoinsMarkets({ page });
         const pageNumber = Number(page);
         const totalPages = Math.ceil(totalCoins / itemsPerPage);
 
-        // Если текущая страница — последняя, ограничиваем количество элементов
         if (pageNumber === totalPages) {
           const allowedCount = totalCoins - (pageNumber - 1) * itemsPerPage;
           setCoins(coinsData.slice(0, allowedCount));

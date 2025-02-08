@@ -1,4 +1,4 @@
-import { createCoinsMarketsTotal } from '../utils/coins-markets-total';
+import { createCoinsMarketsTotal } from '@/utils';
 
 export enum AppRoutes {
   HOME = '/',
@@ -19,6 +19,6 @@ export const COINS_MARKETS_TOTAL = createCoinsMarketsTotal(250);
 
 export enum DefaultCoinsApiParams {
   CURRENCY = 'usd',
-  PER_PAGE = '20',
+  PER_PAGE = '15',
   PAGE = '1',
 }
