@@ -16,7 +16,6 @@ interface SearchProps {
 
 export function Search({ className, placeholder, onSearch }: Readonly<SearchProps>) {
   const [searchQuery, setSearchQuery] = useLocalStorage(SEARCH_QUERY_KEY, '');
-  const isFirstRender = React.useRef(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -28,11 +27,10 @@ export function Search({ className, placeholder, onSearch }: Readonly<SearchProp
   };
 
   React.useEffect(() => {
-    if (isFirstRender.current && searchQuery) {
+    if (searchQuery) {
       onSearch(searchQuery);
-      isFirstRender.current = false;
     }
-  }, [onSearch, searchQuery]);
+  }, []);
 
   return (
     <form className={cn(classes.root, className)} onSubmit={handleSubmit}>
