@@ -14,11 +14,7 @@ interface SearchProps {
   onSearch: (query: string) => void;
 }
 
-export function Search({
-  className,
-  placeholder,
-  onSearch,
-}: Readonly<SearchProps>) {
+export function Search({ className, placeholder, onSearch }: Readonly<SearchProps>) {
   const [searchQuery, setSearchQuery] = useLocalStorage(SEARCH_QUERY_KEY, '');
   const isFirstRender = React.useRef(true);
 

@@ -1,3 +1,6 @@
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React from 'react';
+
 import classes from './pagination.module.scss';
 
 interface PaginationProps {
@@ -7,29 +10,27 @@ interface PaginationProps {
   paginate: (pageNumber: number) => void;
 }
 
-export function Pagination({
-  itemsPerPage,
-  totalItems,
-  currentPage,
-  paginate,
-}: Readonly<PaginationProps>) {
+export function Pagination({ itemsPerPage, totalItems, currentPage, paginate }: Readonly<PaginationProps>) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const maxVisiblePages = 3;
 
   const getPageNumbers = () => {
-    const pages = [];
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    const pages = new Set<number>();
 
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
+    pages.add(1);
+
+    const startPage = Math.max(2, currentPage - Math.floor(maxVisiblePages / 2));
+    const endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
 
     for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
+      pages.add(i);
     }
 
-    return pages;
+    if (totalPages > 1) {
+      pages.add(totalPages);
+    }
+
+    return Array.from(pages).sort((a, b) => a - b);
   };
 
   const handlePrevious = () => {
@@ -42,39 +43,23 @@ export function Pagination({
 
   return (
     <nav className={classes.paginationWrapper}>
-      <button
-        className={classes.navButton}
-        onClick={handlePrevious}
-        disabled={currentPage === 1}
-      >
-        &lt;
+      <button className={classes.navButton} onClick={handlePrevious} disabled={currentPage === 1}>
+        <ChevronLeft size={20} />
       </button>
       <ul className={classes.pagination}>
-        {getPageNumbers().map((number) => (
-          <li
-            key={number}
-            className={`${classes.pageItem} ${
-              currentPage === number ? classes.active : ''
-            }`}
-          >
-            <button
-              className={classes.pageButton}
-              onClick={() => paginate(number)}
-            >
-              {number}
-            </button>
-          </li>
+        {getPageNumbers().map((number, index, array) => (
+          <React.Fragment key={number}>
+            <li className={`${classes.pageItem} ${currentPage === number ? classes.active : ''}`}>
+              <button className={classes.pageButton} onClick={() => paginate(number)}>
+                {number}
+              </button>
+            </li>
+            {index < array.length - 1 && array[index + 1] - number > 1 && <li className={classes.ellipsis}>...</li>}
+          </React.Fragment>
         ))}
-        {totalPages > maxVisiblePages && currentPage < totalPages - 1 && (
-          <li className={classes.ellipsis}>...</li>
-        )}
       </ul>
-      <button
-        className={classes.navButton}
-        onClick={handleNext}
-        disabled={currentPage === totalPages}
-      >
-        &gt;
+      <button className={classes.navButton} onClick={handleNext} disabled={currentPage === totalPages}>
+        <ChevronRight size={20} />
       </button>
     </nav>
   );

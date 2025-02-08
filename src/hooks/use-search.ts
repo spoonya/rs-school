@@ -24,9 +24,7 @@ export const useSearch = () => {
       setSearchResults(detailedCoins);
       setSearchError(null);
     } catch (error) {
-      setSearchError(
-        error instanceof Error ? error.message : 'An error occurred'
-      );
+      setSearchError(error instanceof Error ? error.message : 'An error occurred');
       setSearchResults([]);
     } finally {
       setIsSearchLoading(false);

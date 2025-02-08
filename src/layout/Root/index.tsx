@@ -1,13 +1,13 @@
-import { ReactNode } from 'react';
+import React from 'react';
 
 interface LayoutProps {
-  children: ReactNode;
+  children?: React.ReactNode;
 }
 
-export function RootLayout({ children }: Readonly<LayoutProps>) {
+export const RootLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="layout">
       <main className="main">{children}</main>
     </div>
   );
-}
+};

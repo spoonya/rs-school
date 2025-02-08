@@ -3,11 +3,7 @@ import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 
 import classes from './input.module.scss';
 
-interface InputProps
-  extends DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > {
+interface InputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   className?: string;
 }
 

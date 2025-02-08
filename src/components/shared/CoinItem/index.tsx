@@ -23,20 +23,13 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
       </td>
 
       <td className={classes.price}>
-        <span className={classes.currentPrice}>
-          {formatNumber(data.current_price)}
-        </span>
+        <span className={classes.currentPrice}>{formatNumber(data.current_price)}</span>
       </td>
 
       <td className={classes.high24}>{formatNumber(data.high_24h)}</td>
       <td className={classes.low24}>{formatNumber(data.low_24h)}</td>
 
-      <td
-        className={classes.change}
-        data-type={
-          data.price_change_percentage_24h > 0 ? 'positive' : 'negative'
-        }
-      >
+      <td className={classes.change} data-type={data.price_change_percentage_24h > 0 ? 'positive' : 'negative'}>
         {formatPercent(data.price_change_percentage_24h)}
       </td>
 

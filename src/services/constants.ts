@@ -1,3 +1,5 @@
+import { createCoinsMarketsTotal } from '../utils/coins-markets-total';
+
 export enum AppRoutes {
   HOME = '/',
 }
@@ -12,3 +14,11 @@ export enum ApiEndpoints {
 const prefix = 'nexum';
 
 export const SEARCH_QUERY_KEY = `${prefix}-search-query`;
+
+export const COINS_MARKETS_TOTAL = createCoinsMarketsTotal(250);
+
+export enum DefaultCoinsApiParams {
+  CURRENCY = 'usd',
+  PER_PAGE = '20',
+  PAGE = '1',
+}

@@ -1,41 +1,31 @@
-import {
-  CoinTable,
-  Container,
-  Pagination,
-  Preloader,
-  Search,
-} from '@/components/shared';
-import { useAllCoins, useSearch } from '@/hooks';
-import { usePagination } from '@/hooks/use-pagination';
+import { CoinTable, Container, Pagination, Preloader, Search } from '@/components/shared';
+import { useCoinsMarkets, usePagination, useSearch } from '@/hooks';
+import { COINS_MARKETS_TOTAL, DefaultCoinsApiParams } from '@/services';
 
 import classes from './home.module.scss';
 
 export function HomePage() {
-  const { coins, isLoading, error } = useAllCoins();
-  const { searchResults, isSearchLoading, searchError, handleSearch } =
-    useSearch();
-  const { currentPage, paginate, getPaginatedItems, itemsPerPage } =
-    usePagination(5);
+  const { searchResults, isSearchLoading, searchError, handleSearch } = useSearch();
+  const { currentPage, paginate, itemsPerPage } = usePagination(
+    Number(DefaultCoinsApiParams.PER_PAGE),
+    COINS_MARKETS_TOTAL
+  );
+  const { coins, isLoading, error } = useCoinsMarkets(currentPage.toString(), itemsPerPage, COINS_MARKETS_TOTAL);
 
   const itemsToDisplay = searchResults.length > 0 ? searchResults : coins;
-  const paginatedItems = getPaginatedItems(itemsToDisplay);
 
   return (
     <div>
       <Container>
-        <Search
-          className={classes.search}
-          placeholder="Bitcoin, ETH, PEPE etc."
-          onSearch={handleSearch}
-        />
+        <Search className={classes.search} placeholder="Bitcoin, ETH, PEPE etc." onSearch={handleSearch} />
         {(error || searchError) && <div>{error ?? searchError}</div>}
         {(isLoading || isSearchLoading) && <Preloader />}
         {!error && !isLoading && !isSearchLoading && (
           <>
-            <CoinTable items={paginatedItems} />
+            <CoinTable items={itemsToDisplay} />
             <Pagination
               itemsPerPage={itemsPerPage}
-              totalItems={itemsToDisplay.length}
+              totalItems={COINS_MARKETS_TOTAL}
               currentPage={currentPage}
               paginate={paginate}
             />

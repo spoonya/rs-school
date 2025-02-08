@@ -1,19 +1,21 @@
 import { Coin, SearchResponse } from '@/types';
 
-import { ApiEndpoints } from './constants';
+import { ApiEndpoints, DefaultCoinsApiParams } from './constants';
 import { apiInstance } from './instance';
 
-interface GetCoinsParams {
+export interface GetCoinsParams {
   vs_currency?: string;
   per_page?: string;
+  page?: string;
 }
 
 const defaultParams: GetCoinsParams = {
-  vs_currency: 'usd',
-  per_page: '10',
+  vs_currency: DefaultCoinsApiParams.CURRENCY,
+  per_page: DefaultCoinsApiParams.PER_PAGE,
+  page: DefaultCoinsApiParams.PAGE,
 };
 
-export const getAll = async (params?: GetCoinsParams): Promise<Coin[]> => {
+export const getCoinsMarkets = async (params?: GetCoinsParams): Promise<Coin[]> => {
   const { data } = await apiInstance.get(ApiEndpoints.COINS_MARKETS, {
     params: {
       ...defaultParams,
@@ -24,10 +26,7 @@ export const getAll = async (params?: GetCoinsParams): Promise<Coin[]> => {
   return data;
 };
 
-export const getByName = async (
-  names: string[],
-  params?: GetCoinsParams
-): Promise<Coin[]> => {
+export const getByName = async (names: string[], params?: GetCoinsParams): Promise<Coin[]> => {
   const { data } = await apiInstance.get(ApiEndpoints.COINS_MARKETS, {
     params: {
       ...defaultParams,

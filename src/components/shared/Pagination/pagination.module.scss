@@ -23,8 +23,8 @@
   --pagination-bg: var(--background-primary);
   --pagination-hover-bg: var(--background-secondary);
 
-  min-width: 3rem;
-  padding: 0.5rem;
+  min-width: 3.6rem;
+  height: 3.6rem;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-small);
   background: var(--pagination-bg);
@@ -53,8 +53,11 @@
 .navButton {
   --pagination-color: var(--color-primary);
 
-  min-width: 2.5rem;
-  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.6rem;
+  height: 3.6rem;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-small);
   background: var(--background-primary);
