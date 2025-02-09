@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { CoinTable, Container, Pagination, Preloader, Search } from '@/components/shared';
@@ -9,7 +10,6 @@ import classes from './home.module.scss';
 export function HomePage() {
   const location = useLocation();
   const showDetails = location.pathname.includes(AppRoutes.COIN_DETAILS.replace(':id', ''));
-
   const {
     searchQuery,
     searchResults,
@@ -20,30 +20,27 @@ export function HomePage() {
     handleSearch,
     changeSearchPage,
   } = useSearch();
-
   const { currentPage, paginate, itemsPerPage } = usePagination(
     Number(DefaultCoinsApiParams.PER_PAGE),
     COINS_MARKETS_TOTAL
   );
-
   const { coins, isLoading, error } = useCoinsMarkets(currentPage.toString(), itemsPerPage, COINS_MARKETS_TOTAL);
 
   const handleClose = useCloseDetails();
-
-  const isSearching = Boolean(searchQuery?.trim());
-
   const handleMainPanelClick = () => {
     if (showDetails) {
       handleClose();
     }
   };
 
+  const isSearching = Boolean(searchQuery?.trim());
+
   return (
     <div className={classes.wrapper}>
       <Container>
         <div className={classes.layout}>
           <div
-            className={`${classes.tableSection} ${showDetails ? classes.withDetails : ''}`}
+            className={cn(classes.tableSection, showDetails ? classes.withDetails : '')}
             onClick={handleMainPanelClick}
           >
             <Search
