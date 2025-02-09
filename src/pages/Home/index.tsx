@@ -2,13 +2,13 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 import { CoinTable, Container, Pagination, Preloader, Search } from '@/components/shared';
 import { useCloseDetails, useCoinsMarkets, usePagination, useSearch } from '@/hooks';
-import { COINS_MARKETS_TOTAL, DefaultCoinsApiParams } from '@/services';
+import { AppRoutes, COINS_MARKETS_TOTAL, DefaultCoinsApiParams } from '@/services';
 
 import classes from './home.module.scss';
 
 export function HomePage() {
   const location = useLocation();
-  const showDetails = location.pathname.includes('/details/');
+  const showDetails = location.pathname.includes(AppRoutes.COIN_DETAILS.replace(':id', ''));
 
   const {
     searchQuery,

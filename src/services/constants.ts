@@ -21,7 +21,7 @@ export const COINS_MARKETS_TOTAL = createCoinsMarketsTotal(250);
 
 export enum DefaultCoinsApiParams {
   CURRENCY = 'usd',
-  PER_PAGE = '15',
+  PER_PAGE = '10',
   PAGE_NUM = '1',
 }
 
