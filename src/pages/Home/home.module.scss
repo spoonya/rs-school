@@ -12,11 +12,28 @@
 }
 
 .tableSection {
+  position: relative;
+
   flex: 0 0 100%;
   transition: flex-basis 0.3s ease;
   min-width: 0;
 
   &.withDetails {
+    &::after {
+      position: absolute;
+
+      z-index: 1;
+
+      content: '';
+      background-color: var(--background-primary);
+      opacity: 0.5;
+
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+
     flex: 0 0 70%;
   }
 }

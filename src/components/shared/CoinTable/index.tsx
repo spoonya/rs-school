@@ -1,9 +1,9 @@
 import cn from 'classnames';
 import { SearchX } from 'lucide-react';
 
+import { CoinItem } from '@/components/shared/CoinItem';
 import { Coin } from '@/types';
 
-import { CoinItem } from '../CoinItem';
 import classes from './coin.list.module.scss';
 
 interface CoinTableProps {
@@ -27,7 +27,7 @@ export function CoinTable({ items, className }: Readonly<CoinTableProps>) {
         <thead>
           <tr>
             <th className={classes.center}>#</th>
-            <th>Name</th>
+            <th className={classes.left}>Coin</th>
             <th>Price</th>
             <th>High (24h)</th>
             <th>Low (24h)</th>
