@@ -28,9 +28,7 @@ export function Search({ className, placeholder, onSearch }: Readonly<SearchProp
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      onSearch(searchQuery);
-    }
+    onSearch(searchQuery);
   };
 
   React.useEffect(() => {

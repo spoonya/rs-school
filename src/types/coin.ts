@@ -23,7 +23,7 @@ export interface Coin {
   atl: number;
   atl_change_percentage: number;
   atl_date: string;
-  roi: string;
+  roi: string | null;
   last_updated: string;
   price_change_percentage_1h: number;
   sparkline_in_7d: {
