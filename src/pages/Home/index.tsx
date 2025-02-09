@@ -28,7 +28,7 @@ export function HomePage() {
 
   const { coins, isLoading, error } = useCoinsMarkets(currentPage.toString(), itemsPerPage, COINS_MARKETS_TOTAL);
 
-  const isSearching = Boolean(searchQuery.trim());
+  const isSearching = Boolean(searchQuery?.trim());
 
   return (
     <div className={classes.wrapper}>

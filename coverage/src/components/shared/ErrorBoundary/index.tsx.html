@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.38% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/26</span>
+                <span class='fraction'>26/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.38% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/26</span>
+                <span class='fraction'>26/26</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -121,34 +121,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Component, ErrorInfo, ReactNode } from 'react';
 &nbsp;
 import { Button } from '@/components/ui';
@@ -163,35 +163,35 @@ interface ErrorBoundaryState {
   hasError: boolean;
 }
 &nbsp;
-export class ErrorBoundary extends Component&lt;ErrorBoundaryProps, ErrorBoundaryState&gt; <span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >{</span></span>
-<span class="cstat-no" title="statement not covered" >  state = { hasError: false };</span>
+export class ErrorBoundary extends Component&lt;ErrorBoundaryProps, ErrorBoundaryState&gt; {
+  state = { hasError: false };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  static getDerivedStateFromError(): ErrorBoundaryState {</span>
-<span class="cstat-no" title="statement not covered" >    return { hasError: true };</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
+  static getDerivedStateFromError(): ErrorBoundaryState {
+    return { hasError: true };
+  }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {</span>
-<span class="cstat-no" title="statement not covered" >    console.error('Error Boundary caught:', error, errorInfo);</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    console.error('Error Boundary caught:', error, errorInfo);
+  }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  handleRefresh = () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    this.setState({ hasError: false });</span>
-<span class="cstat-no" title="statement not covered" >    window.location.reload();</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+  handleRefresh = () =&gt; {
+    this.setState({ hasError: false });
+    window.location.reload();
+  };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  render() {</span>
-<span class="cstat-no" title="statement not covered" >    if (this.state.hasError) {</span>
-<span class="cstat-no" title="statement not covered" >      return (</span>
-<span class="cstat-no" title="statement not covered" >        &lt;div className={classes.root}&gt;</span>
-<span class="cstat-no" title="statement not covered" >          &lt;h2&gt;Something went wrong!&lt;/h2&gt;</span>
-<span class="cstat-no" title="statement not covered" >          &lt;Button onClick={this.handleRefresh}&gt;Try Again&lt;/Button&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;/div&gt;</span>
+  render() {
+    if (this.state.hasError) {
+      return (
+        &lt;div className={classes.root}&gt;
+          &lt;h2&gt;Something went wrong!&lt;/h2&gt;
+          &lt;Button onClick={this.handleRefresh}&gt;Try Again&lt;/Button&gt;
+        &lt;/div&gt;
       );
-<span class="cstat-no" title="statement not covered" >    }</span>
+    }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return this.props.children;</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+    return this.props.children;
+  }
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -199,7 +199,7 @@ export class ErrorBoundary extends Component&lt;ErrorBoundaryProps, ErrorBoundar
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-09T00:42:39.109Z
+                at 2025-02-09T09:01:13.829Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -10,7 +10,7 @@ interface PaginationProps {
   paginate: (pageNumber: number) => void;
 }
 
-export function Pagination({ itemsPerPage, totalItems, currentPage, paginate }: PaginationProps) {
+export function Pagination({ itemsPerPage, totalItems, currentPage, paginate }: Readonly<PaginationProps>) {
   const pageCount = Math.ceil(totalItems / itemsPerPage);
 
   if (pageCount <= 1) {
@@ -48,7 +48,12 @@ export function Pagination({ itemsPerPage, totalItems, currentPage, paginate }: 
 
   return (
     <nav className={classes.paginationWrapper}>
-      <button className={classes.navButton} onClick={handlePrevious} disabled={currentPage === 1}>
+      <button
+        className={classes.navButton}
+        onClick={handlePrevious}
+        disabled={currentPage === 1}
+        aria-label="Previous page"
+      >
         <ChevronLeft size={20} />
       </button>
       <ul className={classes.pagination}>
@@ -63,7 +68,12 @@ export function Pagination({ itemsPerPage, totalItems, currentPage, paginate }: 
           </React.Fragment>
         ))}
       </ul>
-      <button className={classes.navButton} onClick={handleNext} disabled={currentPage === pageCount}>
+      <button
+        className={classes.navButton}
+        onClick={handleNext}
+        disabled={currentPage === pageCount}
+        aria-label="Next page"
+      >
         <ChevronRight size={20} />
       </button>
     </nav>

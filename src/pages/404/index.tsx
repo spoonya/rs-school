@@ -9,7 +9,7 @@ export function Page404() {
   const navigate = useNavigate();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} data-testid="page-404">
       <h1 className={classes.title}>404</h1>
       <p className={classes.message}>The page you are looking for does not exist.</p>
       <Button onClick={() => navigate(AppRoutes.HOME)}>Back home</Button>

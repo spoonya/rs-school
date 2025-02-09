@@ -11,7 +11,7 @@ interface LogoProps {
 
 export function Logo({ className }: Readonly<LogoProps>) {
   return (
-    <Link to={AppRoutes.HOME} className={cn(classes.root, className)}>
+    <Link to={AppRoutes.HOME} className={cn(classes.root, className)} data-testid="logo">
       <span className={classes.nex}>NEX</span>
       <span className={classes.um}>UM</span>
       <span className={classes.dot}>•</span>

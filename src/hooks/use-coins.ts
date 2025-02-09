@@ -12,6 +12,7 @@ export const useCoinsMarkets = (page: string, itemsPerPage: number, totalCoins: 
     const fetchCoins = async () => {
       try {
         setIsLoading(true);
+        setError(null);
 
         const coinsData = await Api.coins.getMarkets({ page });
         const pageNumber = Number(page);
@@ -24,8 +25,10 @@ export const useCoinsMarkets = (page: string, itemsPerPage: number, totalCoins: 
           setCoins(coinsData);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-        console.error(err);
+        const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+        setError(errorMessage);
+        setCoins([]);
+        console.error('API Error:', errorMessage);
       } finally {
         setIsLoading(false);
       }

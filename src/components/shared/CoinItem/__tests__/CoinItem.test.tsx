@@ -18,8 +18,15 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+// Изменённая функция для рендеринга с корректной обёрткой таблицы
 const renderWithRouter = (component: React.ReactNode) => {
-  return render(<BrowserRouter>{component}</BrowserRouter>);
+  return render(
+    <BrowserRouter>
+      <table>
+        <tbody>{component}</tbody>
+      </table>
+    </BrowserRouter>
+  );
 };
 
 describe('CoinItem', () => {
