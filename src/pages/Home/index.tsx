@@ -1,4 +1,3 @@
-import { SearchX } from 'lucide-react';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { CoinTable, Container, Pagination, Preloader, Search } from '@/components/shared';
@@ -31,41 +30,6 @@ export function HomePage() {
 
   const isSearching = Boolean(searchQuery.trim());
 
-  const renderContent = () => {
-    if (isSearching) {
-      if (searchResults.length === 0) {
-        return (
-          <div className={classes.noResults}>
-            <SearchX size={32} className={classes.noResultsIcon} />
-            <span>No results found</span>
-          </div>
-        );
-      }
-      return (
-        <>
-          <CoinTable items={searchResults} />
-          <Pagination
-            itemsPerPage={itemsPerPage}
-            totalItems={totalSearchResults}
-            currentPage={currentSearchPage}
-            paginate={(page) => changeSearchPage(page, itemsPerPage)}
-          />
-        </>
-      );
-    }
-    return (
-      <>
-        <CoinTable items={coins} />
-        <Pagination
-          itemsPerPage={itemsPerPage}
-          totalItems={COINS_MARKETS_TOTAL}
-          currentPage={currentPage}
-          paginate={paginate}
-        />
-      </>
-    );
-  };
-
   return (
     <div className={classes.wrapper}>
       <Container>
@@ -78,7 +42,33 @@ export function HomePage() {
             />
             {(error || searchError) && <div>{error ?? searchError}</div>}
             {(isLoading || isSearchLoading) && <Preloader />}
-            {!error && !isLoading && !isSearchLoading && <>{renderContent()}</>}
+            {!error && !isLoading && !isSearchLoading && (
+              <>
+                {isSearching ? (
+                  <>
+                    <CoinTable items={searchResults} />
+                    {searchResults.length > 0 && (
+                      <Pagination
+                        itemsPerPage={itemsPerPage}
+                        totalItems={totalSearchResults}
+                        currentPage={currentSearchPage}
+                        paginate={(page) => changeSearchPage(page, itemsPerPage)}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <CoinTable items={coins} />
+                    <Pagination
+                      itemsPerPage={itemsPerPage}
+                      totalItems={COINS_MARKETS_TOTAL}
+                      currentPage={currentPage}
+                      paginate={paginate}
+                    />
+                  </>
+                )}
+              </>
+            )}
           </div>
           {showDetails && (
             <div className={classes.detailsSection}>

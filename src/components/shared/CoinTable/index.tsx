@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { SearchX } from 'lucide-react';
 
 import { Coin } from '@/types';
 
@@ -10,20 +11,29 @@ interface CoinTableProps {
   items: Coin[];
 }
 
-export function CoinTable({ className, items }: Readonly<CoinTableProps>) {
+export function CoinTable({ items, className }: Readonly<CoinTableProps>) {
+  if (items.length === 0) {
+    return (
+      <div className={classes.noResults}>
+        <SearchX size={32} className={classes.noResultsIcon} data-testid="search-x" />
+        <span>No results found</span>
+      </div>
+    );
+  }
+
   return (
     <div className={cn(classes.root, className)}>
       <table className={classes.table}>
         <thead>
           <tr>
-            <th className={cn(classes.center)}>#</th>
-            <th className={cn(classes.mainInfo, classes.left)}>Name</th>
-            <th className={classes.price}>Price</th>
-            <th className={classes.high24}>High (24h)</th>
-            <th className={classes.low24}>Low (24h)</th>
-            <th className={classes.change}>24h</th>
-            <th className={classes.volume}>Volume (24h)</th>
-            <th className={classes.marketCap}>Market Cap</th>
+            <th className={classes.center}>#</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>High (24h)</th>
+            <th>Low (24h)</th>
+            <th>24h</th>
+            <th>Volume (24h)</th>
+            <th>Market Cap</th>
           </tr>
         </thead>
         <tbody>

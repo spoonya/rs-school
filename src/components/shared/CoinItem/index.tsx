@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { AppRoutes } from '@/services';
+import { AppRoutes, SearchParams } from '@/services';
 import { Coin } from '@/types';
 import { formatNumber, formatPercent } from '@/utils';
 
@@ -20,16 +20,21 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
     const searchParams = new URLSearchParams(location.search);
     const currentPage = searchParams.get('page');
 
-    let url = `${AppRoutes.HOME}details/${data.id}`;
+    let url = `${AppRoutes.HOME}${AppRoutes.COIN_DETAILS.replace(':id', data.id)}`;
     if (currentPage) {
-      url += `?page=${currentPage}`;
+      url += `?${SearchParams.PAGE}=${currentPage}`;
     }
 
     navigate(url);
   };
 
   return (
-    <tr className={cn(classes.root, className)} onClick={handleClick} style={{ cursor: 'pointer' }}>
+    <tr
+      className={cn(classes.root, className)}
+      onClick={handleClick}
+      style={{ cursor: 'pointer' }}
+      data-testid="coin-item"
+    >
       <td className={classes.center}>{data.market_cap_rank}</td>
       <td className={classes.mainInfo}>
         <img src={data.image} alt={data.name} className={classes.logo} />

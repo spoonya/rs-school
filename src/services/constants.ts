@@ -6,7 +6,7 @@ export const SEARCH_QUERY_KEY = `${prefix}-search-query`;
 
 export enum AppRoutes {
   HOME = '/',
-  COIN_DETAILS = '/details/:id',
+  COIN_DETAILS = 'details/:id',
 }
 
 export const API_URL = 'https://api.coingecko.com/api/v3';
