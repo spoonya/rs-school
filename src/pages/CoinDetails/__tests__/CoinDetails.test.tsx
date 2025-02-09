@@ -25,6 +25,7 @@ vi.mock('@/hooks', () => ({
   useQueryParams: () => ({
     getParam: () => '1',
   }),
+  useCloseDetails: () => () => mockNavigate('/?page=1'),
 }));
 
 const mockCoinData = {

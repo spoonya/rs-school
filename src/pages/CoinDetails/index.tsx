@@ -1,24 +1,18 @@
 import { X } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Preloader } from '@/components/shared';
-import { useCoinDetails, useQueryParams } from '@/hooks';
+import { useCloseDetails, useCoinDetails } from '@/hooks';
 import { Page404 } from '@/pages';
-import { AppRoutes, DefaultCoinsApiParams, SearchParams } from '@/services';
 import { formatNumber, formatPercent } from '@/utils';
 
 import classes from './coin-details.module.scss';
 
 export function CoinDetailsPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const { getParam } = useQueryParams();
   const { data, isLoading, error } = useCoinDetails(id);
 
-  const handleClose = () => {
-    const currentPage = getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM);
-    navigate(currentPage ? `${AppRoutes.HOME}?${SearchParams.PAGE}=${currentPage}` : AppRoutes.HOME);
-  };
+  const handleClose = useCloseDetails();
 
   if (error || (!isLoading && !data)) {
     return <Page404 />;
