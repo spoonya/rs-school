@@ -1,0 +1,17 @@
+.root {
+  margin-bottom: 5rem;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 2rem 0;
+
+  border-bottom: 1px solid var(--background-tertiary);
+}
+
+.logo {
+  margin-right: 10rem;
+}

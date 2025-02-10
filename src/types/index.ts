@@ -1,1 +1,1 @@
-export * from './pokemon';
+export * from './coin';

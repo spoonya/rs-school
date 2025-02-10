@@ -1,0 +1,62 @@
+.wrapper {
+  overflow: hidden;
+  background: var(--background-primary);
+}
+
+.layout {
+  display: flex;
+  gap: 2rem;
+  min-height: 100%;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.tableSection {
+  position: relative;
+
+  flex: 0 0 100%;
+  transition: flex-basis 0.3s ease;
+  min-width: 0;
+
+  &.withDetails {
+    &::after {
+      position: absolute;
+
+      z-index: 1;
+
+      content: '';
+      background-color: var(--background-primary);
+      opacity: 0.5;
+
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    flex: 0 0 70%;
+  }
+}
+
+.detailsSection {
+  flex: 0 0 28%;
+  min-width: 0;
+  position: sticky;
+  top: 2rem;
+  animation: slideIn 0.3s ease-in-out;
+}
+
+.search {
+  margin-bottom: 3rem;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
