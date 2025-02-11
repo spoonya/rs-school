@@ -25,7 +25,7 @@ export const useSearch = () => {
           return;
         }
 
-        const response = await Api.coins.getByName(trimmedQuery, {
+        const response = await Api.coins.search(trimmedQuery, {
           page,
           limit: itemsPerPage,
         });
