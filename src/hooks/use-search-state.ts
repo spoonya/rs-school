@@ -46,7 +46,11 @@ export const useSearchState = () => {
   };
 
   const setSearch = (query: string, page: number) => {
-    setState((prev) => ({ ...prev, query, page, isLoading: true }));
+    setState((prev) => ({ ...prev, query, page }));
+  };
+
+  const setIsLoading = (isLoading: boolean) => {
+    setState((prev) => ({ ...prev, isLoading }));
   };
 
   return {
@@ -55,5 +59,6 @@ export const useSearchState = () => {
     setError,
     setResults,
     setSearch,
+    setIsLoading,
   };
 };

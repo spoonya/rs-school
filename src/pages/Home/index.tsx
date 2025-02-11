@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { CoinTable, Container, Pagination, Preloader, Search } from '@/components/shared';
-import { useCloseDetails, useCoinsMarkets, usePagination, useSearch } from '@/hooks';
+import { useCoinsMarkets, usePagination, useSearch } from '@/hooks';
 import { AppRoutes, COINS_MARKETS_TOTAL, DefaultCoinsApiParams } from '@/services';
 
 import classes from './home.module.scss';
@@ -24,14 +24,7 @@ export function HomePage() {
     Number(DefaultCoinsApiParams.PER_PAGE),
     COINS_MARKETS_TOTAL
   );
-  const { coins, isLoading, error } = useCoinsMarkets(currentPage.toString(), itemsPerPage, COINS_MARKETS_TOTAL);
-
-  const handleClose = useCloseDetails();
-  const handleMainPanelClick = () => {
-    if (showDetails) {
-      handleClose();
-    }
-  };
+  const { coins, isLoading, error } = useCoinsMarkets(currentPage, itemsPerPage, COINS_MARKETS_TOTAL);
 
   const isSearching = Boolean(searchQuery?.trim());
 
@@ -39,10 +32,7 @@ export function HomePage() {
     <div className={classes.wrapper}>
       <Container>
         <div className={classes.layout}>
-          <div
-            className={cn(classes.tableSection, showDetails ? classes.withDetails : '')}
-            onClick={handleMainPanelClick}
-          >
+          <div className={cn(classes.tableSection, showDetails ? classes.withDetails : '')}>
             <Search
               className={classes.search}
               placeholder="Bitcoin, ETH, PEPE etc."

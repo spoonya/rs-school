@@ -12,7 +12,7 @@ interface CoinTableProps {
 }
 
 export function CoinTable({ items, className }: Readonly<CoinTableProps>) {
-  if (items.length === 0) {
+  if (!items.length) {
     return (
       <div className={classes.noResults}>
         <SearchX size={32} className={classes.noResultsIcon} data-testid="search-x" />
@@ -29,9 +29,9 @@ export function CoinTable({ items, className }: Readonly<CoinTableProps>) {
             <th className={classes.center}>#</th>
             <th className={classes.left}>Coin</th>
             <th>Price</th>
-            <th>High (24h)</th>
-            <th>Low (24h)</th>
-            <th>24h</th>
+            <th>1h</th>
+            <th>1d</th>
+            <th>1w</th>
             <th>Volume (24h)</th>
             <th>Market Cap</th>
           </tr>

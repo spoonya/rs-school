@@ -1,21 +1,21 @@
-import { Coin, SearchResponse } from '@/types';
+import { CoinsMarketsResponse } from '@/types';
 
 import { ApiEndpoints, DefaultCoinsApiParams } from './constants';
 import { apiInstance } from './instance';
 
 export interface GetCoinsParams {
-  vs_currency?: string;
-  per_page?: string;
-  page?: string;
+  limit?: number;
+  currency?: string;
+  page?: number;
 }
 
 const defaultParams: GetCoinsParams = {
-  vs_currency: DefaultCoinsApiParams.CURRENCY,
-  per_page: DefaultCoinsApiParams.PER_PAGE,
-  page: DefaultCoinsApiParams.PAGE_NUM,
+  limit: Number(DefaultCoinsApiParams.PER_PAGE),
+  currency: DefaultCoinsApiParams.CURRENCY,
+  page: Number(DefaultCoinsApiParams.PAGE_NUM),
 };
 
-export const getMarkets = async (params?: GetCoinsParams): Promise<Coin[]> => {
+export const getMarkets = async (params?: GetCoinsParams): Promise<CoinsMarketsResponse> => {
   const { data } = await apiInstance.get(ApiEndpoints.COINS_MARKETS, {
     params: {
       ...defaultParams,
@@ -26,22 +26,12 @@ export const getMarkets = async (params?: GetCoinsParams): Promise<Coin[]> => {
   return data;
 };
 
-export const getByName = async (names: string[], params?: GetCoinsParams): Promise<Coin[]> => {
+export const getByName = async (name: string, params?: GetCoinsParams): Promise<CoinsMarketsResponse> => {
   const { data } = await apiInstance.get(ApiEndpoints.COINS_MARKETS, {
     params: {
       ...defaultParams,
       ...params,
-      ids: names.join(','),
-    },
-  });
-
-  return data;
-};
-
-export const search = async (name: string): Promise<SearchResponse> => {
-  const { data } = await apiInstance.get(ApiEndpoints.COINS_SEARCH, {
-    params: {
-      query: name,
+      name,
     },
   });
 

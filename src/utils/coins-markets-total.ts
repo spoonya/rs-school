@@ -1,4 +1,4 @@
-const MAX_COINS_MARKETS = 250;
+const MAX_COINS_MARKETS = 1000;
 
 export type CoinsMarketsTotal = number & { readonly __brand: unique symbol };
 

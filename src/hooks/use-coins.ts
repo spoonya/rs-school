@@ -3,7 +3,7 @@ import React from 'react';
 import { Api } from '@/services';
 import { Coin } from '@/types';
 
-export const useCoinsMarkets = (page: string, itemsPerPage: number, totalCoins: number) => {
+export const useCoinsMarkets = (page: number, itemsPerPage: number, totalCoins: number) => {
   const [coins, setCoins] = React.useState<Coin[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -20,9 +20,9 @@ export const useCoinsMarkets = (page: string, itemsPerPage: number, totalCoins: 
 
         if (pageNumber === totalPages) {
           const allowedCount = totalCoins - (pageNumber - 1) * itemsPerPage;
-          setCoins(coinsData.slice(0, allowedCount));
+          setCoins(coinsData.result.slice(0, allowedCount));
         } else {
-          setCoins(coinsData);
+          setCoins(coinsData.result);
         }
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'An error occurred';

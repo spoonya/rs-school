@@ -5,7 +5,7 @@ import { Api, DefaultCoinsApiParams } from '@/services';
 
 export const useSearch = () => {
   const { setMultipleParams, clearParams } = useQueryParams();
-  const { state, setSearch, setResults, setError } = useSearchState();
+  const { state, setSearch, setResults, setError, setIsLoading } = useSearchState();
 
   const handleSearch = useCallback(
     async (
@@ -13,40 +13,48 @@ export const useSearch = () => {
       itemsPerPage: number = Number(DefaultCoinsApiParams.PER_PAGE),
       page: number = Number(DefaultCoinsApiParams.PAGE_NUM)
     ) => {
-      setSearch(query, page);
+      setIsLoading(true);
+      const trimmedQuery = query.trim();
+      setSearch(trimmedQuery, page);
 
       try {
-        if (!query.trim()) {
+        if (!trimmedQuery) {
           setResults([], 0);
           clearParams();
+          setIsLoading(false);
           return;
         }
 
-        const searchResponse = await Api.coins.search(query);
-        const coinIds = searchResponse.coins.map((coin) => coin.id);
+        const response = await Api.coins.getByName(trimmedQuery, {
+          page,
+          limit: itemsPerPage,
+        });
 
-        if (coinIds.length === 0) {
+        if (response.result.length === 0) {
           setResults([], 0);
-          setMultipleParams({ search: query, page });
+          setMultipleParams({ search: trimmedQuery, page });
+          setIsLoading(false);
           return;
         }
 
-        const startIndex = (page - 1) * itemsPerPage;
-        const pageCoinIds = coinIds.slice(startIndex, startIndex + itemsPerPage);
-        const detailedCoins = await Api.coins.getByName(pageCoinIds);
-
-        setResults(detailedCoins, coinIds.length);
-        setMultipleParams({ search: query, page });
+        setResults(response.result, response.meta.itemCount);
+        setMultipleParams({ search: trimmedQuery, page });
+        setIsLoading(false);
       } catch (error) {
-        setError(error instanceof Error ? error.message : 'An error occurred');
+        const errorMessage = error instanceof Error ? error.message : 'Failed to fetch search results';
+        setError(errorMessage);
+        setResults([], 0);
+        setIsLoading(false);
       }
     },
-    [clearParams, setMultipleParams, setSearch, setResults, setError]
+    [clearParams, setMultipleParams, setSearch, setResults, setError, setIsLoading]
   );
 
   useEffect(() => {
-    handleSearch(state.query, Number(DefaultCoinsApiParams.PER_PAGE), state.page);
-  }, []);
+    if (state.query) {
+      handleSearch(state.query, Number(DefaultCoinsApiParams.PER_PAGE), state.page);
+    }
+  }, [state.query]);
 
   const changeSearchPage = useCallback(
     (page: number, itemsPerPage: number) => {
