@@ -26,6 +26,11 @@ export enum SearchParams {
   ID = 'id',
 }
 
-export const COINS_MARKETS_TOTAL = createCoinsMarketsTotal(1000);
+export enum Themes {
+  LIGHT = 'light',
+  DARK = 'dark',
+}
 
+export const COINS_MARKETS_TOTAL = createCoinsMarketsTotal(1000);
 export const SEARCH_QUERY_KEY = `${prefix}-search-query`;
+export const THEME_KEY = `${prefix}-theme`;

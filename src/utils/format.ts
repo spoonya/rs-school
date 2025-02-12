@@ -22,7 +22,9 @@ export const formatNumber = (num: number, options: { isCurrency?: boolean } = {}
   const firstNonZeroIndex = decimalPart?.search(/[1-9]/) ?? -1;
 
   if (firstNonZeroIndex === -1) {
-    return isCurrency ? `${isNegative ? '-' : ''}$0.00` : `${isNegative ? '-' : ''}0.00`;
+    const negativePrefix = isNegative ? '-' : '';
+
+    return isCurrency ? `${negativePrefix}$0.00` : `${negativePrefix}0.00`;
   }
 
   const zeroCount = firstNonZeroIndex;

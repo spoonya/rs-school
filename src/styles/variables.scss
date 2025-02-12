@@ -6,7 +6,7 @@ $ff-primary: 'Poppins', sans-serif;
   --color-primary: #5d7fff;
   --color-primary-dark: #4c6fff;
   --color-secondary: #8b4fed;
-  --color-accent: #00d4ff;
+  --color-accent: #4c00ff;
 
   // Functional Colors
   --color-success: #00c853;
@@ -37,6 +37,14 @@ $ff-primary: 'Poppins', sans-serif;
   --border-color: #2a3558;
   --shadow-color: rgba(13, 16, 45, 0.5);
 
+  // Table Specific
+  --table-row-hover: #1c2447;
+  --table-row-even: #151b35;
+
+  // Pagination
+  --pagination-active-text: #ffffff;
+  --pagination-hover-text: #1a1f36;
+
   // Charts & Graphs
   --chart-grid: #2a3558;
   --chart-line: var(--color-primary);
@@ -51,20 +59,24 @@ $ff-primary: 'Poppins', sans-serif;
 
   // Backgrounds
   --background-primary: #ffffff;
-  --background-secondary: #f8faff;
-  --background-tertiary: #edf1fc;
-  --surface-card: #ffffff;
+  --background-secondary: #f7f9fc;
+  --background-tertiary: #eef2f6;
+  --surface-card: #f0f4fc;
 
   // Text
   --text-primary: #1a1f36;
-  --text-secondary: #4e5d78;
-  --text-tertiary: #8792a2;
+  --text-secondary: #4a5567;
+  --text-tertiary: #6e7a8a;
+
+  // Table Specific
+  --table-row-hover: #f8f8f8;
+  --table-row-even: #f7f9fc;
 
   // UI Elements
-  --border-color: #e6e8f0;
-  --shadow-color: rgba(76, 111, 255, 0.1);
+  --border-color: #e4e9f2;
+  --shadow-color: rgba(76, 111, 255, 0.08);
 
   // Charts & Graphs
-  --chart-grid: #f0f3fa;
-  --chart-fill: rgba(76, 111, 255, 0.1);
+  --chart-grid: #eef2f6;
+  --chart-fill: rgba(76, 111, 255, 0.08);
 }

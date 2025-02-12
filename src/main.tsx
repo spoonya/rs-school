@@ -12,12 +12,15 @@ import { BrowserRouter } from 'react-router-dom';
 
 import App from '@/App';
 import { ErrorBoundary } from '@/components/shared';
+import { ThemeProvider } from './contexts';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <ErrorBoundary>
-        <App />
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
       </ErrorBoundary>
     </BrowserRouter>
   </React.StrictMode>

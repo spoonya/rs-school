@@ -9,17 +9,24 @@
   border-spacing: 0 0.8rem;
 }
 
-tr {
-  border-bottom: 1px solid var(--border-color);
+tbody {
+  tr {
+    background-color: var(--surface-card);
+    transition: background-color 0.2s ease;
 
-  &:last-child {
-    border-bottom: none;
+    &:nth-child(even) {
+      background-color: var(--table-row-even);
+    }
+
+    &:hover {
+      background-color: var(--table-row-hover);
+    }
   }
 }
 
 th {
   padding: 0 1.6rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   font-size: 1.2rem;
   text-align: right;
   font-weight: 500;

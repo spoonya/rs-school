@@ -4,7 +4,7 @@ import { SearchX } from 'lucide-react';
 import { CoinItem } from '@/components/shared/CoinItem';
 import { Coin } from '@/types';
 
-import classes from './coin.list.module.scss';
+import classes from './coin.table.module.scss';
 
 interface CoinTableProps {
   className?: string;
