@@ -1,6 +1,8 @@
+import React from 'react';
+
 import { useLocalStorage } from '@/hooks';
 import { THEME_KEY, Themes } from '@/services';
-import React from 'react';
+
 import { ThemeContext } from './theme-context-def';
 
 interface ThemeProviderProps {
@@ -15,13 +17,11 @@ export function ThemeProvider({ children }: Readonly<ThemeProviderProps>) {
     setTheme(newTheme);
   }, [theme, setTheme]);
 
-  React.useLayoutEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
   return (
-    <ThemeContext.Provider value={React.useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme])}>
-      {children}
-    </ThemeContext.Provider>
+    <div className={`theme-provider ${theme.toLowerCase()}`}>
+      <ThemeContext.Provider value={React.useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme])}>
+        {children}
+      </ThemeContext.Provider>
+    </div>
   );
 }
