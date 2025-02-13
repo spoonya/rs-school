@@ -26,6 +26,7 @@ export function CoinTable({ items, className }: Readonly<CoinTableProps>) {
       <table className={classes.table}>
         <thead>
           <tr>
+            <th className={classes.center} aria-label="Favorite"></th>
             <th className={classes.center}>#</th>
             <th className={classes.left}>Coin</th>
             <th>Price</th>

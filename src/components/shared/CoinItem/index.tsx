@@ -6,6 +6,10 @@ import { Coin } from '@/types';
 import { formatNumber, formatPercent } from '@/utils';
 
 import classes from './coin.item.module.scss';
+import { FavoriteCheckbox } from '@/components/FavoriteCheckbox';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { addFavorite, removeFavorite } from '@/store/favorite/slice';
 
 interface CoinItemProps {
   className?: string;
@@ -15,6 +19,9 @@ interface CoinItemProps {
 export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const favorites = useSelector((state: RootState) => state.favorite.coinsIds);
+  const dispatch = useDispatch();
 
   const handleClick = () => {
     const searchParams = new URLSearchParams(location.search);
@@ -35,6 +42,18 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
       style={{ cursor: 'pointer' }}
       data-testid="coin-item"
     >
+      <td className={classes.center}>
+        <FavoriteCheckbox
+          isFavorite={favorites.includes(data.id)}
+          onFavorite={() => {
+            if (favorites.includes(data.id)) {
+              dispatch(removeFavorite(data.id));
+            } else {
+              dispatch(addFavorite(data.id));
+            }
+          }}
+        />
+      </td>
       <td className={classes.center}>{data.rank}</td>
       <td className={classes.mainInfo}>
         <img src={data.icon} alt={data.name} className={classes.logo} />

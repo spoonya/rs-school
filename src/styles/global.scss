@@ -20,11 +20,13 @@ body {
   background-color: var(--background-primary);
 }
 
-.theme-provider{
+.theme-provider {
   min-height: 100vh;
   background-color: var(--background-primary);
   color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 
   &.light {
     // Brand Colors
@@ -35,7 +37,7 @@ body {
     --background-primary: #ffffff;
     --background-secondary: #f7f9fc;
     --background-tertiary: #eef2f6;
-    --surface-card: #f0f4fc;
+    --surface-card: #f3f9ff;
 
     // Text
     --text-primary: #1a1f36;
