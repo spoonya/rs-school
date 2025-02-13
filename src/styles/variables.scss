@@ -3,8 +3,6 @@ $ff-primary: 'Poppins', sans-serif;
 
 :root {
   // Brand Colors
-  --color-primary: #5d7fff;
-  --color-primary-dark: #4c6fff;
   --color-secondary: #8b4fed;
   --color-accent: #4c00ff;
 
@@ -24,29 +22,4 @@ $ff-primary: 'Poppins', sans-serif;
   --color-profit: #00dc82;
   --color-loss: #ff3d71;
   --color-volume: #aa00ff;
-  --color-chart-grid: rgba(255, 255, 255, 0.1);
-
-  // Default Dark Theme
-  --background-primary: #0f1429;
-  --background-secondary: #151b35;
-  --background-tertiary: #1c2447;
-  --surface-card: #1a1f36;
-  --text-primary: #ffffff;
-  --text-secondary: #b4c2d3;
-  --text-tertiary: #8792a2;
-  --border-color: #2a3558;
-  --shadow-color: rgba(13, 16, 45, 0.5);
-
-  // Table Specific
-  --table-row-hover: #1c2447;
-  --table-row-even: #151b35;
-
-  // Pagination
-  --pagination-active-text: #ffffff;
-  --pagination-hover-text: #1a1f36;
-
-  // Charts & Graphs
-  --chart-grid: #2a3558;
-  --chart-line: var(--color-primary);
-  --chart-fill: rgba(93, 127, 255, 0.15);
 }
