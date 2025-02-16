@@ -1,15 +1,15 @@
 import cn from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { CheckboxFavorite } from '@/components/shared';
 import { AppRoutes, SearchParams } from '@/services';
+import { addFavorite, removeFavorite } from '@/store/favorite/slice';
+import { RootState } from '@/store/store';
 import { Coin } from '@/types';
 import { formatNumber, formatPercent } from '@/utils';
 
 import classes from './coin.item.module.scss';
-import { FavoriteCheckbox } from '@/components/FavoriteCheckbox';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { addFavorite, removeFavorite } from '@/store/favorite/slice';
 
 interface CoinItemProps {
   className?: string;
@@ -43,7 +43,7 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
       data-testid="coin-item"
     >
       <td className={classes.center}>
-        <FavoriteCheckbox
+        <CheckboxFavorite
           isFavorite={favorites.includes(data.id)}
           onFavorite={() => {
             if (favorites.includes(data.id)) {

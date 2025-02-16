@@ -1,41 +1,27 @@
 import React from 'react';
 
-import { Api } from '@/services';
-import { Coin } from '@/types';
+import { useGetMarketsQuery } from '@/services';
 
 export const useCoinsMarkets = (page: number, itemsPerPage: number, totalCoins: number) => {
-  const [coins, setCoins] = React.useState<Coin[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const { data, isFetching, error } = useGetMarketsQuery({ page }, { refetchOnMountOrArgChange: true });
 
-  React.useEffect(() => {
-    const fetchCoins = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
+  const processedCoins = React.useMemo(() => {
+    if (!data?.result) return [];
 
-        const coinsData = await Api.coins.getMarkets({ page });
-        const pageNumber = Number(page);
-        const totalPages = Math.ceil(totalCoins / itemsPerPage);
+    const pageNumber = Number(page);
+    const totalPages = Math.ceil(totalCoins / itemsPerPage);
 
-        if (pageNumber === totalPages) {
-          const allowedCount = totalCoins - (pageNumber - 1) * itemsPerPage;
-          setCoins(coinsData.result.slice(0, allowedCount));
-        } else {
-          setCoins(coinsData.result);
-        }
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'An error occurred';
-        setError(errorMessage);
-        setCoins([]);
-        console.error('API Error:', errorMessage);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (pageNumber === totalPages) {
+      const allowedCount = totalCoins - (pageNumber - 1) * itemsPerPage;
+      return data.result.slice(0, allowedCount);
+    }
 
-    fetchCoins();
-  }, [page, itemsPerPage, totalCoins]);
+    return data.result;
+  }, [data, page, itemsPerPage, totalCoins]);
 
-  return { coins, isLoading, error };
+  return {
+    coins: processedCoins,
+    isLoading: isFetching,
+    error: error ? 'An error occurred while fetching coins' : null,
+  };
 };

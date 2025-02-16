@@ -7,8 +7,6 @@ export enum AppRoutes {
   COIN_DETAILS = 'details/:id',
 }
 
-export const API_URL = 'https://openapiv1.coinstats.app';
-
 export enum ApiEndpoints {
   COINS_MARKETS = '/coins',
   COINS_DETAILS = '/coins/:id',

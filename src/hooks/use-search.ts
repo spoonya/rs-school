@@ -1,72 +1,72 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { useQueryParams, useSearchState } from '@/hooks';
-import { Api, DefaultCoinsApiParams } from '@/services';
+import { DefaultCoinsApiParams } from '@/services';
+import { useGetByNameQuery } from '@/services/api';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 
 export const useSearch = () => {
   const { setMultipleParams, clearParams } = useQueryParams();
   const { state, setSearch, setResults, setError, setIsLoading } = useSearchState();
+  const prevIsFetching = useRef(false);
 
   const handleSearch = useCallback(
-    async (
-      query: string,
-      itemsPerPage: number = Number(DefaultCoinsApiParams.PER_PAGE),
-      page: number = Number(DefaultCoinsApiParams.PAGE_NUM)
-    ) => {
-      setIsLoading(true);
+    (query: string, page: number = Number(DefaultCoinsApiParams.PAGE_NUM)) => {
       const trimmedQuery = query.trim();
       setSearch(trimmedQuery, page);
 
-      try {
-        if (!trimmedQuery) {
-          setResults([], 0);
-          clearParams();
-          setIsLoading(false);
-          return;
-        }
-
-        const response = await Api.coins.search(trimmedQuery, {
-          page,
-          limit: itemsPerPage,
-        });
-
-        if (response.result.length === 0) {
-          setResults([], 0);
-          setMultipleParams({ search: trimmedQuery, page });
-          setIsLoading(false);
-          return;
-        }
-
-        setResults(response.result, response.meta.itemCount);
-        setMultipleParams({ search: trimmedQuery, page });
-        setIsLoading(false);
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to fetch search results';
-        setError(errorMessage);
+      if (!trimmedQuery) {
         setResults([], 0);
-        setIsLoading(false);
+        clearParams();
+        return;
       }
+
+      setMultipleParams({ search: trimmedQuery, page });
     },
-    [clearParams, setMultipleParams, setSearch, setResults, setError, setIsLoading]
+    [clearParams, setMultipleParams, setSearch, setResults]
+  );
+
+  const { data, error, isFetching } = useGetByNameQuery(
+    state.query
+      ? {
+          name: state.query,
+          page: state.page,
+          limit: Number(DefaultCoinsApiParams.PER_PAGE),
+        }
+      : skipToken,
+    {
+      refetchOnMountOrArgChange: true,
+    }
   );
 
   useEffect(() => {
-    if (state.query) {
-      handleSearch(state.query, Number(DefaultCoinsApiParams.PER_PAGE), state.page);
+    if (isFetching !== prevIsFetching.current) {
+      prevIsFetching.current = isFetching;
+      setIsLoading(isFetching);
     }
-  }, [state.query]);
+
+    if (error) {
+      setError('Failed to fetch search results');
+      setResults([], 0);
+    } else if (data) {
+      setResults(data.result, data.meta.itemCount);
+    }
+  }, [data, error, isFetching, setError, setIsLoading, setResults]);
 
   const changeSearchPage = useCallback(
-    (page: number, itemsPerPage: number) => {
-      handleSearch(state.query, itemsPerPage, page);
+    (page: number) => {
+      if (state.query) {
+        setSearch(state.query, page);
+        setMultipleParams({ search: state.query, page });
+      }
     },
-    [state.query, handleSearch]
+    [state.query, setSearch, setMultipleParams]
   );
 
   return {
     searchQuery: state.query,
     searchResults: state.results,
-    isSearchLoading: state.isLoading,
+    isSearchLoading: isFetching,
     searchError: state.error,
     totalSearchResults: state.total,
     currentSearchPage: state.page,

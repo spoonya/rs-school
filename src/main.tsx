@@ -8,24 +8,25 @@ import '@fontsource/poppins/700.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
 import App from '@/App';
 import { ErrorBoundary } from '@/components/shared';
+
 import { ThemeProvider } from './contexts';
 import { store } from './store/store';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
+    <Provider store={store}>
+      <BrowserRouter>
         <ErrorBoundary>
           <ThemeProvider>
             <App />
           </ThemeProvider>
         </ErrorBoundary>
-      </Provider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );

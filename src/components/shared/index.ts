@@ -7,4 +7,5 @@ export { CoinTable } from '@/components/shared/CoinTable';
 export { Logo } from '@/components/shared/Logo';
 export { Preloader } from '@/components/shared/Preloader';
 export { Pagination } from '@/components/shared/Pagination';
-export { FavoriteCheckbox } from '@/components/FavoriteCheckbox';
+export { CheckboxFavorite } from '@/components/shared/CheckboxFavorite';
+export { ThemeSwitcher } from '@/components/shared/ThemeSwitcher';

@@ -1,5 +1,6 @@
-import { Themes } from '@/services';
 import React from 'react';
+
+import { Themes } from '@/services';
 
 interface ThemeContextType {
   theme: Themes;

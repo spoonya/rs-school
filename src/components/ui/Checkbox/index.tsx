@@ -1,6 +1,6 @@
 import cn from 'classnames';
-import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import { Check } from 'lucide-react';
+import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 
 import classes from './checkbox.module.scss';
 
