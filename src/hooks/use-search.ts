@@ -1,74 +1,57 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback } from 'react';
 
 import { useQueryParams, useSearchState } from '@/hooks';
-import { DefaultCoinsApiParams } from '@/services';
-import { useGetByNameQuery } from '@/services/api';
-import { skipToken } from '@reduxjs/toolkit/query/react';
+import { DefaultCoinsApiParams, useSearchQuery } from '@/services';
 
 export const useSearch = () => {
   const { setMultipleParams, clearParams } = useQueryParams();
-  const { state, setSearch, setResults, setError, setIsLoading } = useSearchState();
-  const prevIsFetching = useRef(false);
+  const { state, setSearch } = useSearchState();
 
   const handleSearch = useCallback(
-    (query: string, page: number = Number(DefaultCoinsApiParams.PAGE_NUM)) => {
+    (query: string) => {
       const trimmedQuery = query.trim();
-      setSearch(trimmedQuery, page);
 
-      if (!trimmedQuery) {
-        setResults([], 0);
-        clearParams();
-        return;
-      }
-
-      setMultipleParams({ search: trimmedQuery, page });
-    },
-    [clearParams, setMultipleParams, setSearch, setResults]
-  );
-
-  const { data, error, isFetching } = useGetByNameQuery(
-    state.query
-      ? {
-          name: state.query,
-          page: state.page,
-          limit: Number(DefaultCoinsApiParams.PER_PAGE),
+      if (trimmedQuery !== state.query) {
+        setSearch(trimmedQuery, 1);
+        if (trimmedQuery) {
+          setMultipleParams({ search: trimmedQuery, page: 1 });
+        } else {
+          clearParams();
         }
-      : skipToken,
-    {
-      refetchOnMountOrArgChange: true,
-    }
+      }
+    },
+    [state.query, setSearch, setMultipleParams, clearParams]
   );
-
-  useEffect(() => {
-    if (isFetching !== prevIsFetching.current) {
-      prevIsFetching.current = isFetching;
-      setIsLoading(isFetching);
-    }
-
-    if (error) {
-      setError('Failed to fetch search results');
-      setResults([], 0);
-    } else if (data) {
-      setResults(data.result, data.meta.itemCount);
-    }
-  }, [data, error, isFetching, setError, setIsLoading, setResults]);
 
   const changeSearchPage = useCallback(
     (page: number) => {
-      if (state.query) {
+      if (page !== state.page) {
         setSearch(state.query, page);
         setMultipleParams({ search: state.query, page });
       }
     },
-    [state.query, setSearch, setMultipleParams]
+    [state.query, state.page, setSearch, setMultipleParams]
+  );
+
+  const {
+    data: searchData,
+    error: searchError,
+    isFetching,
+  } = useSearchQuery(
+    {
+      query: state.query,
+      page: state.page,
+      limit: Number(DefaultCoinsApiParams.PER_PAGE),
+    },
+    { skip: state.query.length === 0 }
   );
 
   return {
     searchQuery: state.query,
-    searchResults: state.results,
+    searchResults: searchData?.result ?? [],
     isSearchLoading: isFetching,
-    searchError: state.error,
-    totalSearchResults: state.total,
+    searchError,
+    totalSearchResults: searchData?.meta.itemCount ?? 0,
     currentSearchPage: state.page,
     handleSearch,
     changeSearchPage,

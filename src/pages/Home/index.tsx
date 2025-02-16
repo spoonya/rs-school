@@ -36,9 +36,9 @@ export function HomePage() {
             <Search
               className={classes.search}
               placeholder="Bitcoin, ETH, PEPE etc."
-              onSearch={(query) => handleSearch(query, itemsPerPage)}
+              onSearch={(query) => handleSearch(query)}
             />
-            {(error || searchError) && <div>{error ?? searchError}</div>}
+            {(error || searchError) && <div>{JSON.stringify(error ?? searchError)}</div>}
             {(isLoading || isSearchLoading) && <Preloader />}
             {!error && !isLoading && !isSearchLoading && (
               <>
@@ -50,7 +50,7 @@ export function HomePage() {
                         itemsPerPage={itemsPerPage}
                         totalItems={totalSearchResults}
                         currentPage={currentSearchPage}
-                        paginate={(page) => changeSearchPage(page, itemsPerPage)}
+                        paginate={(page) => changeSearchPage(page)}
                       />
                     )}
                   </>

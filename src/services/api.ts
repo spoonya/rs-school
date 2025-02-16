@@ -60,10 +60,55 @@ export const api = createApi({
       }),
       transformResponse: (response: { result: Coin[]; meta: CoinsMarketsResponse['meta'] }) => response,
     }),
+    search: builder.query<CoinsMarketsResponse, { query: string } & Partial<GetCoinsParams>>({
+      async queryFn(args, _api, _extraOptions, baseQuery) {
+        const { query, ...params } = args;
+
+        // Первый запрос по символу
+        const symbolResult = await baseQuery({
+          url: ApiEndpoints.COINS_MARKETS,
+          params: {
+            ...defaultParams,
+            ...params,
+            symbol: query,
+          },
+        });
+
+        if (symbolResult.error) {
+          return { error: symbolResult.error };
+        }
+
+        const symbolData = symbolResult.data as CoinsMarketsResponse;
+
+        // Если есть результаты по символу — возвращаем
+        if (symbolData.result.length > 0) {
+          return { data: symbolData };
+        }
+
+        // Второй запрос по имени
+        const nameResult = await baseQuery({
+          url: ApiEndpoints.COINS_MARKETS,
+          params: {
+            ...defaultParams,
+            ...params,
+            name: query,
+          },
+        });
+
+        if (nameResult.error) {
+          return { error: nameResult.error };
+        }
+
+        const nameData = nameResult.data as CoinsMarketsResponse;
+        return { data: nameData };
+      },
+    }),
+
     getCoinDetails: builder.query<CoinDetails, string>({
       query: (id) => ApiEndpoints.COINS_DETAILS.replace(':id', id),
     }),
   }),
 });
 
-export const { useGetMarketsQuery, useGetByNameQuery, useGetBySymbolQuery, useGetCoinDetailsQuery } = api;
+export const { useGetMarketsQuery, useGetByNameQuery, useGetBySymbolQuery, useSearchQuery, useGetCoinDetailsQuery } =
+  api;
