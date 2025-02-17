@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import { Outlet, useLocation } from 'react-router-dom';
 
-import { CoinTable, Container, Pagination, Preloader, Search } from '@/components/shared';
+import { CoinTable, Container, FlyoutFavorites, Pagination, Preloader, Search } from '@/components/shared';
 import { useCoinsMarkets, usePagination, useSearch } from '@/hooks';
 import { AppRoutes, COINS_MARKETS_TOTAL, DefaultCoinsApiParams } from '@/services';
 
@@ -56,6 +56,7 @@ export function HomePage() {
                   </>
                 ) : (
                   <>
+                    <FlyoutFavorites />
                     <CoinTable items={coins} />
                     <Pagination
                       itemsPerPage={itemsPerPage}

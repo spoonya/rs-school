@@ -15,7 +15,7 @@ import App from '@/App';
 import { ErrorBoundary } from '@/components/shared';
 
 import { ThemeProvider } from './contexts';
-import { store } from './store/store';
+import { store } from './store';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

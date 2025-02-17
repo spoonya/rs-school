@@ -64,6 +64,7 @@ export const api = createApi({
       async queryFn(args, _api, _extraOptions, baseQuery) {
         const { query, ...params } = args;
 
+        // Так как поиск не реализован на бэке, делаем два запроса
         // Первый запрос по символу
         const symbolResult = await baseQuery({
           url: ApiEndpoints.COINS_MARKETS,
@@ -80,7 +81,6 @@ export const api = createApi({
 
         const symbolData = symbolResult.data as CoinsMarketsResponse;
 
-        // Если есть результаты по символу — возвращаем
         if (symbolData.result.length > 0) {
           return { data: symbolData };
         }

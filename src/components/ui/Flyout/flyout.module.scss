@@ -1,0 +1,17 @@
+.root {
+  position: fixed;
+
+  z-index: 4;
+
+  bottom: 4rem;
+  left: 4rem;
+
+  max-width: 30rem;
+  width: 100%;
+
+  padding: 2rem;
+
+  border-radius: var(--border-radius-medium);
+  background-color: var(--background-secondary);
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+}

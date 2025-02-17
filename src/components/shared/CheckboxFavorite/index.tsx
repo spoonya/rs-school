@@ -1,6 +1,7 @@
-import { Checkbox } from '@/components/ui/Checkbox';
-import { Star } from 'lucide-react';
 import cn from 'classnames';
+import { Star } from 'lucide-react';
+
+import { Checkbox } from '@/components/ui/Checkbox';
 
 import classes from './checkbox.favorite.module.scss';
 

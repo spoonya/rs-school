@@ -1,15 +1,14 @@
 import cn from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CheckboxFavorite } from '@/components/shared';
 import { AppRoutes, SearchParams } from '@/services';
-import { addFavorite, removeFavorite } from '@/store/favorite/slice';
-import { RootState } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { Coin } from '@/types';
 import { formatNumber, formatPercent } from '@/utils';
 
 import classes from './coin.item.module.scss';
+import { addFavorite, removeFavorite } from '@/store/favorite/slice';
 
 interface CoinItemProps {
   className?: string;
@@ -20,12 +19,12 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const favorites = useSelector((state: RootState) => state.favorite.coinsIds);
-  const dispatch = useDispatch();
+  const favorites = useAppSelector((state) => state.favorite.coinsIds);
+  const dispatch = useAppDispatch();
 
   const handleClick = () => {
     const searchParams = new URLSearchParams(location.search);
-    const currentPage = searchParams.get('page');
+    const currentPage = searchParams.get(SearchParams.PAGE);
 
     let url = `${AppRoutes.HOME}${AppRoutes.COIN_DETAILS.replace(':id', data.id)}`;
     if (currentPage) {
@@ -43,16 +42,18 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
       data-testid="coin-item"
     >
       <td className={classes.center}>
-        <CheckboxFavorite
-          isFavorite={favorites.includes(data.id)}
-          onFavorite={() => {
-            if (favorites.includes(data.id)) {
-              dispatch(removeFavorite(data.id));
-            } else {
-              dispatch(addFavorite(data.id));
-            }
-          }}
-        />
+        <div onClick={(e) => e.stopPropagation()}>
+          <CheckboxFavorite
+            isFavorite={favorites.includes(data.id)}
+            onFavorite={() => {
+              if (favorites.includes(data.id)) {
+                dispatch(removeFavorite(data.id));
+              } else {
+                dispatch(addFavorite(data.id));
+              }
+            }}
+          />
+        </div>
       </td>
       <td className={classes.center}>{data.rank}</td>
       <td className={classes.mainInfo}>
