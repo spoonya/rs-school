@@ -14,4 +14,36 @@
   border-radius: var(--border-radius-medium);
   background-color: var(--background-secondary);
   box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+
+  visibility: hidden;
+
+  &.is-open {
+    animation: slide-in-left 0.2s ease-in-out forwards;
+  }
+
+  &.is-closed {
+    animation: slide-out-left 0.2s ease-in-out forwards;
+  }
+}
+
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    visibility: visible;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-left {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  100% {
+    visibility: hidden;
+    transform: translateX(-150%);
+  }
 }
