@@ -3,6 +3,7 @@ import cn from 'classnames';
 import { Button, Flyout } from '@/components/ui';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { removeAllFavorites } from '@/store/favorite/slice';
+import { coinCSVOptions, downloadCSV } from '@/utils';
 
 import classes from './flyout.favorites.module.scss';
 
@@ -11,19 +12,19 @@ export interface FlyoutFavoritesProps {
 }
 
 export function FlyoutFavorites({ className }: Readonly<FlyoutFavoritesProps>) {
-  const { coinsIds } = useAppSelector((state) => state.favorite);
+  const { coins } = useAppSelector((state) => state.favorite);
   const dispatch = useAppDispatch();
 
-  const isFavoritesEmpty = coinsIds.length === 0;
+  const isFavoritesEmpty = coins.length === 0;
 
   const handleDownload = () => {
-    console.log('download');
+    downloadCSV(coins, coinCSVOptions, `${coins.length}_coins.csv`);
   };
 
   return (
-    <div className={cn(classes.root, className)}>
+    <div className={cn(classes.root, className, { [classes.empty]: isFavoritesEmpty })}>
       <Flyout isOpen={!isFavoritesEmpty}>
-        <div className={classes.selected}>Selected coins: {coinsIds.length}</div>
+        <div className={classes.selected}>Selected coins: {coins.length}</div>
         <div className={classes.buttons}>
           <Button onClick={() => dispatch(removeAllFavorites())}>Unselect all</Button>
           <Button variant="primary" onClick={handleDownload}>

@@ -1,27 +1,28 @@
+import { Coin } from '@/types';
 import { createSlice } from '@reduxjs/toolkit';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface FavoriteState {
-  coinsIds: string[];
+  coins: Coin[];
 }
 
 const initialState: FavoriteState = {
-  coinsIds: [],
+  coins: [],
 };
 
 export const favoriteSlice = createSlice({
   name: 'favorite',
   initialState,
   reducers: {
-    addFavorite: (state, action: PayloadAction<string>) => {
-      state.coinsIds.push(action.payload);
+    addFavorite: (state, action: PayloadAction<Coin>) => {
+      state.coins.push(action.payload);
     },
-    removeFavorite: (state, action: PayloadAction<string>) => {
-      state.coinsIds = state.coinsIds.filter((id) => id !== action.payload);
+    removeFavorite: (state, action: PayloadAction<Coin['id']>) => {
+      state.coins = state.coins.filter((coin) => coin.id !== action.payload);
     },
     removeAllFavorites: (state) => {
-      state.coinsIds = [];
+      state.coins = [];
     },
   },
 });

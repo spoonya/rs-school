@@ -4,11 +4,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckboxFavorite } from '@/components/shared';
 import { AppRoutes, SearchParams } from '@/services';
 import { useAppDispatch, useAppSelector } from '@/store';
+import { addFavorite, removeFavorite } from '@/store/favorite/slice';
 import { Coin } from '@/types';
 import { formatNumber, formatPercent } from '@/utils';
 
 import classes from './coin.item.module.scss';
-import { addFavorite, removeFavorite } from '@/store/favorite/slice';
 
 interface CoinItemProps {
   className?: string;
@@ -19,7 +19,7 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const favorites = useAppSelector((state) => state.favorite.coinsIds);
+  const favorites = useAppSelector((state) => state.favorite.coins);
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
@@ -34,6 +34,8 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
     navigate(url);
   };
 
+  const isFavorite = favorites.indexOf(data) !== -1;
+
   return (
     <tr
       className={cn(classes.root, className)}
@@ -44,12 +46,12 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
       <td className={classes.center}>
         <div onClick={(e) => e.stopPropagation()}>
           <CheckboxFavorite
-            isFavorite={favorites.includes(data.id)}
+            isFavorite={isFavorite}
             onFavorite={() => {
-              if (favorites.includes(data.id)) {
+              if (isFavorite) {
                 dispatch(removeFavorite(data.id));
               } else {
-                dispatch(addFavorite(data.id));
+                dispatch(addFavorite(data));
               }
             }}
           />
