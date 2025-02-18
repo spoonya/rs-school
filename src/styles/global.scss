@@ -30,32 +30,44 @@ body {
 
   &.light {
     // Brand Colors
-    --color-primary: #4c6fff;
-    --color-primary-dark: #3d5ce0;
+    --color-primary: #6c5ce7;
+    --color-primary-dark: #5b4bc4;
+    --color-secondary: #a55eea;
+    --color-accent: #00c2d4;
+
+    // Crypto Specific
+    --color-profit: #006d4b;
+    --color-loss: #cc1f35;
+    --color-volume: #6d5aef;
+
+    // Functional Colors
+    --color-success: #007a5e;
+    --color-error: #bd1e36;
+    --color-error-bg: rgba(189, 30, 54, 0.08);
+    --color-success-bg: rgba(0, 122, 94, 0.1);
 
     // Backgrounds
-    --background-primary: #ffffff;
-    --background-secondary: #f7f9fc;
-    --background-tertiary: #eef2f6;
-    --surface-card: #f3f9ff;
+    --background-primary: #fdfcff;
+    --background-secondary: #f8f9ff;
+    --background-tertiary: #eef1ff;
+    --surface-card: #ffffff;
 
     // Text
-    --text-primary: #1a1f36;
-    --text-secondary: #4a5567;
-    --text-tertiary: #6e7a8a;
-
-    // Table Specific
-    --table-row-hover: #f8f8f8;
-    --table-row-even: #f7f9fc;
+    --text-primary: #2d3436;
+    --text-secondary: #636e72;
+    --text-tertiary: #7f8c8d;
 
     // UI Elements
-    --border-color: #e4e9f2;
-    --shadow-color: rgba(76, 111, 255, 0.08);
+    --border-color: #daddff;
+    --shadow-color: rgba(108, 92, 231, 0.1);
+
+    // Table Specific
+    --table-row-hover: #f0f4ff;
+    --table-row-even: #f8f9ff;
 
     // Charts & Graphs
-    --chart-grid: #eef2f6;
-    --chart-fill: rgba(76, 111, 255, 0.08);
-    --color-chart-grid: rgba(0, 0, 0, 0.1);
+    --chart-grid: #eef1ff;
+    --chart-fill: rgba(108, 92, 231, 0.08);
   }
 
   &.dark {

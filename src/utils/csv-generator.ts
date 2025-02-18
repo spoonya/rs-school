@@ -26,17 +26,3 @@ export const generateCSV = <T>(data: T[], options: CSVOptions<T>): string => {
 
   return includeBOM ? '\uFEFF' + csvString : csvString;
 };
-
-export const downloadCSV = <T>(data: T[], options: CSVOptions<T>, filename = 'data.csv') => {
-  const csvString = generateCSV(data, options);
-  const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-};

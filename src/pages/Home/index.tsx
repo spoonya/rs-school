@@ -42,6 +42,7 @@ export function HomePage() {
             {(isLoading || isSearchLoading) && <Preloader />}
             {!error && !isLoading && !isSearchLoading && (
               <>
+                <FlyoutFavorites />
                 {isSearching ? (
                   <>
                     <CoinTable items={searchResults} />
@@ -56,7 +57,6 @@ export function HomePage() {
                   </>
                 ) : (
                   <>
-                    <FlyoutFavorites />
                     <CoinTable items={coins} />
                     <Pagination
                       itemsPerPage={itemsPerPage}
