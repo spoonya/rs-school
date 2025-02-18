@@ -4,7 +4,7 @@ import { formatNumber, formatPercent, formatSupply } from './format';
 
 export const coinCSVOptions: CSVOptions<Coin> = {
   delimiter: ';',
-  includeBOM: true,
+  includeBOM: false,
   fields: [
     { key: 'name', label: 'Name' },
     { key: 'symbol', label: 'Symbol' },
