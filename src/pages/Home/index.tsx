@@ -38,11 +38,12 @@ export function HomePage() {
               placeholder="Bitcoin, ETH, PEPE etc."
               onSearch={(query) => handleSearch(query)}
             />
+            <FlyoutFavorites />
+
             {(error || searchError) && <div>{JSON.stringify(error ?? searchError)}</div>}
             {(isLoading || isSearchLoading) && <Preloader />}
             {!error && !isLoading && !isSearchLoading && (
               <>
-                <FlyoutFavorites />
                 {isSearching ? (
                   <>
                     <CoinTable items={searchResults} />

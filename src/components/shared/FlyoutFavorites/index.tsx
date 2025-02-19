@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { FolderHeart } from 'lucide-react';
 
 import { Button, Flyout } from '@/components/ui';
 import { useCSV } from '@/hooks';
@@ -21,7 +22,7 @@ export function FlyoutFavorites({ className }: Readonly<FlyoutFavoritesProps>) {
 
   return (
     <div className={cn(classes.root, className, { [classes.empty]: isFavoritesEmpty })}>
-      <Flyout isOpen={!isFavoritesEmpty}>
+      <Flyout isOpen={!isFavoritesEmpty} minimizeBtn contentOnMinimize={<FolderHeart size={20} />}>
         <div className={classes.selected}>Selected coins: {coins.length}</div>
         <div className={classes.buttons}>
           <Button onClick={() => dispatch(removeAllFavorites())}>Unselect all</Button>
