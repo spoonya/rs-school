@@ -4,7 +4,7 @@ import { FolderHeart } from 'lucide-react';
 import { Button, Flyout } from '@/components/ui';
 import { useCSV } from '@/hooks';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { removeAllFavorites } from '@/store/favorite/slice';
+import { removeAllFavorites } from '@/store/favorites/slice';
 import { coinCSVOptions } from '@/utils';
 
 import classes from './flyout.favorites.module.scss';
@@ -14,7 +14,7 @@ export interface FlyoutFavoritesProps {
 }
 
 export function FlyoutFavorites({ className }: Readonly<FlyoutFavoritesProps>) {
-  const { coins } = useAppSelector((state) => state.favorite);
+  const { coins } = useAppSelector((state) => state.favorites);
   const { downloadCSV } = useCSV();
   const dispatch = useAppDispatch();
 

@@ -1,10 +1,11 @@
 import cn from 'classnames';
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CheckboxFavorite } from '@/components/shared';
 import { AppRoutes, SearchParams } from '@/services';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { addFavorite, removeFavorite } from '@/store/favorite/slice';
+import { addFavorite, removeFavorite } from '@/store/favorites/slice';
 import { Coin } from '@/types';
 import { formatNumber, formatPercent } from '@/utils';
 
@@ -19,7 +20,7 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const favorites = useAppSelector((state) => state.favorite.coins);
+  const favorites = useAppSelector((state) => state.favorites.coins);
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
@@ -34,7 +35,7 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
     navigate(url);
   };
 
-  const isFavorite = favorites.indexOf(data) !== -1;
+  const isFavorite = favorites.some((coin) => coin.id === data.id);
 
   return (
     <tr

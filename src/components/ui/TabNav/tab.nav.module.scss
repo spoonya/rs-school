@@ -1,0 +1,40 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+
+  border-bottom: 1px solid var(--border-color);
+}
+
+.navBtn {
+  position: relative;
+  padding: 0.8rem 2rem;
+  font-size: 1.4rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 1px;
+    background-color: var(--color-primary);
+    transition: width 0.2s ease;
+  }
+
+  &.active {
+    &::after {
+      width: 100%;
+    }
+  }
+}

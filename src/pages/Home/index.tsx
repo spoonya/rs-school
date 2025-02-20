@@ -1,15 +1,27 @@
 import cn from 'classnames';
+import { useMemo } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
-import { CoinTable, Container, FlyoutFavorites, Pagination, Preloader, Search } from '@/components/shared';
-import { useCoinsMarkets, usePagination, useSearch } from '@/hooks';
-import { AppRoutes, COINS_MARKETS_TOTAL, DefaultCoinsApiParams } from '@/services';
+import {
+  CoinCategoriesList,
+  CoinTable,
+  Container,
+  FlyoutFavorites,
+  NoResults,
+  Pagination,
+  Preloader,
+  Search,
+} from '@/components/shared';
+import { useCoinCategories, useCoinsMarkets, usePagination, useSearch } from '@/hooks';
+import { AppRoutes, CoinCategories, DefaultCoinsApiParams } from '@/services';
+import { useAppSelector } from '@/store';
 
 import classes from './home.module.scss';
 
 export function HomePage() {
   const location = useLocation();
   const showDetails = location.pathname.includes(AppRoutes.COIN_DETAILS.replace(':id', ''));
+
   const {
     searchQuery,
     searchResults,
@@ -20,55 +32,95 @@ export function HomePage() {
     handleSearch,
     changeSearchPage,
   } = useSearch();
-  const { currentPage, paginate, itemsPerPage } = usePagination(
-    Number(DefaultCoinsApiParams.PER_PAGE),
-    COINS_MARKETS_TOTAL
+
+  const { activeCategory, totalItems } = useCoinCategories();
+  const { currentPage, paginate, itemsPerPage } = usePagination(Number(DefaultCoinsApiParams.PER_PAGE), totalItems);
+  const favorites = useAppSelector((state) => state.favorites.coins);
+
+  const { coins, isLoading, error } = useCoinsMarkets(
+    currentPage,
+    itemsPerPage,
+    totalItems,
+    activeCategory === CoinCategories.ALL
   );
-  const { coins, isLoading, error } = useCoinsMarkets(currentPage, itemsPerPage, COINS_MARKETS_TOTAL);
+
+  const paginatedFavorites = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return favorites.slice(startIndex, endIndex);
+  }, [favorites, currentPage, itemsPerPage]);
+
+  const coinsByCategory = {
+    [CoinCategories.ALL]: coins,
+    [CoinCategories.FAVORITES]: paginatedFavorites,
+  };
 
   const isSearching = Boolean(searchQuery?.trim());
+  const coinsToRender = coinsByCategory[activeCategory] || [];
+  const hasError = Boolean(error ?? searchError);
+  const isLoadingState = isLoading || isSearchLoading;
+
+  const renderContent = () => {
+    if (hasError) {
+      return <div className={classes.error}>{JSON.stringify(error ?? searchError)}</div>;
+    }
+
+    if (isLoadingState) {
+      return <Preloader />;
+    }
+
+    return (
+      <>
+        <CoinCategoriesList className={classes.coinCategories} />
+        {isSearching ? (
+          <>
+            {searchResults.length > 0 ? (
+              <>
+                <CoinTable items={searchResults} />
+                <Pagination
+                  itemsPerPage={itemsPerPage}
+                  totalItems={totalSearchResults}
+                  currentPage={currentSearchPage}
+                  paginate={changeSearchPage}
+                />
+              </>
+            ) : (
+              <NoResults text="No results found" />
+            )}
+          </>
+        ) : (
+          <>
+            {coinsToRender.length > 0 ? (
+              <>
+                <CoinTable items={coinsToRender} />
+                <Pagination
+                  itemsPerPage={itemsPerPage}
+                  totalItems={totalItems}
+                  currentPage={currentPage}
+                  paginate={paginate}
+                />
+              </>
+            ) : (
+              <NoResults text="List is empty" />
+            )}
+          </>
+        )}
+      </>
+    );
+  };
 
   return (
     <div className={classes.wrapper}>
       <Container>
         <div className={classes.layout}>
-          <div className={cn(classes.tableSection, showDetails ? classes.withDetails : '')}>
-            <Search
-              className={classes.search}
-              placeholder="Bitcoin, ETH, PEPE etc."
-              onSearch={(query) => handleSearch(query)}
-            />
+          <div
+            className={cn(classes.tableSection, {
+              [classes.withDetails]: showDetails,
+            })}
+          >
+            <Search className={classes.search} placeholder="Bitcoin, ETH, PEPE etc." onSearch={handleSearch} />
             <FlyoutFavorites />
-
-            {(error || searchError) && <div>{JSON.stringify(error ?? searchError)}</div>}
-            {(isLoading || isSearchLoading) && <Preloader />}
-            {!error && !isLoading && !isSearchLoading && (
-              <>
-                {isSearching ? (
-                  <>
-                    <CoinTable items={searchResults} />
-                    {searchResults.length > 0 && (
-                      <Pagination
-                        itemsPerPage={itemsPerPage}
-                        totalItems={totalSearchResults}
-                        currentPage={currentSearchPage}
-                        paginate={(page) => changeSearchPage(page)}
-                      />
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <CoinTable items={coins} />
-                    <Pagination
-                      itemsPerPage={itemsPerPage}
-                      totalItems={COINS_MARKETS_TOTAL}
-                      currentPage={currentPage}
-                      paginate={paginate}
-                    />
-                  </>
-                )}
-              </>
-            )}
+            {renderContent()}
           </div>
           {showDetails && (
             <div className={classes.detailsSection}>

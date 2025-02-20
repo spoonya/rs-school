@@ -2,8 +2,19 @@ import React from 'react';
 
 import { useGetMarketsQuery } from '@/services';
 
-export const useCoinsMarkets = (page: number, itemsPerPage: number, totalCoins: number) => {
-  const { data, isFetching, error } = useGetMarketsQuery({ page }, { refetchOnMountOrArgChange: true });
+export const useCoinsMarkets = (
+  page: number,
+  itemsPerPage: number,
+  totalCoins: number,
+  shouldFetch: boolean = true
+) => {
+  const { data, isFetching, error } = useGetMarketsQuery(
+    { page },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: !shouldFetch,
+    }
+  );
 
   const processedCoins = React.useMemo(() => {
     if (!data?.result) return [];

@@ -1,7 +1,6 @@
 import cn from 'classnames';
-import { SearchX } from 'lucide-react';
 
-import { CoinItem } from '@/components/shared/CoinItem';
+import { CoinItem } from '@/components/shared';
 import { Coin } from '@/types';
 
 import classes from './coin.table.module.scss';
@@ -12,15 +11,6 @@ interface CoinTableProps {
 }
 
 export function CoinTable({ items, className }: Readonly<CoinTableProps>) {
-  if (!items.length) {
-    return (
-      <div className={classes.noResults}>
-        <SearchX size={32} className={classes.noResultsIcon} data-testid="search-x" />
-        <span>No results found</span>
-      </div>
-    );
-  }
-
   return (
     <div className={cn(classes.root, className)}>
       <table className={classes.table}>

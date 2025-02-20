@@ -29,6 +29,18 @@ export enum Themes {
   DARK = 'dark',
 }
 
+export enum CoinCategories {
+  ALL = 'all',
+  FAVORITES = 'favorites',
+}
+
+export const coinCategories = [
+  { label: 'All', value: CoinCategories.ALL },
+  { label: 'Favorites', value: CoinCategories.FAVORITES },
+];
+
+export const DEFAULT_CATEGORY = CoinCategories.ALL;
 export const COINS_MARKETS_TOTAL = createCoinsMarketsTotal(1000);
 export const SEARCH_QUERY_KEY = `${prefix}-search-query`;
 export const THEME_KEY = `${prefix}-theme`;
+export const FAVORITES_KEY = `${prefix}-favorites`;

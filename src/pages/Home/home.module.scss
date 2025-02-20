@@ -32,7 +32,15 @@
 }
 
 .search {
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
+}
+
+.coinCategories {
+  margin-bottom: 2.5rem;
+}
+
+.error {
+  color: var(--color-error);
 }
 
 @keyframes slideIn {
