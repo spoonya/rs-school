@@ -7,26 +7,46 @@ import { DefaultCoinsApiParams, SearchParams } from '@/services';
 export const usePagination = (itemsPerPage: number, totalItems: number) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { getParam, setParam } = useQueryParams();
+  const { getParam } = useQueryParams();
   const { activeCategory } = useCoinCategories();
 
-  const initialPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
-  const [currentPage, setCurrentPage] = useState(initialPage);
-
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+  const [currentPage, setCurrentPage] = useState(() => {
+    const urlPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
+    return Math.max(1, Math.min(urlPage || 1, totalPages));
+  });
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [activeCategory, totalItems]);
+    const urlPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
+    if (!isNaN(urlPage) && urlPage !== currentPage) {
+      const validPage = Math.max(1, Math.min(urlPage, totalPages));
+      setCurrentPage(validPage);
+    }
+  }, [location.search, totalPages]);
+
+  useEffect(() => {
+    const urlPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
+    const newPage = !isNaN(urlPage) ? Math.max(1, Math.min(urlPage, totalPages)) : 1;
+
+    setCurrentPage(newPage);
+    navigate(`?${SearchParams.PAGE}=${newPage}`, { replace: true });
+  }, [activeCategory, totalPages]);
+
+  useEffect(() => {
+    const validPage = Math.min(currentPage, totalPages);
+    if (validPage !== currentPage) {
+      setCurrentPage(validPage);
+      navigate(`?${SearchParams.PAGE}=${validPage}`, { replace: true });
+    }
+  }, [totalPages, currentPage]);
 
   const paginate = useCallback(
     (pageNumber: number) => {
       const validPage = Math.max(1, Math.min(pageNumber, totalPages));
       setCurrentPage(validPage);
-      setParam(SearchParams.PAGE, validPage);
-      navigate(`${location.pathname}?${SearchParams.PAGE}=${validPage}`);
+      navigate(`?${SearchParams.PAGE}=${validPage}`);
     },
-    [location, navigate, totalPages, setParam]
+    [navigate, totalPages]
   );
 
   return {
