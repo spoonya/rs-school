@@ -11,4 +11,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  define: {
+    APIKEY: process.env.VITE_OPENAPI_API_KEY,
+    APIURL: process.env.VITE_API_URL,
+  },
 });
