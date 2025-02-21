@@ -1,5 +1,4 @@
 import cn from 'classnames';
-import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CheckboxFavorite } from '@/components/shared';

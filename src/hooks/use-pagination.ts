@@ -22,7 +22,7 @@ export const usePagination = (itemsPerPage: number, totalItems: number) => {
       const validPage = Math.max(1, Math.min(urlPage, totalPages));
       setCurrentPage(validPage);
     }
-  }, [location.search, totalPages]);
+  }, [currentPage, getParam, location.search, totalPages]);
 
   useEffect(() => {
     const urlPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
@@ -30,7 +30,7 @@ export const usePagination = (itemsPerPage: number, totalItems: number) => {
 
     setCurrentPage(newPage);
     navigate(`?${SearchParams.PAGE}=${newPage}`, { replace: true });
-  }, [activeCategory, totalPages]);
+  }, [activeCategory, getParam, navigate, totalPages]);
 
   useEffect(() => {
     const validPage = Math.min(currentPage, totalPages);
@@ -38,7 +38,7 @@ export const usePagination = (itemsPerPage: number, totalItems: number) => {
       setCurrentPage(validPage);
       navigate(`?${SearchParams.PAGE}=${validPage}`, { replace: true });
     }
-  }, [totalPages, currentPage]);
+  }, [totalPages, currentPage, navigate]);
 
   const paginate = useCallback(
     (pageNumber: number) => {

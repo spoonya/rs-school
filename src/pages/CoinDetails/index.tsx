@@ -43,7 +43,7 @@ export function CoinDetailsPage() {
     <div className={classes.details}>
       <div className={classes.header}>
         <h2>{data.name}</h2>
-        <button onClick={handleClose} className={classes.closeButton}>
+        <button onClick={handleClose} className={classes.closeButton} data-testid="close-button">
           <X />
         </button>
       </div>

@@ -17,7 +17,7 @@ const defaultParams: GetCoinsParams = {
   page: Number(DefaultCoinsApiParams.PAGE_NUM),
 };
 
-export const api = createApi({
+export const coinsApi = createApi({
   reducerPath: 'coinsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_URL,
@@ -111,4 +111,4 @@ export const api = createApi({
 });
 
 export const { useGetMarketsQuery, useGetByNameQuery, useGetBySymbolQuery, useSearchQuery, useGetCoinDetailsQuery } =
-  api;
+  coinsApi;
