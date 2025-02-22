@@ -20,18 +20,31 @@ export function Checkbox({
   icon,
   checkedIcon,
   label,
+  disabled,
   ...props
 }: Readonly<CheckboxProps>) {
   const hasCustomIcon = Boolean(icon || checkedIcon);
 
   return (
-    <div className={cn(classes.root, className)}>
-      <label className={classes.label}>
-        <input type="checkbox" className={cn(classes.input)} checked={checked} onChange={onChange} {...props} />
-        <span className={cn(classes.icon, { [classes.customIcon]: hasCustomIcon })}>
-          {checked ? checkedIcon || icon || <Check /> : icon || ''}
+    <div className={cn(classes.root, className, { [classes.disabled]: disabled })} data-testid="checkbox-wrapper">
+      <label className={classes.label} data-testid="checkbox-label">
+        <input
+          type="checkbox"
+          className={cn(classes.input)}
+          checked={checked}
+          onChange={onChange}
+          disabled={disabled}
+          {...props}
+          data-testid="checkbox-input"
+        />
+        <span className={cn(classes.icon, { [classes.customIcon]: hasCustomIcon })} data-testid="checkbox-icon">
+          {checked ? checkedIcon || icon || <Check data-testid="default-check-icon" /> : icon || ''}
         </span>
-        {label && <span className={classes.text}>{label}</span>}
+        {label && (
+          <span className={classes.text} data-testid="checkbox-text">
+            {label}
+          </span>
+        )}
       </label>
     </div>
   );

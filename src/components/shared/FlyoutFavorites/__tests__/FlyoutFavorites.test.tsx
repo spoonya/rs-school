@@ -28,7 +28,7 @@ describe('FlyoutFavorites', () => {
     vi.clearAllMocks();
   });
 
-  it('does not display content if the list of coins is empty', () => {
+  it('does not display element if the list of coins is empty', () => {
     (store.useAppSelector as Mock).mockImplementation((callback) => callback({ favorites: { coins: [] } }));
     render(<FlyoutFavorites />);
 

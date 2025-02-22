@@ -13,7 +13,7 @@ export function TabNav<T>({ className, navItems, activeTab, onChange }: Readonly
   return (
     <ul className={cn(classes.root, className, 'list-reset')}>
       {navItems.map((item) => (
-        <li key={item.value as unknown as string}>
+        <li key={item.value as string}>
           <button
             type="button"
             className={cn(classes.navBtn, { [classes.active]: activeTab === item.value })}

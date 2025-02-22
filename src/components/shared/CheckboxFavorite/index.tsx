@@ -17,8 +17,14 @@ export function CheckboxFavorite({ className, isFavorite, onFavorite }: Readonly
       className={cn(className, classes.favoriteCheckbox)}
       checked={isFavorite}
       onChange={onFavorite}
-      icon={<Star className={cn(classes.checkedIcon, { [classes.favoriteUnchecked]: !isFavorite })} />}
-      checkedIcon={<Star className={classes.favoriteChecked} />}
+      icon={
+        <Star
+          className={cn(classes.checkedIcon, { [classes.favoriteUnchecked]: !isFavorite })}
+          data-testid="star-icon"
+        />
+      }
+      checkedIcon={<Star className={classes.favoriteChecked} data-testid="star-icon-checked" />}
+      data-testid="checkbox-favorite"
     />
   );
 }

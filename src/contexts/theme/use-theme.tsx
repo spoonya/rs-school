@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ThemeContext } from './theme-context-def';
 
-export const useTheme = () => {
+export function useTheme() {
   const context = React.useContext(ThemeContext);
 
   if (context === undefined) {
@@ -10,4 +10,4 @@ export const useTheme = () => {
   }
 
   return context;
-};
+}

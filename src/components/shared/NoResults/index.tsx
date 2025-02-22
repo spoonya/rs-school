@@ -10,7 +10,7 @@ interface NoResultsProps {
 
 export function NoResults({ className, text }: Readonly<NoResultsProps>) {
   return (
-    <div className={cn(className, classes.noResults)}>
+    <div className={cn(className, classes.noResults)} data-testid="no-results">
       <SearchX size={32} className={classes.noResultsIcon} data-testid="search-x" />
       <span>{text}</span>
     </div>

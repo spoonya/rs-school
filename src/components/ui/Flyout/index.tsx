@@ -41,17 +41,19 @@ export function Flyout({
         { [classes[`${position}`]]: position },
         { [classes['is-minimized']]: isMinimized }
       )}
+      data-testid="flyout"
     >
       {minimizeBtn && (
         <button
           className={classes.minimizeBtn}
           onClick={handleMinimize}
-          aria-label={isMinimized ? 'Minimize' : 'Maximize'}
+          aria-label={isMinimized ? 'Maximize' : 'Minimize'}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
+          data-testid="flyout-minimize-btn"
         >
-          {!isMinimized && <Minimize2 size={20} />}
-          {isMinimized && isHovering && <Maximize2 size={20} />}
+          {!isMinimized && <Minimize2 data-testid="minimize-icon" size={20} />}
+          {isMinimized && isHovering && <Maximize2 data-testid="maximize-icon" size={20} />}
         </button>
       )}
       <div className={classes.content}>
