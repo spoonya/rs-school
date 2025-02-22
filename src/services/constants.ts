@@ -2,22 +2,15 @@ import { createCoinsMarketsTotal } from '@/utils';
 
 const prefix = 'nexum';
 
-export const SEARCH_QUERY_KEY = `${prefix}-search-query`;
-
 export enum AppRoutes {
   HOME = '/',
   COIN_DETAILS = 'details/:id',
 }
 
-export const API_URL = 'https://api.coingecko.com/api/v3';
-
 export enum ApiEndpoints {
-  COINS_MARKETS = '/coins/markets',
-  COINS_SEARCH = '/search',
+  COINS_MARKETS = '/coins',
   COINS_DETAILS = '/coins/:id',
 }
-
-export const COINS_MARKETS_TOTAL = createCoinsMarketsTotal(250);
 
 export enum DefaultCoinsApiParams {
   CURRENCY = 'usd',
@@ -30,3 +23,24 @@ export enum SearchParams {
   PAGE = 'page',
   ID = 'id',
 }
+
+export enum Themes {
+  LIGHT = 'light',
+  DARK = 'dark',
+}
+
+export enum CoinCategories {
+  ALL = 'all',
+  FAVORITES = 'favorites',
+}
+
+export const coinCategories = [
+  { label: 'All', value: CoinCategories.ALL },
+  { label: 'Favorites', value: CoinCategories.FAVORITES },
+];
+
+export const DEFAULT_CATEGORY = CoinCategories.ALL;
+export const COINS_MARKETS_TOTAL = createCoinsMarketsTotal(1000);
+export const SEARCH_QUERY_KEY = `${prefix}-search-query`;
+export const THEME_KEY = `${prefix}-theme`;
+export const FAVORITES_KEY = `${prefix}-favorites`;

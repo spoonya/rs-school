@@ -1,6 +1,5 @@
 .wrapper {
   overflow: hidden;
-  background: var(--background-primary);
 }
 
 .layout {
@@ -19,21 +18,6 @@
   min-width: 0;
 
   &.withDetails {
-    &::after {
-      position: absolute;
-
-      z-index: 1;
-
-      content: '';
-      background-color: var(--background-primary);
-      opacity: 0.5;
-
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-    }
-
     flex: 0 0 70%;
   }
 }
@@ -47,7 +31,15 @@
 }
 
 .search {
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
+}
+
+.coinCategories {
+  margin-bottom: 2.5rem;
+}
+
+.error {
+  color: var(--color-error);
 }
 
 @keyframes slideIn {

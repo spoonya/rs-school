@@ -31,10 +31,7 @@
   background: var(--pagination-bg);
   color: var(--text-primary);
   cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    border-colorr 0.2s ease;
-  text-align: center;
+  transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
     background: var(--pagination-hover-bg);
@@ -48,7 +45,6 @@
 }
 
 .active .pageButton {
-  background: var(--pagination-color);
   border-color: var(--pagination-color);
   font-weight: 500;
 }

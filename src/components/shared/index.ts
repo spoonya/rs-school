@@ -7,3 +7,8 @@ export { CoinTable } from '@/components/shared/CoinTable';
 export { Logo } from '@/components/shared/Logo';
 export { Preloader } from '@/components/shared/Preloader';
 export { Pagination } from '@/components/shared/Pagination';
+export { CheckboxFavorite } from '@/components/shared/CheckboxFavorite';
+export { ThemeSwitcher } from '@/components/shared/ThemeSwitcher';
+export { FlyoutFavorites } from '@/components/shared/FlyoutFavorites';
+export { CoinCategoriesList } from '@/components/shared/CoinCategoriesList';
+export { NoResults } from '@/components/shared/NoResults';

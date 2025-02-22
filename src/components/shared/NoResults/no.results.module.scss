@@ -1,0 +1,16 @@
+.noResults {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.noResultsIcon {
+  margin-bottom: 1.5rem;
+  color: var(--text-tertiary);
+}

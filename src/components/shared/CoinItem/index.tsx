@@ -1,7 +1,10 @@
 import cn from 'classnames';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { CheckboxFavorite } from '@/components/shared';
 import { AppRoutes, SearchParams } from '@/services';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { addFavorite, removeFavorite } from '@/store/favorites/slice';
 import { Coin } from '@/types';
 import { formatNumber, formatPercent } from '@/utils';
 
@@ -16,9 +19,12 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const favorites = useAppSelector((state) => state.favorites.coins);
+  const dispatch = useAppDispatch();
+
   const handleClick = () => {
     const searchParams = new URLSearchParams(location.search);
-    const currentPage = searchParams.get('page');
+    const currentPage = searchParams.get(SearchParams.PAGE);
 
     let url = `${AppRoutes.HOME}${AppRoutes.COIN_DETAILS.replace(':id', data.id)}`;
     if (currentPage) {
@@ -28,6 +34,8 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
     navigate(url);
   };
 
+  const isFavorite = favorites.some((coin) => coin.id === data.id);
+
   return (
     <tr
       className={cn(classes.root, className)}
@@ -35,28 +43,42 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
       style={{ cursor: 'pointer' }}
       data-testid="coin-item"
     >
-      <td className={classes.center}>{data.market_cap_rank}</td>
+      <td className={classes.center}>
+        <div onClick={(e) => e.stopPropagation()}>
+          <CheckboxFavorite
+            isFavorite={isFavorite}
+            onFavorite={() => {
+              if (isFavorite) {
+                dispatch(removeFavorite(data.id));
+              } else {
+                dispatch(addFavorite(data));
+              }
+            }}
+          />
+        </div>
+      </td>
+      <td className={classes.center}>{data.rank}</td>
       <td className={classes.mainInfo}>
-        <img src={data.image} alt={data.name} className={classes.logo} />
+        <img src={data.icon} alt={data.name} className={classes.logo} />
         <div className={classes.nameBlock}>
           <span className={classes.name}>{data.name}</span>
           <span className={classes.symbol}>{data.symbol}</span>
         </div>
       </td>
-
       <td className={classes.price}>
-        <span className={classes.currentPrice}>{formatNumber(data.current_price)}</span>
+        <span className={classes.currentPrice}>{formatNumber(data.price, { isCurrency: true })}</span>
       </td>
-
-      <td className={classes.high24}>{formatNumber(data.high_24h)}</td>
-      <td className={classes.low24}>{formatNumber(data.low_24h)}</td>
-
-      <td className={classes.change} data-type={data.price_change_percentage_24h > 0 ? 'positive' : 'negative'}>
-        {formatPercent(data.price_change_percentage_24h)}
+      <td className={classes.change} data-type={(data.priceChange1h ?? 0) > 0 ? 'positive' : 'negative'}>
+        {formatPercent(data.priceChange1h)}
       </td>
-
-      <td className={classes.marketCap}>{formatNumber(data.market_cap)}</td>
-      <td className={classes.volume}>{formatNumber(data.total_volume)}</td>
+      <td className={classes.change} data-type={(data.priceChange1d ?? 0) > 0 ? 'positive' : 'negative'}>
+        {formatPercent(data.priceChange1d)}
+      </td>
+      <td className={classes.change} data-type={(data.priceChange1w ?? 0) > 0 ? 'positive' : 'negative'}>
+        {formatPercent(data.priceChange1w)}
+      </td>
+      <td className={classes.volume}>{formatNumber(data.volume, { isCurrency: true })}</td>
+      <td className={classes.marketCap}>{formatNumber(data.marketCap, { isCurrency: true })}</td>
     </tr>
   );
 }
