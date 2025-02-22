@@ -15,7 +15,7 @@ export interface FlyoutFavoritesProps {
 
 export function FlyoutFavorites({ className }: Readonly<FlyoutFavoritesProps>) {
   const { coins } = useAppSelector((state) => state.favorites);
-  const { downloadCSV } = useCSV();
+  const { downloadCSV, CSVLink } = useCSV();
   const dispatch = useAppDispatch();
 
   const isFavoritesEmpty = coins.length === 0;
@@ -31,6 +31,7 @@ export function FlyoutFavorites({ className }: Readonly<FlyoutFavoritesProps>) {
           <Button variant="primary" onClick={() => downloadCSV(coins, coinCSVOptions, `${coins.length}_coins.csv`)}>
             Download
           </Button>
+          <CSVLink />
         </div>
       </Flyout>
     </div>

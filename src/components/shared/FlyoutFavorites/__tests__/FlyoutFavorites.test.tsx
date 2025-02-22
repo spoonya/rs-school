@@ -20,12 +20,20 @@ const downloadCSVMock = vi.fn();
 vi.mock('@/hooks', () => ({
   useCSV: () => ({
     downloadCSV: downloadCSVMock,
+    CSVLink: () => <a href="#" />,
   }),
 }));
 
 describe('FlyoutFavorites', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  it('CSVLink is rendered', () => {
+    render(<FlyoutFavorites />);
+
+    const link = screen.getByRole('link');
+    expect(link).toBeInTheDocument();
   });
 
   it('does not display element if the list of coins is empty', () => {
