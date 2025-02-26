@@ -2,7 +2,7 @@ import { Provider } from 'react-redux';
 import { describe, expect, it, vi } from 'vitest';
 
 import { CoinCategories, coinCategories } from '@/services';
-import { setActiveCategory } from '@/store/coinCategories/slice';
+import { setActiveCategory } from '@/store/coin-categories/slice';
 import { configureStore } from '@reduxjs/toolkit';
 import { fireEvent, render, screen } from '@testing-library/react';
 

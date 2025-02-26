@@ -1,52 +1,94 @@
+import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useCoinCategories, useQueryParams } from '@/hooks';
+import { useCoinCategories } from '@/hooks';
 import { DefaultCoinsApiParams, SearchParams } from '@/services';
 
 export const usePagination = (itemsPerPage: number, totalItems: number) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { getParam } = useQueryParams();
+  const router = useRouter();
   const { activeCategory } = useCoinCategories();
 
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
-  const [currentPage, setCurrentPage] = useState(() => {
-    const urlPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
+
+  const getCurrentPage = () => {
+    const pageParam = router.query[SearchParams.PAGE];
+    const urlPage = Array.isArray(pageParam)
+      ? parseInt(pageParam[0], 10)
+      : parseInt(pageParam || DefaultCoinsApiParams.PAGE_NUM, 10);
+
     return Math.max(1, Math.min(urlPage || 1, totalPages));
-  });
+  };
+
+  const [currentPage, setCurrentPage] = useState(getCurrentPage);
 
   useEffect(() => {
-    const urlPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
-    if (!isNaN(urlPage) && urlPage !== currentPage) {
-      const validPage = Math.max(1, Math.min(urlPage, totalPages));
-      setCurrentPage(validPage);
+    const newPage = getCurrentPage();
+    if (newPage !== currentPage) {
+      setCurrentPage(newPage);
     }
-  }, [currentPage, getParam, location.search, totalPages]);
+  }, [router.query]);
 
   useEffect(() => {
-    const urlPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
-    const newPage = !isNaN(urlPage) ? Math.max(1, Math.min(urlPage, totalPages)) : 1;
-
+    const newPage = 1;
     setCurrentPage(newPage);
-    navigate(`?${SearchParams.PAGE}=${newPage}`, { replace: true });
-  }, [activeCategory, getParam, navigate, totalPages]);
+
+    const newQuery = { ...router.query };
+    if (newPage === 1) {
+      newQuery[SearchParams.PAGE] = undefined;
+    } else {
+      newQuery[SearchParams.PAGE] = newPage.toString();
+    }
+
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: newQuery,
+      },
+      undefined,
+      { shallow: true }
+    );
+  }, [activeCategory]);
 
   useEffect(() => {
     const validPage = Math.min(currentPage, totalPages);
     if (validPage !== currentPage) {
       setCurrentPage(validPage);
-      navigate(`?${SearchParams.PAGE}=${validPage}`, { replace: true });
+      const newQuery = { ...router.query };
+      newQuery[SearchParams.PAGE] = validPage.toString();
+
+      router.replace(
+        {
+          pathname: router.pathname,
+          query: newQuery,
+        },
+        undefined,
+        { shallow: true }
+      );
     }
-  }, [totalPages, currentPage, navigate]);
+  }, [totalPages, currentPage]);
 
   const paginate = useCallback(
     (pageNumber: number) => {
       const validPage = Math.max(1, Math.min(pageNumber, totalPages));
       setCurrentPage(validPage);
-      navigate(`?${SearchParams.PAGE}=${validPage}`);
+
+      const newQuery = { ...router.query };
+      if (validPage === 1) {
+        newQuery[SearchParams.PAGE] = undefined;
+      } else {
+        newQuery[SearchParams.PAGE] = validPage.toString();
+      }
+
+      router.push(
+        {
+          pathname: router.pathname,
+          query: newQuery,
+        },
+        undefined,
+        { shallow: true }
+      );
     },
-    [navigate, totalPages]
+    [router, totalPages]
   );
 
   return {

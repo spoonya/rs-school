@@ -1,55 +1,70 @@
+import { useRouter } from 'next/router';
 import { useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 type QueryParamValue = string | number;
 
 export const useQueryParams = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
 
   const getParam = useCallback(
     (key: string, defaultValue: QueryParamValue): QueryParamValue => {
-      const value = searchParams.get(key);
-      if (value === null) return defaultValue;
+      const value = router.query[key];
+
+      if (value === undefined) return defaultValue;
+
+      const strValue = Array.isArray(value) ? value[0] : value;
 
       if (typeof defaultValue === 'number') {
-        return parseInt(value);
+        const numValue = parseInt(strValue, 10);
+        return isNaN(numValue) ? defaultValue : numValue;
       }
 
-      return value;
+      return strValue || defaultValue;
     },
-    [searchParams]
+    [router.query]
   );
 
   const setParam = useCallback(
     (key: string, value: QueryParamValue) => {
-      setSearchParams((prev) => {
-        prev.set(key, value.toString());
-        return prev;
-      });
+      const newQuery = { ...router.query };
+
+      if (value === '' || value === null || value === undefined) {
+        newQuery[key] = undefined;
+      } else {
+        newQuery[key] = value.toString();
+      }
+
+      router.replace({ query: newQuery }, undefined, { shallow: true });
     },
-    [setSearchParams]
+    [router]
   );
 
   const clearParams = useCallback(() => {
-    setSearchParams(new URLSearchParams(), { replace: true });
-  }, [setSearchParams]);
+    router.replace({ query: {} }, undefined, { shallow: true });
+  }, [router]);
 
   const setMultipleParams = useCallback(
     (params: Record<string, QueryParamValue>) => {
-      const newParams = new URLSearchParams();
+      const newQuery = { ...router.query };
+
       Object.entries(params).forEach(([key, value]) => {
-        newParams.set(key, value.toString());
+        if (value === '' || value === null || value === undefined) {
+          newQuery[key] = undefined;
+        } else {
+          newQuery[key] = value.toString();
+        }
       });
-      setSearchParams(newParams, { replace: true });
+
+      router.replace({ query: newQuery }, undefined, { shallow: true });
     },
-    [setSearchParams]
+    [router]
   );
 
   return {
-    searchParams,
     getParam,
     setParam,
     clearParams,
     setMultipleParams,
+    query: router.query,
   };
 };

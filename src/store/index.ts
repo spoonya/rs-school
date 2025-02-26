@@ -4,7 +4,7 @@ import { coinsApi } from '@/services/api';
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
-import { coinCategoriesSlice } from './coinCategories/slice';
+import { coinCategoriesSlice } from './coin-categories/slice';
 import { favoritesSlice } from './favorites/slice';
 
 export const store = configureStore({

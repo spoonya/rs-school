@@ -1,6 +1,8 @@
+'use client';
+
 import cn from 'classnames';
-import { useMemo } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
+import React, { useMemo } from 'react';
 
 import {
   CoinCategoriesList,
@@ -13,14 +15,19 @@ import {
   Search,
 } from '@/components/shared';
 import { useCoinCategories, useCoinsMarkets, usePagination, useSearch } from '@/hooks';
+import { LayoutDefault } from '@/layouts';
 import { AppRoutes, CoinCategories, DefaultCoinsApiParams } from '@/services';
-import { useAppSelector } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { initializeFavorites } from '@/store/favorites/slice';
+import classes from '@/styles/home.module.scss';
 
-import classes from './home.module.scss';
+export default function HomePage() {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { pathname, query } = router;
+  const coinId = query.id;
 
-export function HomePage() {
-  const location = useLocation();
-  const showDetails = location.pathname.includes(AppRoutes.COIN_DETAILS.replace(':id', ''));
+  const showDetails = pathname.includes(AppRoutes.COIN_DETAILS.replace('[id]', '')) && !!coinId;
 
   const {
     searchQuery,
@@ -43,6 +50,10 @@ export function HomePage() {
     totalItems,
     activeCategory === CoinCategories.ALL
   );
+
+  React.useEffect(() => {
+    dispatch(initializeFavorites());
+  }, [dispatch]);
 
   const paginatedFavorites = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -110,25 +121,23 @@ export function HomePage() {
   };
 
   return (
-    <div className={classes.wrapper}>
-      <Container>
-        <div className={classes.layout}>
-          <div
-            className={cn(classes.tableSection, {
-              [classes.withDetails]: showDetails,
-            })}
-          >
-            <Search className={classes.search} placeholder="Bitcoin, ETH, PEPE etc." onSearch={handleSearch} />
-            <FlyoutFavorites />
-            {renderContent()}
-          </div>
-          {showDetails && (
-            <div className={classes.detailsSection}>
-              <Outlet />
+    <LayoutDefault>
+      <div className={classes.wrapper}>
+        <Container>
+          <div className={classes.layout}>
+            <div
+              className={cn(classes.tableSection, {
+                [classes.withDetails]: showDetails,
+              })}
+            >
+              <Search className={classes.search} placeholder="Bitcoin, ETH, PEPE etc." onSearch={handleSearch} />
+              <FlyoutFavorites />
+              {renderContent()}
             </div>
-          )}
-        </div>
-      </Container>
-    </div>
+            {showDetails && <div className={classes.detailsSection}>{/* Детали */}</div>}
+          </div>
+        </Container>
+      </div>
+    </LayoutDefault>
   );
 }
