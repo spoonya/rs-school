@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { TabNav } from '@/components/ui';
 import { CoinCategories, coinCategories } from '@/services';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { setActiveCategory } from '@/store/coinCategories/slice';
+import { setActiveCategory } from '@/store/coin-categories/slice';
 
 import classes from './coin.categories.module.scss';
 

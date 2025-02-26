@@ -4,7 +4,7 @@ const prefix = 'nexum';
 
 export enum AppRoutes {
   HOME = '/',
-  COIN_DETAILS = 'details/:id',
+  COIN_DETAILS = 'details/[id]',
 }
 
 export enum ApiEndpoints {

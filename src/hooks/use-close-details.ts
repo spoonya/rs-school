@@ -1,15 +1,16 @@
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
-import { useQueryParams } from '@/hooks';
 import { AppRoutes, DefaultCoinsApiParams, SearchParams } from '@/services';
 
 export function useCloseDetails() {
-  const navigate = useNavigate();
-  const { getParam } = useQueryParams();
+  const router = useRouter();
 
   return () => {
-    const currentPage = getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM);
+    const currentPage = router.query[SearchParams.PAGE] || DefaultCoinsApiParams.PAGE_NUM;
 
-    navigate(currentPage ? `${AppRoutes.HOME}?${SearchParams.PAGE}=${currentPage}` : AppRoutes.HOME);
+    router.push({
+      pathname: AppRoutes.HOME,
+      query: currentPage !== DefaultCoinsApiParams.PAGE_NUM ? { [SearchParams.PAGE]: currentPage } : undefined,
+    });
   };
 }
