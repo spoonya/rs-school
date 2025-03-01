@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useQueryParams } from '@/hooks';
-import { DefaultCoinsApiParams, SearchParams } from '@/services';
+import { DefaultCoinsApiParams, QueryParams } from '@/services';
 import { Coin } from '@/types';
 
 interface SearchState {
@@ -21,8 +21,8 @@ export const useSearchState = () => {
     isLoading: false,
     error: null,
     total: 0,
-    page: Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM)),
-    query: String(getParam(SearchParams.SEARCH, '')),
+    page: Number(getParam(QueryParams.PAGE, DefaultCoinsApiParams.PAGE_NUM)),
+    query: String(getParam(QueryParams.SEARCH, '')),
   };
 
   const [state, setState] = useState<SearchState>(initialState);

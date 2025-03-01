@@ -1,10 +1,8 @@
-'use client';
-
 import cn from 'classnames';
 import { useRouter } from 'next/router';
 
 import { CheckboxFavorite } from '@/components/shared';
-import { AppRoutes, SearchParams } from '@/services';
+import { AppRoutes, QueryParams } from '@/services';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { addFavorite, removeFavorite } from '@/store/favorites/slice';
 import { Coin } from '@/types';
@@ -25,13 +23,18 @@ export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
-    const currentPage = query[SearchParams.PAGE];
-    const url = {
-      pathname: AppRoutes.COIN_DETAILS.replace('[id]', data.id),
-      query: currentPage ? { [SearchParams.PAGE]: currentPage } : undefined,
-    };
-
-    router.push(url);
+    const currentPage = query[QueryParams.PAGE];
+    router.push(
+      {
+        pathname: AppRoutes.HOME,
+        query: {
+          ...(currentPage ? { [QueryParams.PAGE]: currentPage } : {}),
+          details: data.id,
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
   };
 
   const isFavorite = favorites.some((coin) => coin.id === data.id);

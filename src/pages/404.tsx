@@ -5,7 +5,7 @@ import { LayoutDefault } from '@/layouts';
 import { AppRoutes } from '@/services';
 import classes from '@/styles/404.module.scss';
 
-export function Page404() {
+export default function Page404() {
   const router = useRouter();
 
   return (

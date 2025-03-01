@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 
 import { useCoinCategories } from '@/hooks';
-import { DefaultCoinsApiParams, SearchParams } from '@/services';
+import { DefaultCoinsApiParams, QueryParams } from '@/services';
 
 export const usePagination = (itemsPerPage: number, totalItems: number) => {
   const router = useRouter();
@@ -11,7 +11,7 @@ export const usePagination = (itemsPerPage: number, totalItems: number) => {
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
 
   const getCurrentPage = () => {
-    const pageParam = router.query[SearchParams.PAGE];
+    const pageParam = router.query[QueryParams.PAGE];
     const urlPage = Array.isArray(pageParam)
       ? parseInt(pageParam[0], 10)
       : parseInt(pageParam || DefaultCoinsApiParams.PAGE_NUM, 10);
@@ -34,9 +34,9 @@ export const usePagination = (itemsPerPage: number, totalItems: number) => {
 
     const newQuery = { ...router.query };
     if (newPage === 1) {
-      newQuery[SearchParams.PAGE] = undefined;
+      newQuery[QueryParams.PAGE] = undefined;
     } else {
-      newQuery[SearchParams.PAGE] = newPage.toString();
+      newQuery[QueryParams.PAGE] = newPage.toString();
     }
 
     router.replace(
@@ -54,7 +54,7 @@ export const usePagination = (itemsPerPage: number, totalItems: number) => {
     if (validPage !== currentPage) {
       setCurrentPage(validPage);
       const newQuery = { ...router.query };
-      newQuery[SearchParams.PAGE] = validPage.toString();
+      newQuery[QueryParams.PAGE] = validPage.toString();
 
       router.replace(
         {
@@ -74,9 +74,9 @@ export const usePagination = (itemsPerPage: number, totalItems: number) => {
 
       const newQuery = { ...router.query };
       if (validPage === 1) {
-        newQuery[SearchParams.PAGE] = undefined;
+        newQuery[QueryParams.PAGE] = undefined;
       } else {
-        newQuery[SearchParams.PAGE] = validPage.toString();
+        newQuery[QueryParams.PAGE] = validPage.toString();
       }
 
       router.push(

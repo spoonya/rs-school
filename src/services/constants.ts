@@ -18,10 +18,10 @@ export enum DefaultCoinsApiParams {
   PAGE_NUM = '1',
 }
 
-export enum SearchParams {
+export enum QueryParams {
+  DETAILS = 'details',
   SEARCH = 'search',
   PAGE = 'page',
-  ID = 'id',
 }
 
 export enum Themes {

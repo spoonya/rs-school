@@ -1,13 +1,15 @@
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 
+import { QueryParams } from '@/services';
+
 type QueryParamValue = string | number;
 
 export const useQueryParams = () => {
   const router = useRouter();
 
   const getParam = useCallback(
-    (key: string, defaultValue: QueryParamValue): QueryParamValue => {
+    (key: QueryParams, defaultValue: QueryParamValue): QueryParamValue => {
       const value = router.query[key];
 
       if (value === undefined) return defaultValue;
@@ -25,7 +27,7 @@ export const useQueryParams = () => {
   );
 
   const setParam = useCallback(
-    (key: string, value: QueryParamValue) => {
+    (key: QueryParams, value: QueryParamValue) => {
       const newQuery = { ...router.query };
 
       if (value === '' || value === null || value === undefined) {
@@ -44,7 +46,7 @@ export const useQueryParams = () => {
   }, [router]);
 
   const setMultipleParams = useCallback(
-    (params: Record<string, QueryParamValue>) => {
+    (params: Partial<Record<QueryParams, QueryParamValue>>) => {
       const newQuery = { ...router.query };
 
       Object.entries(params).forEach(([key, value]) => {

@@ -1,11 +1,9 @@
-'use client';
-
 import cn from 'classnames';
-import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
 
 import {
   CoinCategoriesList,
+  CoinDetails,
   CoinTable,
   Container,
   FlyoutFavorites,
@@ -14,20 +12,20 @@ import {
   Preloader,
   Search,
 } from '@/components/shared';
-import { useCoinCategories, useCoinsMarkets, usePagination, useSearch } from '@/hooks';
+import { useCoinCategories, useCoinsMarkets, usePagination, useQueryParams, useSearch } from '@/hooks';
 import { LayoutDefault } from '@/layouts';
-import { AppRoutes, CoinCategories, DefaultCoinsApiParams } from '@/services';
+import { CoinCategories, DefaultCoinsApiParams, QueryParams } from '@/services';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { initializeFavorites } from '@/store/favorites/slice';
 import classes from '@/styles/home.module.scss';
 
 export default function HomePage() {
-  const router = useRouter();
   const dispatch = useAppDispatch();
-  const { pathname, query } = router;
-  const coinId = query.id;
+  const { getParam } = useQueryParams();
 
-  const showDetails = pathname.includes(AppRoutes.COIN_DETAILS.replace('[id]', '')) && !!coinId;
+  const coinId = getParam(QueryParams.DETAILS, '');
+
+  const showDetails = Boolean(coinId);
 
   const {
     searchQuery,
@@ -134,7 +132,11 @@ export default function HomePage() {
               <FlyoutFavorites />
               {renderContent()}
             </div>
-            {showDetails && <div className={classes.detailsSection}>{/* Детали */}</div>}
+            {showDetails && (
+              <div className={classes.detailsSection}>
+                <CoinDetails coinId={coinId} />
+              </div>
+            )}
           </div>
         </Container>
       </div>
