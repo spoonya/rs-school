@@ -45,22 +45,19 @@ export const useQueryParams = () => {
     router.replace({ query: {} }, undefined, { shallow: true });
   }, [router]);
 
-  const setMultipleParams = useCallback(
-    (params: Partial<Record<QueryParams, QueryParamValue>>) => {
-      const newQuery = { ...router.query };
+  const setMultipleParams = useCallback((params: Partial<Record<QueryParams, QueryParamValue>>) => {
+    const query = new URLSearchParams(window.location.search);
 
-      Object.entries(params).forEach(([key, value]) => {
-        if (value === '' || value === null || value === undefined) {
-          newQuery[key] = undefined;
-        } else {
-          newQuery[key] = value.toString();
-        }
-      });
+    Object.entries(params).forEach(([key, value]) => {
+      if (value === undefined || value === null) {
+        query.delete(key);
+      } else {
+        query.set(key, String(value));
+      }
+    });
 
-      router.replace({ query: newQuery }, undefined, { shallow: true });
-    },
-    [router]
-  );
+    window.history.replaceState({}, '', `?${query.toString()}`);
+  }, []);
 
   return {
     getParam,

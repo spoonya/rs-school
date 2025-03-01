@@ -1,3 +1,4 @@
+import omit from 'lodash/omit';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -23,48 +24,35 @@ export const usePagination = (itemsPerPage: number, totalItems: number) => {
 
   useEffect(() => {
     const newPage = getCurrentPage();
-    if (newPage !== currentPage) {
-      setCurrentPage(newPage);
-    }
-  }, [router.query]);
+    if (newPage !== currentPage) setCurrentPage(newPage);
+  }, [currentPage, router.query]);
 
+  // Сброс страницы при изменении категории
   useEffect(() => {
-    const newPage = 1;
-    setCurrentPage(newPage);
-
-    const newQuery = { ...router.query };
-    if (newPage === 1) {
-      newQuery[QueryParams.PAGE] = undefined;
-    } else {
-      newQuery[QueryParams.PAGE] = newPage.toString();
-    }
-
+    setCurrentPage(1);
     router.replace(
       {
         pathname: router.pathname,
-        query: newQuery,
+        query: omit(router.query, QueryParams.PAGE),
       },
       undefined,
       { shallow: true }
     );
   }, [activeCategory]);
 
+  // Корректировка текущей страницы
   useEffect(() => {
     const validPage = Math.min(currentPage, totalPages);
-    if (validPage !== currentPage) {
-      setCurrentPage(validPage);
-      const newQuery = { ...router.query };
-      newQuery[QueryParams.PAGE] = validPage.toString();
+    if (validPage === currentPage) return;
 
-      router.replace(
-        {
-          pathname: router.pathname,
-          query: newQuery,
-        },
-        undefined,
-        { shallow: true }
-      );
-    }
+    setCurrentPage(validPage);
+
+    const newQuery =
+      validPage === 1
+        ? omit(router.query, QueryParams.PAGE)
+        : { ...router.query, [QueryParams.PAGE]: validPage.toString() };
+
+    router.replace({ pathname: router.pathname, query: newQuery }, undefined, { shallow: true });
   }, [totalPages, currentPage]);
 
   const paginate = useCallback(
@@ -72,29 +60,15 @@ export const usePagination = (itemsPerPage: number, totalItems: number) => {
       const validPage = Math.max(1, Math.min(pageNumber, totalPages));
       setCurrentPage(validPage);
 
-      const newQuery = { ...router.query };
-      if (validPage === 1) {
-        newQuery[QueryParams.PAGE] = undefined;
-      } else {
-        newQuery[QueryParams.PAGE] = validPage.toString();
-      }
+      const newQuery =
+        validPage === 1
+          ? omit(router.query, QueryParams.PAGE)
+          : { ...router.query, [QueryParams.PAGE]: validPage.toString() };
 
-      router.push(
-        {
-          pathname: router.pathname,
-          query: newQuery,
-        },
-        undefined,
-        { shallow: true }
-      );
+      router.push({ pathname: router.pathname, query: newQuery }, undefined, { shallow: true });
     },
     [router, totalPages]
   );
 
-  return {
-    currentPage,
-    paginate,
-    itemsPerPage,
-    totalPages,
-  };
+  return { currentPage, paginate, itemsPerPage, totalPages };
 };

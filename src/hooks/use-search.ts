@@ -13,11 +13,12 @@ export const useSearch = () => {
 
       if (trimmedQuery !== state.query) {
         setSearch(trimmedQuery, 1);
-        if (trimmedQuery) {
-          setMultipleParams({ search: trimmedQuery, page: 1 });
-        } else {
-          clearParams();
-        }
+
+        const params = trimmedQuery ? { search: trimmedQuery } : {};
+
+        setMultipleParams(params);
+
+        if (!trimmedQuery) clearParams();
       }
     },
     [state.query, setSearch, setMultipleParams, clearParams]
@@ -27,31 +28,31 @@ export const useSearch = () => {
     (page: number) => {
       if (page !== state.page) {
         setSearch(state.query, page);
-        setMultipleParams({ search: state.query, page });
+
+        setMultipleParams({
+          ...(state.query && { search: state.query }),
+          ...(page > 1 && { page }),
+        });
       }
     },
     [state.query, state.page, setSearch, setMultipleParams]
   );
 
-  const {
-    data: searchData,
-    error: searchError,
-    isFetching,
-  } = useSearchQuery(
+  const { data, error, isFetching } = useSearchQuery(
     {
       query: state.query,
       page: state.page,
       limit: Number(DefaultCoinsApiParams.PER_PAGE),
     },
-    { skip: state.query.length === 0 }
+    { skip: !state.query }
   );
 
   return {
     searchQuery: state.query,
-    searchResults: searchData?.result ?? [],
+    searchResults: data?.result ?? [],
     isSearchLoading: isFetching,
-    searchError,
-    totalSearchResults: searchData?.meta.itemCount ?? 0,
+    searchError: error,
+    totalSearchResults: data?.meta.itemCount ?? 0,
     currentSearchPage: state.page,
     handleSearch,
     changeSearchPage,
