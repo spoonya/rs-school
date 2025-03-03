@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useQueryParams } from '@/hooks';
 import { DefaultCoinsApiParams, QueryParams } from '@/services';
@@ -52,6 +52,19 @@ export const useSearchState = () => {
   const setIsLoading = (isLoading: boolean) => {
     setState((prev) => ({ ...prev, isLoading }));
   };
+
+  useEffect(() => {
+    const currentPage = Number(getParam(QueryParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
+    const currentQuery = String(getParam(QueryParams.SEARCH, ''));
+
+    if (currentPage !== state.page || currentQuery !== state.query) {
+      setState((prev) => ({
+        ...prev,
+        page: currentPage,
+        query: currentQuery,
+      }));
+    }
+  }, [getParam, state.page, state.query]);
 
   return {
     state,

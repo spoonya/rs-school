@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 
@@ -45,19 +46,22 @@ export const useQueryParams = () => {
     router.replace({ query: {} }, undefined, { shallow: true });
   }, [router]);
 
-  const setMultipleParams = useCallback((params: Partial<Record<QueryParams, QueryParamValue>>) => {
-    const query = new URLSearchParams(window.location.search);
+  const setMultipleParams = useCallback(
+    (params: Partial<Record<QueryParams, QueryParamValue>>) => {
+      let newQuery = { ...router.query };
 
-    Object.entries(params).forEach(([key, value]) => {
-      if (value === undefined || value === null) {
-        query.delete(key);
-      } else {
-        query.set(key, String(value));
-      }
-    });
+      Object.entries(params).forEach(([key, value]) => {
+        if (value === undefined || value === null) {
+          newQuery = omit(newQuery, key);
+        } else {
+          newQuery[key] = String(value);
+        }
+      });
 
-    window.history.replaceState({}, '', `?${query.toString()}`);
-  }, []);
+      router.replace({ query: newQuery }, undefined, { shallow: true, scroll: false });
+    },
+    [router]
+  );
 
   return {
     getParam,

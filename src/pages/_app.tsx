@@ -1,4 +1,4 @@
-import type { AppContext, AppProps } from 'next/app';
+import type { AppProps } from 'next/app';
 import '@/styles/globals.scss';
 import 'normalize.css';
 import '@/styles/app.scss';
@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import { ErrorBoundary } from '@/components/shared';
 import { ThemeProvider } from '@/contexts';
 import { THEME_KEY, Themes } from '@/services';
-import { store } from '@/store';
+import { wrapper } from '@/store';
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '700'],
@@ -18,17 +18,19 @@ const poppins = Poppins({
   display: 'swap',
 });
 
-type PageProps = {
+interface PageProps {
   theme: Themes;
-};
+}
 
-export default function App({ Component, pageProps }: AppProps<PageProps>) {
+function App({ Component, pageProps, ...rest }: AppProps<PageProps>) {
+  const { store, props } = wrapper.useWrappedStore(rest);
+
   return (
     <main className={poppins.className}>
       <Provider store={store}>
         <ErrorBoundary>
           <ThemeProvider serverTheme={pageProps.theme}>
-            <Component {...pageProps} />
+            <Component {...props.pageProps} />
           </ThemeProvider>
         </ErrorBoundary>
       </Provider>
@@ -36,8 +38,8 @@ export default function App({ Component, pageProps }: AppProps<PageProps>) {
   );
 }
 
-App.getInitialProps = async (context: AppContext) => {
-  const cookies = getCookies(context.ctx) as { [key: string]: string };
+App.getInitialProps = wrapper.getInitialAppProps(() => async ({ ctx }) => {
+  const cookies = getCookies(ctx) as { [key: string]: string };
   const theme = (cookies[THEME_KEY] as Themes) in Object.values(Themes) ? (cookies[THEME_KEY] as Themes) : Themes.LIGHT;
 
   return {
@@ -45,4 +47,6 @@ App.getInitialProps = async (context: AppContext) => {
       theme,
     },
   };
-};
+});
+
+export default App;

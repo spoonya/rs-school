@@ -1,27 +1,23 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { useQueryParams, useSearchState } from '@/hooks';
 import { DefaultCoinsApiParams, useSearchQuery } from '@/services';
 
 export const useSearch = () => {
-  const { setMultipleParams, clearParams } = useQueryParams();
+  const { setMultipleParams } = useQueryParams();
   const { state, setSearch } = useSearchState();
 
   const handleSearch = useCallback(
     (query: string) => {
       const trimmedQuery = query.trim();
 
-      if (trimmedQuery !== state.query) {
-        setSearch(trimmedQuery, 1);
-
-        const params = trimmedQuery ? { search: trimmedQuery } : {};
-
-        setMultipleParams(params);
-
-        if (!trimmedQuery) clearParams();
-      }
+      setSearch(trimmedQuery, 1);
+      setMultipleParams({
+        search: trimmedQuery || undefined,
+        page: undefined,
+      });
     },
-    [state.query, setSearch, setMultipleParams, clearParams]
+    [setSearch, setMultipleParams]
   );
 
   const changeSearchPage = useCallback(
@@ -46,6 +42,14 @@ export const useSearch = () => {
     },
     { skip: !state.query }
   );
+
+  useEffect(() => {
+    if (!isFetching && data) {
+      if (data.meta.page > data.meta.pageCount && data.meta.pageCount > 0) {
+        changeSearchPage(data.meta.pageCount);
+      }
+    }
+  }, [isFetching, data]);
 
   return {
     searchQuery: state.query,

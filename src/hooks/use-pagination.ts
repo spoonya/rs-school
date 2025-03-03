@@ -1,74 +1,43 @@
-import omit from 'lodash/omit';
+import { omit } from 'lodash';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { useCoinCategories } from '@/hooks';
-import { DefaultCoinsApiParams, QueryParams } from '@/services';
+import { CoinCategories, QueryParams } from '@/services';
 
 export const usePagination = (itemsPerPage: number, totalItems: number) => {
   const router = useRouter();
   const { activeCategory } = useCoinCategories();
 
-  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
-
-  const getCurrentPage = () => {
+  const currentPage = useMemo(() => {
     const pageParam = router.query[QueryParams.PAGE];
-    const urlPage = Array.isArray(pageParam)
-      ? parseInt(pageParam[0], 10)
-      : parseInt(pageParam || DefaultCoinsApiParams.PAGE_NUM, 10);
+    return Math.max(1, Number(pageParam || 1));
+  }, [router.query]);
 
-    return Math.max(1, Math.min(urlPage || 1, totalPages));
-  };
-
-  const [currentPage, setCurrentPage] = useState(getCurrentPage);
-
-  useEffect(() => {
-    const newPage = getCurrentPage();
-    if (newPage !== currentPage) setCurrentPage(newPage);
-  }, [currentPage, router.query]);
-
-  // Сброс страницы при изменении категории
-  useEffect(() => {
-    setCurrentPage(1);
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: omit(router.query, QueryParams.PAGE),
-      },
-      undefined,
-      { shallow: true }
-    );
-  }, [activeCategory]);
-
-  // Корректировка текущей страницы
-  useEffect(() => {
-    const validPage = Math.min(currentPage, totalPages);
-    if (validPage === currentPage) return;
-
-    setCurrentPage(validPage);
-
-    const newQuery =
-      validPage === 1
-        ? omit(router.query, QueryParams.PAGE)
-        : { ...router.query, [QueryParams.PAGE]: validPage.toString() };
-
-    router.replace({ pathname: router.pathname, query: newQuery }, undefined, { shallow: true });
-  }, [totalPages, currentPage]);
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(totalItems / itemsPerPage)), [totalItems, itemsPerPage]);
 
   const paginate = useCallback(
     (pageNumber: number) => {
-      const validPage = Math.max(1, Math.min(pageNumber, totalPages));
-      setCurrentPage(validPage);
+      let newQuery = { ...router.query };
 
-      const newQuery =
-        validPage === 1
-          ? omit(router.query, QueryParams.PAGE)
-          : { ...router.query, [QueryParams.PAGE]: validPage.toString() };
+      if (pageNumber > 1) {
+        newQuery[QueryParams.PAGE] = String(pageNumber);
+      } else {
+        newQuery = omit(newQuery, QueryParams.PAGE);
+      }
 
-      router.push({ pathname: router.pathname, query: newQuery }, undefined, { shallow: true });
+      router.replace({ query: newQuery }, undefined, { shallow: true, scroll: false });
     },
-    [router, totalPages]
+    [router]
   );
+
+  useEffect(() => {
+    if (activeCategory !== CoinCategories.ALL) {
+      const newQuery = omit(router.query, QueryParams.PAGE);
+
+      router.replace({ query: newQuery }, undefined, { shallow: true });
+    }
+  }, [activeCategory]);
 
   return { currentPage, paginate, itemsPerPage, totalPages };
 };

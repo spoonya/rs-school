@@ -1,5 +1,6 @@
 import cn from 'classnames';
-import React, { useMemo } from 'react';
+import { GetServerSideProps } from 'next';
+import React, { useEffect, useMemo } from 'react';
 
 import {
   CoinCategoriesList,
@@ -14,17 +15,18 @@ import {
 } from '@/components/shared';
 import { useCoinCategories, useCoinsMarkets, usePagination, useQueryParams, useSearch } from '@/hooks';
 import { LayoutDefault } from '@/layouts';
-import { CoinCategories, DefaultCoinsApiParams, QueryParams } from '@/services';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { CoinCategories, coinsApi, DefaultCoinsApiParams, QueryParams } from '@/services';
+import { useAppDispatch, useAppSelector, wrapper } from '@/store';
 import { initializeFavorites } from '@/store/favorites/slice';
 import classes from '@/styles/home.module.scss';
 
 export default function HomePage() {
   const dispatch = useAppDispatch();
   const { getParam } = useQueryParams();
+  const favorites = useAppSelector((state) => state.favorites.coins);
+  const { activeCategory, totalItems: totalMarketItems } = useCoinCategories();
 
   const coinId = getParam(QueryParams.DETAILS, '');
-
   const showDetails = Boolean(coinId);
 
   const {
@@ -38,40 +40,41 @@ export default function HomePage() {
     changeSearchPage,
   } = useSearch();
 
-  const { activeCategory, totalItems } = useCoinCategories();
-  const { currentPage, paginate, itemsPerPage } = usePagination(Number(DefaultCoinsApiParams.PER_PAGE), totalItems);
-  const favorites = useAppSelector((state) => state.favorites.coins);
+  const paginationTotalItems = activeCategory === CoinCategories.ALL ? totalMarketItems : favorites.length;
+
+  const { currentPage, paginate, itemsPerPage } = usePagination(
+    Number(DefaultCoinsApiParams.PER_PAGE),
+    paginationTotalItems
+  );
 
   const { coins, isLoading, error } = useCoinsMarkets(
     currentPage,
     itemsPerPage,
-    totalItems,
+    totalMarketItems,
     activeCategory === CoinCategories.ALL
   );
 
-  React.useEffect(() => {
+  const paginatedFavorites = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return favorites.slice(startIndex, startIndex + itemsPerPage);
+  }, [favorites, currentPage, itemsPerPage]);
+
+  const coinsToRender = useMemo(() => {
+    if (activeCategory === CoinCategories.FAVORITES) return paginatedFavorites;
+    return coins;
+  }, [activeCategory, coins, paginatedFavorites]);
+
+  useEffect(() => {
     dispatch(initializeFavorites());
   }, [dispatch]);
 
-  const paginatedFavorites = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return favorites.slice(startIndex, endIndex);
-  }, [favorites, currentPage, itemsPerPage]);
-
-  const coinsByCategory = {
-    [CoinCategories.ALL]: coins,
-    [CoinCategories.FAVORITES]: paginatedFavorites,
-  };
-
   const isSearching = Boolean(searchQuery?.trim());
-  const coinsToRender = coinsByCategory[activeCategory] || [];
   const hasError = Boolean(error ?? searchError);
   const isLoadingState = isLoading || isSearchLoading;
 
   const renderContent = () => {
     if (hasError) {
-      return <div className={classes.error}>{JSON.stringify(error ?? searchError)}</div>;
+      return <div className={classes.error}>{error?.toString() || searchError?.toString()}</div>;
     }
 
     if (isLoadingState) {
@@ -104,7 +107,7 @@ export default function HomePage() {
                 <CoinTable items={coinsToRender} />
                 <Pagination
                   itemsPerPage={itemsPerPage}
-                  totalItems={totalItems}
+                  totalItems={activeCategory === CoinCategories.ALL ? totalMarketItems : favorites.length}
                   currentPage={currentPage}
                   paginate={paginate}
                 />
@@ -143,3 +146,25 @@ export default function HomePage() {
     </LayoutDefault>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  const page = context.query.page || 1;
+  const category = context.query.category || CoinCategories.ALL;
+
+  if (category === CoinCategories.ALL) {
+    await store.dispatch(
+      coinsApi.endpoints.getMarkets.initiate(
+        {
+          page: Number(page),
+        },
+        { forceRefetch: true }
+      )
+    );
+  }
+
+  store.dispatch(initializeFavorites());
+
+  return {
+    props: {},
+  };
+});
