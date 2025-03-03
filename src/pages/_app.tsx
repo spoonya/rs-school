@@ -3,8 +3,8 @@ import '@/styles/globals.scss';
 import 'normalize.css';
 import '@/styles/app.scss';
 
-import { getCookies } from 'cookies-next';
 import { Poppins } from 'next/font/google';
+import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
 import { ErrorBoundary } from '@/components/shared';
@@ -18,18 +18,25 @@ const poppins = Poppins({
   display: 'swap',
 });
 
-interface PageProps {
-  theme: Themes;
-}
-
-function App({ Component, pageProps, ...rest }: AppProps<PageProps>) {
+function App({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
+  const [theme, setTheme] = useState<Themes>(Themes.LIGHT);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem(THEME_KEY) as Themes;
+    if (savedTheme && Object.values(Themes).includes(savedTheme)) {
+      setTheme(savedTheme);
+    } else {
+      setTheme(Themes.LIGHT);
+      localStorage.setItem(THEME_KEY, Themes.LIGHT);
+    }
+  }, []);
 
   return (
     <main className={poppins.className}>
       <Provider store={store}>
         <ErrorBoundary>
-          <ThemeProvider serverTheme={pageProps.theme}>
+          <ThemeProvider serverTheme={theme}>
             <Component {...props.pageProps} />
           </ThemeProvider>
         </ErrorBoundary>
@@ -37,16 +44,5 @@ function App({ Component, pageProps, ...rest }: AppProps<PageProps>) {
     </main>
   );
 }
-
-App.getInitialProps = wrapper.getInitialAppProps(() => async ({ ctx }) => {
-  const cookies = getCookies(ctx) as { [key: string]: string };
-  const theme = (cookies[THEME_KEY] as Themes) in Object.values(Themes) ? (cookies[THEME_KEY] as Themes) : Themes.LIGHT;
-
-  return {
-    pageProps: {
-      theme,
-    },
-  };
-});
 
 export default App;
