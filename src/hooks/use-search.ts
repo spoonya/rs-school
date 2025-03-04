@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect } from 'react';
 
 import { useQueryParams, useSearchState } from '@/hooks';
@@ -49,7 +51,7 @@ export const useSearch = () => {
         changeSearchPage(data.meta.pageCount);
       }
     }
-  }, [isFetching, data]);
+  }, [isFetching, data, changeSearchPage]);
 
   return {
     searchQuery: state.query,

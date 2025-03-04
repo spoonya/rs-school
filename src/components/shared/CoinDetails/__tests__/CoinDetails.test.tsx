@@ -4,11 +4,12 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { CoinDetailsPage } from '@/pages';
 import { useGetCoinDetailsQuery } from '@/services';
 import { formatNumber, mockCoinsMarket } from '@/utils';
 import { configureStore } from '@reduxjs/toolkit';
 import { fireEvent, render, screen } from '@testing-library/react';
+
+import { CoinDetails } from '../';
 
 vi.mock('@/services', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/services')>();
@@ -65,7 +66,7 @@ describe('CoinDetailsPage', () => {
       error: undefined,
     });
 
-    renderWithProviders(<CoinDetailsPage />);
+    renderWithProviders(<CoinDetails coinId={mockData.id} />);
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
@@ -76,7 +77,7 @@ describe('CoinDetailsPage', () => {
       error: undefined,
     });
 
-    renderWithProviders(<CoinDetailsPage />);
+    renderWithProviders(<CoinDetails coinId={mockData.id} />);
 
     expect(screen.getByText(mockData.name)).toBeInTheDocument();
     expect(screen.getByText(mockData.symbol.toUpperCase())).toBeInTheDocument();
@@ -90,7 +91,7 @@ describe('CoinDetailsPage', () => {
       error: undefined,
     });
 
-    renderWithProviders(<CoinDetailsPage />);
+    renderWithProviders(<CoinDetails coinId={mockData.id} />);
     fireEvent.click(screen.getByTestId('close-button'));
     expect(mockNavigate).toHaveBeenCalledWith('/?page=1');
   });
@@ -102,7 +103,7 @@ describe('CoinDetailsPage', () => {
       error: { status: 404 },
     });
 
-    renderWithProviders(<CoinDetailsPage />);
+    renderWithProviders(<CoinDetails coinId={mockData.id} />);
     expect(screen.getByTestId('page-404')).toBeInTheDocument();
   });
 });

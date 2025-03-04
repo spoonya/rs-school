@@ -1,5 +1,6 @@
-import { omit } from 'lodash';
-import { useRouter } from 'next/router';
+'use client';
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
 import { QueryParams } from '@/services';
@@ -8,59 +9,59 @@ type QueryParamValue = string | number;
 
 export const useQueryParams = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const getParam = useCallback(
     (key: QueryParams, defaultValue: QueryParamValue): QueryParamValue => {
-      const value = router.query[key];
+      const value = searchParams.get(key);
 
-      if (value === undefined) return defaultValue;
-
-      const strValue = Array.isArray(value) ? value[0] : value;
+      if (value === null) return defaultValue;
 
       if (typeof defaultValue === 'number') {
-        const numValue = parseInt(strValue, 10);
+        const numValue = parseInt(value, 10);
         return isNaN(numValue) ? defaultValue : numValue;
       }
 
-      return strValue || defaultValue;
+      return value || defaultValue;
     },
-    [router.query]
+    [searchParams]
   );
 
   const setParam = useCallback(
     (key: QueryParams, value: QueryParamValue) => {
-      const newQuery = { ...router.query };
+      const params = new URLSearchParams(searchParams.toString());
 
       if (value === '' || value === null || value === undefined) {
-        newQuery[key] = undefined;
+        params.delete(key);
       } else {
-        newQuery[key] = value.toString();
+        params.set(key, value.toString());
       }
 
-      router.replace({ query: newQuery }, undefined, { shallow: true });
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
-    [router]
+    [router, searchParams, pathname]
   );
 
   const clearParams = useCallback(() => {
-    router.replace({ query: {} }, undefined, { shallow: true });
-  }, [router]);
+    router.replace(pathname, { scroll: false });
+  }, [router, pathname]);
 
   const setMultipleParams = useCallback(
     (params: Partial<Record<QueryParams, QueryParamValue>>) => {
-      let newQuery = { ...router.query };
+      const newParams = new URLSearchParams(searchParams.toString());
 
       Object.entries(params).forEach(([key, value]) => {
         if (value === undefined || value === null) {
-          newQuery = omit(newQuery, key);
+          newParams.delete(key);
         } else {
-          newQuery[key] = String(value);
+          newParams.set(key, String(value));
         }
       });
 
-      router.replace({ query: newQuery }, undefined, { shallow: true, scroll: false });
+      router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
     },
-    [router]
+    [router, searchParams, pathname]
   );
 
   return {
@@ -68,6 +69,6 @@ export const useQueryParams = () => {
     setParam,
     clearParams,
     setMultipleParams,
-    query: router.query,
+    query: Object.fromEntries(searchParams),
   };
 };

@@ -1,5 +1,6 @@
+'use client';
+
 import cn from 'classnames';
-import { GetServerSideProps } from 'next';
 import React, { useEffect, useMemo } from 'react';
 
 import {
@@ -15,8 +16,8 @@ import {
 } from '@/components/shared';
 import { useCoinCategories, useCoinsMarkets, usePagination, useQueryParams, useSearch } from '@/hooks';
 import { LayoutDefault } from '@/layouts';
-import { CoinCategories, coinsApi, DefaultCoinsApiParams, QueryParams } from '@/services';
-import { useAppDispatch, useAppSelector, wrapper } from '@/store';
+import { CoinCategories, DefaultCoinsApiParams, QueryParams } from '@/services';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { initializeFavorites } from '@/store/favorites/slice';
 import classes from '@/styles/home.module.scss';
 
@@ -146,25 +147,3 @@ export default function HomePage() {
     </LayoutDefault>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
-  const page = context.query.page || 1;
-  const category = context.query.category || CoinCategories.ALL;
-
-  if (category === CoinCategories.ALL) {
-    await store.dispatch(
-      coinsApi.endpoints.getMarkets.initiate(
-        {
-          page: Number(page),
-        },
-        { forceRefetch: true }
-      )
-    );
-  }
-
-  store.dispatch(initializeFavorites());
-
-  return {
-    props: {},
-  };
-});

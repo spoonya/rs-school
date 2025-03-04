@@ -1,5 +1,6 @@
-import { getCookie, setCookie } from 'cookies-next';
-import React, { useEffect } from 'react';
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
 
 import { THEME_KEY, Themes } from '@/services';
 
@@ -11,19 +12,22 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children, serverTheme }: Readonly<ThemeProviderProps>) {
-  const [theme, setTheme] = React.useState<Themes>(serverTheme);
+  const [theme, setTheme] = useState<Themes>(serverTheme);
 
   useEffect(() => {
-    const savedTheme = getCookie(THEME_KEY) as Themes;
-    if (savedTheme && savedTheme !== theme) {
+    const savedTheme = localStorage.getItem(THEME_KEY) as Themes;
+    if (savedTheme && Object.values(Themes).includes(savedTheme)) {
       setTheme(savedTheme);
+    } else {
+      setTheme(serverTheme);
+      localStorage.setItem(THEME_KEY, serverTheme);
     }
-  }, [setTheme, theme]);
+  }, [serverTheme]);
 
-  const toggleTheme = React.useCallback(() => {
+  const toggleTheme = useCallback(() => {
     const newTheme = theme === Themes.DARK ? Themes.LIGHT : Themes.DARK;
     setTheme(newTheme);
-    setCookie(THEME_KEY, newTheme, { path: '/' });
+    localStorage.setItem(THEME_KEY, newTheme);
   }, [theme]);
 
   return (

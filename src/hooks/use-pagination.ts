@@ -1,5 +1,6 @@
-import { omit } from 'lodash';
-import { useRouter } from 'next/router';
+'use client';
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo } from 'react';
 
 import { useCoinCategories } from '@/hooks';
@@ -7,37 +8,40 @@ import { CoinCategories, QueryParams } from '@/services';
 
 export const usePagination = (itemsPerPage: number, totalItems: number) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { activeCategory } = useCoinCategories();
 
   const currentPage = useMemo(() => {
-    const pageParam = router.query[QueryParams.PAGE];
+    const pageParam = searchParams.get(QueryParams.PAGE);
     return Math.max(1, Number(pageParam || 1));
-  }, [router.query]);
+  }, [searchParams]);
 
   const totalPages = useMemo(() => Math.max(1, Math.ceil(totalItems / itemsPerPage)), [totalItems, itemsPerPage]);
 
   const paginate = useCallback(
     (pageNumber: number) => {
-      let newQuery = { ...router.query };
+      const newParams = new URLSearchParams(searchParams.toString());
 
       if (pageNumber > 1) {
-        newQuery[QueryParams.PAGE] = String(pageNumber);
+        newParams.set(QueryParams.PAGE, String(pageNumber));
       } else {
-        newQuery = omit(newQuery, QueryParams.PAGE);
+        newParams.delete(QueryParams.PAGE);
       }
 
-      router.replace({ query: newQuery }, undefined, { shallow: true, scroll: false });
+      router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
     },
-    [router]
+    [router, pathname, searchParams]
   );
 
   useEffect(() => {
     if (activeCategory !== CoinCategories.ALL) {
-      const newQuery = omit(router.query, QueryParams.PAGE);
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.delete(QueryParams.PAGE);
 
-      router.replace({ query: newQuery }, undefined, { shallow: true });
+      router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
     }
-  }, [activeCategory]);
+  }, [activeCategory, router, pathname, searchParams]);
 
   return { currentPage, paginate, itemsPerPage, totalPages };
 };

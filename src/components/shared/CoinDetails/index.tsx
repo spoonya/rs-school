@@ -1,10 +1,12 @@
+'use client';
+
 import { X } from 'lucide-react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { Preloader } from '@/components/shared';
-import Page404 from '@/pages/404';
 import { AppRoutes, useGetCoinDetailsQuery } from '@/services';
 import { extractDomain, formatNumber, formatPercent } from '@/utils';
+import Page404 from '@app/not-found';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 
 import classes from './coin-details.module.scss';
@@ -21,7 +23,7 @@ export function CoinDetails({ coinId }: CoinDetailsProps) {
   });
 
   const handleClose = () => {
-    router.push(AppRoutes.HOME, undefined, { shallow: true });
+    router.push(AppRoutes.HOME);
   };
 
   if (isFetching) {
