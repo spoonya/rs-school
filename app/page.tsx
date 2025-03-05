@@ -1,7 +1,7 @@
 'use client';
 
 import cn from 'classnames';
-import React, { useEffect, useMemo } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 
 import {
   CoinCategoriesList,
@@ -22,6 +22,22 @@ import { initializeFavorites } from '@/store/favorites/slice';
 import classes from '@/styles/home.module.scss';
 
 export default function HomePage() {
+  return (
+    <LayoutDefault>
+      <div className={classes.wrapper}>
+        <Container>
+          <div className={classes.layout}>
+            <Suspense fallback={<Preloader />}>
+              <HomePageContent />
+            </Suspense>
+          </div>
+        </Container>
+      </div>
+    </LayoutDefault>
+  );
+}
+
+function HomePageContent() {
   const dispatch = useAppDispatch();
   const { getParam } = useQueryParams();
   const favorites = useAppSelector((state) => state.favorites.coins);
@@ -123,27 +139,21 @@ export default function HomePage() {
   };
 
   return (
-    <LayoutDefault>
-      <div className={classes.wrapper}>
-        <Container>
-          <div className={classes.layout}>
-            <div
-              className={cn(classes.tableSection, {
-                [classes.withDetails]: showDetails,
-              })}
-            >
-              <Search className={classes.search} placeholder="Bitcoin, ETH, PEPE etc." onSearch={handleSearch} />
-              <FlyoutFavorites />
-              {renderContent()}
-            </div>
-            {showDetails && (
-              <div className={classes.detailsSection}>
-                <CoinDetails coinId={coinId} />
-              </div>
-            )}
-          </div>
-        </Container>
+    <>
+      <div
+        className={cn(classes.tableSection, {
+          [classes.withDetails]: showDetails,
+        })}
+      >
+        <Search className={classes.search} placeholder="Bitcoin, ETH, PEPE etc." onSearch={handleSearch} />
+        <FlyoutFavorites />
+        {renderContent()}
       </div>
-    </LayoutDefault>
+      {showDetails && (
+        <div className={classes.detailsSection}>
+          <CoinDetails coinId={coinId} />
+        </div>
+      )}
+    </>
   );
 }
