@@ -41,6 +41,5 @@ export const coinCategories = [
 
 export const DEFAULT_CATEGORY = CoinCategories.ALL;
 export const COINS_MARKETS_TOTAL = createCoinsMarketsTotal(1000);
-export const SEARCH_QUERY_KEY = `${prefix}-search-query`;
 export const THEME_KEY = `${prefix}-theme`;
 export const FAVORITES_KEY = `${prefix}-favorites`;

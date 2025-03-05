@@ -3,10 +3,9 @@
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-import { Preloader } from '@/components/shared';
+import { NoResults, Preloader } from '@/components/shared';
 import { AppRoutes, useGetCoinDetailsQuery } from '@/services';
 import { extractDomain, formatNumber, formatPercent } from '@/utils';
-import Page404 from '@app/not-found';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 
 import classes from './coin-details.module.scss';
@@ -43,7 +42,17 @@ export function CoinDetails({ coinId }: CoinDetailsProps) {
   }
 
   if (error || !data) {
-    return <Page404 />;
+    return (
+      <div className={classes.details}>
+        <div className={classes.header}>
+          <h2>Not a coin</h2>
+          <button onClick={handleClose} className={classes.closeButton}>
+            <X />
+          </button>
+        </div>
+        <NoResults className={classes.notFound} text="No coins found" />
+      </div>
+    );
   }
 
   return (
