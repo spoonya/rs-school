@@ -1,6 +1,7 @@
 'use client';
 
 import cn from 'classnames';
+import { unstable_noStore as noStore } from 'next/cache';
 import React, { Suspense, useEffect, useMemo } from 'react';
 
 import {
@@ -22,6 +23,8 @@ import { initializeFavorites } from '@/store/favorites/slice';
 import classes from '@/styles/home.module.scss';
 
 export default function HomePage() {
+  noStore();
+
   return (
     <LayoutDefault>
       <div className={classes.wrapper}>
