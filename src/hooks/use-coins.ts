@@ -11,7 +11,9 @@ export const useCoinsMarkets = (
     { page, limit: itemsPerPage },
     {
       skip: !shouldFetch,
-      refetchOnMountOrArgChange: 30,
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+      refetchOnFocus: true,
       selectFromResult: ({ data, ...rest }) => ({
         ...rest,
         data: data ? processCoinsData(data, totalCoins) : null,
