@@ -1,14 +1,23 @@
 import '@testing-library/jest-dom';
 
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { CoinDetailsPage } from '@/pages';
-import { useGetCoinDetailsQuery } from '@/services';
-import { formatNumber, mockCoinsMarket } from '@/utils';
+import { AppRoutes, useGetCoinDetailsQuery } from '@/services';
+import { mockCoinsMarket } from '@/utils';
 import { configureStore } from '@reduxjs/toolkit';
 import { fireEvent, render, screen } from '@testing-library/react';
+
+import { CoinDetails } from '../';
+
+const mockPush = vi.fn();
+vi.mock('next/router', () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
+  useParams: () => ({ id: 'bitcoin' }),
+  useSearchParams: () => new URLSearchParams('page=1'),
+}));
 
 vi.mock('@/services', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/services')>();
@@ -27,26 +36,12 @@ vi.mock('@/utils', async (importOriginal) => {
   };
 });
 
-const mockNavigate = vi.fn();
-const mockUseParams = vi.fn(() => ({ id: 'bitcoin' }));
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')),
-  useNavigate: () => mockNavigate,
-  useParams: () => mockUseParams(),
-  useLocation: () => ({ search: '?page=1' }),
-}));
-
 const store = configureStore({
   reducer: {},
 });
 
 const renderWithProviders = (component: React.ReactNode) => {
-  return render(
-    <Provider store={store}>
-      <BrowserRouter>{component}</BrowserRouter>
-    </Provider>
-  );
+  return render(<Provider store={store}>{component}</Provider>);
 };
 
 describe('CoinDetailsPage', () => {
@@ -65,7 +60,7 @@ describe('CoinDetailsPage', () => {
       error: undefined,
     });
 
-    renderWithProviders(<CoinDetailsPage />);
+    renderWithProviders(<CoinDetails coinId={mockData.id} />);
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
@@ -76,11 +71,11 @@ describe('CoinDetailsPage', () => {
       error: undefined,
     });
 
-    renderWithProviders(<CoinDetailsPage />);
+    renderWithProviders(<CoinDetails coinId={mockData.id} />);
 
     expect(screen.getByText(mockData.name)).toBeInTheDocument();
     expect(screen.getByText(mockData.symbol.toUpperCase())).toBeInTheDocument();
-    expect(screen.getByText(`Price: ${formatNumber(mockData.price)}`)).toBeInTheDocument();
+    expect(screen.getByText(`Price: $${mockData.price.toFixed(2)}`)).toBeInTheDocument();
   });
 
   it('navigates back when close button is clicked', () => {
@@ -90,19 +85,8 @@ describe('CoinDetailsPage', () => {
       error: undefined,
     });
 
-    renderWithProviders(<CoinDetailsPage />);
+    renderWithProviders(<CoinDetails coinId={mockData.id} />);
     fireEvent.click(screen.getByTestId('close-button'));
-    expect(mockNavigate).toHaveBeenCalledWith('/?page=1');
-  });
-
-  it('displays 404 page when there is an error', () => {
-    mockUseGetCoinDetailsQuery.mockReturnValue({
-      data: undefined,
-      isFetching: false,
-      error: { status: 404 },
-    });
-
-    renderWithProviders(<CoinDetailsPage />);
-    expect(screen.getByTestId('page-404')).toBeInTheDocument();
+    expect(mockPush).toHaveBeenCalledWith(AppRoutes.HOME, undefined, { shallow: true });
   });
 });

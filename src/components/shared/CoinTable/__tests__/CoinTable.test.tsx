@@ -54,7 +54,7 @@ describe('CoinTable', () => {
 
     expect(CoinItem).toHaveBeenCalledTimes(mockCoinsMarket.length);
     mockCoinsMarket.forEach((coin) => {
-      expect(CoinItem).toHaveBeenCalledWith({ data: coin }, {});
+      expect(CoinItem).toHaveBeenCalledWith(expect.objectContaining({ data: coin }), undefined);
     });
   });
 

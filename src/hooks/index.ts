@@ -7,3 +7,4 @@ export * from './use-search-state';
 export * from './use-close-details';
 export * from './use-csv';
 export * from './use-coin-categories';
+export * from './use-theme';
