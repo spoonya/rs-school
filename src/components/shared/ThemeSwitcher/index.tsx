@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import { Moon, Sun } from 'lucide-react';
 
-import { useTheme } from '@/contexts';
+import { useTheme } from '@/hooks';
 import { Themes } from '@/services';
 
 import classes from './theme.switcher.module.scss';

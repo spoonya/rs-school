@@ -20,9 +20,9 @@ const defaultParams: GetCoinsParams = {
 export const coinsApi = createApi({
   reducerPath: 'coinsApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
+    baseUrl: process.env.NEXT_PUBLIC_API_URL,
     prepareHeaders: (headers) => {
-      headers.set('X-API-KEY', import.meta.env.VITE_OPENAPI_API_KEY);
+      headers.set('X-API-KEY', process.env.NEXT_PUBLIC_OPENAPI_API_KEY as string);
       headers.set('accept', 'application/json');
       return headers;
     },

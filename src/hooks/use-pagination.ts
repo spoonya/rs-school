@@ -1,58 +1,43 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { omit } from 'lodash';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useMemo } from 'react';
 
-import { useCoinCategories, useQueryParams } from '@/hooks';
-import { DefaultCoinsApiParams, SearchParams } from '@/services';
+import { useCoinCategories } from '@/hooks';
+import { CoinCategories, QueryParams } from '@/services';
 
 export const usePagination = (itemsPerPage: number, totalItems: number) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { getParam } = useQueryParams();
+  const router = useRouter();
   const { activeCategory } = useCoinCategories();
 
-  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
-  const [currentPage, setCurrentPage] = useState(() => {
-    const urlPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
-    return Math.max(1, Math.min(urlPage || 1, totalPages));
-  });
+  const currentPage = useMemo(() => {
+    const pageParam = router.query[QueryParams.PAGE];
+    return Math.max(1, Number(pageParam || 1));
+  }, [router.query]);
 
-  useEffect(() => {
-    const urlPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
-    if (!isNaN(urlPage) && urlPage !== currentPage) {
-      const validPage = Math.max(1, Math.min(urlPage, totalPages));
-      setCurrentPage(validPage);
-    }
-  }, [currentPage, getParam, location.search, totalPages]);
-
-  useEffect(() => {
-    const urlPage = Number(getParam(SearchParams.PAGE, DefaultCoinsApiParams.PAGE_NUM));
-    const newPage = !isNaN(urlPage) ? Math.max(1, Math.min(urlPage, totalPages)) : 1;
-
-    setCurrentPage(newPage);
-    navigate(`?${SearchParams.PAGE}=${newPage}`, { replace: true });
-  }, [activeCategory, getParam, navigate, totalPages]);
-
-  useEffect(() => {
-    const validPage = Math.min(currentPage, totalPages);
-    if (validPage !== currentPage) {
-      setCurrentPage(validPage);
-      navigate(`?${SearchParams.PAGE}=${validPage}`, { replace: true });
-    }
-  }, [totalPages, currentPage, navigate]);
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(totalItems / itemsPerPage)), [totalItems, itemsPerPage]);
 
   const paginate = useCallback(
     (pageNumber: number) => {
-      const validPage = Math.max(1, Math.min(pageNumber, totalPages));
-      setCurrentPage(validPage);
-      navigate(`?${SearchParams.PAGE}=${validPage}`);
+      let newQuery = { ...router.query };
+
+      if (pageNumber > 1) {
+        newQuery[QueryParams.PAGE] = String(pageNumber);
+      } else {
+        newQuery = omit(newQuery, QueryParams.PAGE);
+      }
+
+      router.replace({ query: newQuery }, undefined, { shallow: true, scroll: false });
     },
-    [navigate, totalPages]
+    [router]
   );
 
-  return {
-    currentPage,
-    paginate,
-    itemsPerPage,
-    totalPages,
-  };
+  useEffect(() => {
+    if (activeCategory !== CoinCategories.ALL) {
+      const newQuery = omit(router.query, QueryParams.PAGE);
+
+      router.replace({ query: newQuery }, undefined, { shallow: true });
+    }
+  }, [activeCategory]);
+
+  return { currentPage, paginate, itemsPerPage, totalPages };
 };

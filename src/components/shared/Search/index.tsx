@@ -38,9 +38,9 @@ export function Search({ className, placeholder, onSearch }: Readonly<SearchProp
   }, []);
 
   return (
-    <form className={cn(classes.root, className)} onSubmit={handleSubmit}>
+    <form className={cn(classes.root, className)} onSubmit={handleSubmit} data-testid="search-form">
       <div className={classes.inputWrapper}>
-        <SearchIcon className={classes.icon} size={20} />
+        <SearchIcon className={classes.icon} size={20} data-testid="search-icon" />
         <Input
           className={classes.input}
           placeholder={placeholder}

@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { useGetMarketsQuery } from '@/services';
+import { CoinsMarketsResponse } from '@/types';
 
 export const useCoinsMarkets = (
   page: number,
@@ -8,31 +7,28 @@ export const useCoinsMarkets = (
   totalCoins: number,
   shouldFetch: boolean = true
 ) => {
-  const { data, isFetching, error } = useGetMarketsQuery(
-    { page },
+  const { data, isLoading, error, isFetching } = useGetMarketsQuery(
+    { page, limit: itemsPerPage },
     {
-      refetchOnMountOrArgChange: true,
       skip: !shouldFetch,
+      refetchOnMountOrArgChange: 30,
+      selectFromResult: ({ data, ...rest }) => ({
+        ...rest,
+        data: data ? processCoinsData(data, totalCoins) : null,
+      }),
     }
   );
 
-  const processedCoins = React.useMemo(() => {
-    if (!data?.result) return [];
-
-    const pageNumber = Number(page);
-    const totalPages = Math.ceil(totalCoins / itemsPerPage);
-
-    if (pageNumber === totalPages) {
-      const allowedCount = totalCoins - (pageNumber - 1) * itemsPerPage;
-      return data.result.slice(0, allowedCount);
-    }
-
-    return data.result;
-  }, [data, page, itemsPerPage, totalCoins]);
-
   return {
-    coins: processedCoins,
-    isLoading: isFetching,
-    error: error ? 'An error occurred while fetching coins' : null,
+    coins: data?.result || [],
+    isLoading: isLoading || isFetching,
+    error: error ? 'Failed to load market data' : null,
+  };
+};
+
+const processCoinsData = (data: CoinsMarketsResponse, totalCoins: number) => {
+  return {
+    ...data,
+    result: data.result.slice(0, totalCoins),
   };
 };

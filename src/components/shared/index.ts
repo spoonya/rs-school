@@ -12,3 +12,4 @@ export { ThemeSwitcher } from '@/components/shared/ThemeSwitcher';
 export { FlyoutFavorites } from '@/components/shared/FlyoutFavorites';
 export { CoinCategoriesList } from '@/components/shared/CoinCategoriesList';
 export { NoResults } from '@/components/shared/NoResults';
+export { CoinDetails } from '@/components/shared/CoinDetails';

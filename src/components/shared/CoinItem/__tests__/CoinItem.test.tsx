@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom';
 
-import { BrowserRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { CoinItem } from '@/components/shared';
@@ -10,12 +9,12 @@ import { addFavorite, removeFavorite } from '@/store/favorites/slice';
 import { mockCoinsMarket } from '@/utils';
 import { fireEvent, render, screen } from '@testing-library/react';
 
-const mockNavigate = vi.fn();
-
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')),
-  useNavigate: () => mockNavigate,
-  useLocation: () => ({ search: '?page=1' }),
+const mockPush = vi.fn();
+vi.mock('next/router', () => ({
+  useRouter: () => ({
+    push: mockPush,
+    query: { page: '2' },
+  }),
 }));
 
 vi.mock('@/store', () => ({
@@ -57,13 +56,11 @@ describe('CoinItem', () => {
 
   const renderComponent = () =>
     render(
-      <BrowserRouter>
-        <table>
-          <tbody>
-            <CoinItem data={mockCoin} className="test-class" />
-          </tbody>
-        </table>
-      </BrowserRouter>
+      <table>
+        <tbody>
+          <CoinItem data={mockCoin} className="test-class" />
+        </tbody>
+      </table>
     );
 
   it('displays all coin data correctly', () => {
@@ -80,7 +77,17 @@ describe('CoinItem', () => {
   it('calls navigation when clicking on a row', () => {
     renderComponent();
     fireEvent.click(screen.getByTestId('coin-item'));
-    expect(mockNavigate).toHaveBeenCalledWith('/details/bitcoin?page=1');
+    expect(mockPush).toHaveBeenCalledWith(
+      {
+        pathname: '/',
+        query: {
+          page: '2',
+          details: 'bitcoin',
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
   });
 
   it('toggles favorites without event bubbling', () => {
@@ -94,13 +101,11 @@ describe('CoinItem', () => {
     (useAppSelector as Mock).mockImplementation((selector) => selector({ favorites: { coins: [] } }));
 
     rerender(
-      <BrowserRouter>
-        <table>
-          <tbody>
-            <CoinItem data={mockCoin} className="test-class" />
-          </tbody>
-        </table>
-      </BrowserRouter>
+      <table>
+        <tbody>
+          <CoinItem data={mockCoin} className="test-class" />
+        </tbody>
+      </table>
     );
 
     fireEvent.click(checkbox);

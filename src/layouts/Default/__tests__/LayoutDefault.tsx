@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import { render, screen } from '@testing-library/react';
 
-import { RootLayout } from '../';
+import { LayoutDefault } from '../';
 
-describe('RootLayout', () => {
+describe('LayoutDefault', () => {
   it('should render', () => {
-    render(<RootLayout />);
+    render(<LayoutDefault />);
 
     expect(screen.getByRole('main')).toBeInTheDocument();
   });
@@ -14,7 +14,7 @@ describe('RootLayout', () => {
   it('should render children', () => {
     const children = <div>Test</div>;
 
-    render(<RootLayout>{children}</RootLayout>);
+    render(<LayoutDefault>{children}</LayoutDefault>);
 
     expect(screen.getByText('Test')).toBeInTheDocument();
   });
