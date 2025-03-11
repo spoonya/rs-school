@@ -1,0 +1,90 @@
+@use '@/styles/animations' as *;
+
+.root {
+  position: fixed;
+
+  z-index: 4;
+
+  max-width: 30rem;
+  width: 100%;
+
+  padding: 2rem;
+
+  border-radius: var(--border-radius-medium);
+  background-color: var(--background-secondary);
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+
+  &.is-minimized {
+    width: 5rem;
+    height: 5rem;
+
+    .minimizeBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &.bottom-left {
+    left: 4rem;
+    bottom: 4rem;
+
+    &.is-open {
+      animation: slide-in-left 0.2s ease-in-out forwards;
+    }
+
+    &.is-closed {
+      animation: slide-out-left 0.2s ease-in-out forwards;
+    }
+  }
+
+  &.bottom-right {
+    right: 4rem;
+    bottom: 4rem;
+
+    &.is-open {
+      animation: slide-in-right 0.2s ease-in-out forwards;
+    }
+
+    &.is-closed {
+      animation: slide-out-right 0.2s ease-in-out forwards;
+    }
+  }
+}
+
+.minimizeBtn {
+  position: absolute;
+  top: 1.6rem;
+  right: 1.6rem;
+
+  cursor: pointer;
+
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.contentOnMinimize {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+}

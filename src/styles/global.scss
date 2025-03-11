@@ -1,0 +1,132 @@
+@use './variables' as *;
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: $ff-primary;
+  color: var(--text-primary);
+}
+
+.theme-provider {
+  min-height: 100vh;
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+
+  &.light {
+    // Brand Colors
+    --color-primary: #6c5ce7;
+    --color-primary-dark: #5b4bc4;
+    --color-secondary: #a55eea;
+    --color-accent: #00c2d4;
+
+    // Crypto Specific
+    --color-profit: #006d4b;
+    --color-loss: #cc1f35;
+    --color-volume: #6d5aef;
+
+    // Functional Colors
+    --color-success: #007a5e;
+    --color-error: #bd1e36;
+    --color-error-bg: rgba(189, 30, 54, 0.08);
+    --color-success-bg: rgba(0, 122, 94, 0.1);
+
+    // Backgrounds
+    --background-primary: #fdfcff;
+    --background-secondary: #f8f9ff;
+    --background-tertiary: #eef1ff;
+    --surface-card: #ffffff;
+
+    // Text
+    --text-primary: #2d3436;
+    --text-secondary: #636e72;
+    --text-tertiary: #7f8c8d;
+
+    // UI Elements
+    --border-color: #daddff;
+    --shadow-color: rgba(108, 92, 231, 0.1);
+
+    // Table Specific
+    --table-row-hover: #f0f4ff;
+    --table-row-even: #f8f9ff;
+
+    // Charts & Graphs
+    --chart-grid: #eef1ff;
+    --chart-fill: rgba(108, 92, 231, 0.08);
+  }
+
+  &.dark {
+    // Brand Colors
+    --color-primary: #5d7fff;
+    --color-primary-dark: #4c6fff;
+
+    // Backgrounds
+    --background-primary: #0f1429;
+    --background-secondary: #151b35;
+    --background-tertiary: #1c2447;
+    --surface-card: #1a1f36;
+
+    // Text
+    --text-primary: #ffffff;
+    --text-secondary: #b4c2d3;
+    --text-tertiary: #8792a2;
+
+    // Table Specific
+    --table-row-hover: #1c2447;
+    --table-row-even: #151b35;
+
+    // UI Elements
+    --border-color: #2a3558;
+    --shadow-color: rgba(13, 16, 45, 0.5);
+
+    // Pagination
+    --pagination-active-text: #ffffff;
+    --pagination-hover-text: #1a1f36;
+
+    // Charts & Graphs
+    --chart-grid: #2a3558;
+    --chart-fill: rgba(93, 127, 255, 0.15);
+    --color-chart-grid: rgba(255, 255, 255, 0.1);
+  }
+}
+
+button {
+  display: inline-block;
+
+  font: inherit;
+  color: inherit;
+
+  padding: 0;
+  margin: 0;
+
+  user-select: none;
+
+  cursor: pointer;
+
+  border: none;
+  background: none;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.list-reset {
+  list-style-type: none;
+
+  padding: 0;
+  margin: 0;
+}
