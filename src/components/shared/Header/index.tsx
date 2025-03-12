@@ -1,6 +1,6 @@
 import cn from 'classnames';
 
-import { Container, Logo } from '@/components/shared';
+import { Container, Logo, MainMenu } from '@/components/shared';
 
 import { ThemeSwitcher } from '../ThemeSwitcher';
 import classes from './header.module.scss';
@@ -14,7 +14,10 @@ export function Header({ className }: Readonly<HeaderProps>) {
     <header className={cn(classes.root, className)}>
       <Container>
         <div className={classes.top}>
-          <Logo className={classes.logo} />
+          <div className={classes.left}>
+            <Logo className={classes.logo} />
+            <MainMenu className={classes.menu} />
+          </div>
           <ThemeSwitcher />
         </div>
       </Container>

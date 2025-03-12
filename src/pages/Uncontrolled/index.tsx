@@ -1,13 +1,10 @@
-import { Container } from '@/components/shared';
-import { Button, Input } from '@/components/ui';
+import { Container, FormUncontrolled } from '@/components/shared';
 
 export function UncontrolledFormPage() {
   return (
     <div>
       <Container>
-        <h1>Uncontrolled Form</h1>
-        <Input />
-        <Button>Submit</Button>
+        <FormUncontrolled />
       </Container>
     </div>
   );

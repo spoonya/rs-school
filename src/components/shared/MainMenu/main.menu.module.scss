@@ -1,0 +1,26 @@
+.link {
+  display: block;
+  text-decoration: none;
+  font-size: 1.6rem;
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+
+  &.active {
+    color: var(--color-primary);
+  }
+}
+
+.navList {
+  display: flex;
+  align-items: center;
+}
+
+.navItem {
+  &:not(:last-child) {
+    margin-right: 4rem;
+  }
+}

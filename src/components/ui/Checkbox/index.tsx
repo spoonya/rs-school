@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { Check } from 'lucide-react';
-import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
+import { DetailedHTMLProps, InputHTMLAttributes, useState } from 'react'; // Добавлен импорт useState
 
 import classes from './checkbox.module.scss';
 
@@ -21,9 +21,19 @@ export function Checkbox({
   checkedIcon,
   label,
   disabled,
+  defaultChecked,
   ...props
 }: Readonly<CheckboxProps>) {
+  const [internalChecked, setInternalChecked] = useState(defaultChecked || false);
   const hasCustomIcon = Boolean(icon || checkedIcon);
+  const isControlled = checked !== undefined;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isControlled) {
+      setInternalChecked(e.target.checked);
+    }
+    onChange?.(e);
+  };
 
   return (
     <div className={cn(classes.root, className, { [classes.disabled]: disabled })}>
@@ -31,13 +41,19 @@ export function Checkbox({
         <input
           type="checkbox"
           className={cn(classes.input)}
-          checked={checked}
-          onChange={onChange}
+          checked={isControlled ? checked : internalChecked}
+          onChange={handleChange}
           disabled={disabled}
           {...props}
         />
         <span className={cn(classes.icon, { [classes.customIcon]: hasCustomIcon })}>
-          {checked ? checkedIcon || icon || <Check /> : icon || ''}
+          {isControlled
+            ? checked
+              ? checkedIcon || icon || <Check className={classes.defaultIcon} />
+              : icon || ''
+            : internalChecked
+              ? checkedIcon || icon || <Check className={classes.defaultIcon} />
+              : icon || ''}
         </span>
         {label && <span className={classes.text}>{label}</span>}
       </label>

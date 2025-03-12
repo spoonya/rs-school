@@ -1,6 +1,8 @@
 .root {
   display: inline-block;
   position: relative;
+  font-size: 1.6rem;
+  color: var(--text-primary);
 }
 
 .label {
@@ -54,7 +56,9 @@
 }
 
 .text {
-  font-size: 1.6rem;
-  color: var(--text-primary);
   margin-left: 0.8rem;
+}
+
+.defaultIcon {
+  stroke: var(--color-white);
 }

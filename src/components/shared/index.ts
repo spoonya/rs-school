@@ -1,5 +1,10 @@
 export { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 export { Header } from '@/components/shared/Header';
-export { Container } from '@/components/shared/Container';
+export { Container } from '@/components/ui/Container';
 export { Logo } from '@/components/shared/Logo';
 export { Preloader } from '@/components/shared/Preloader';
+export { MainMenu } from '@/components/shared/MainMenu';
+export { ThemeSwitcher } from '@/components/shared/ThemeSwitcher';
+export { FormControlled } from '@/components/shared/FormControlled';
+export { FormUncontrolled } from '@/components/shared/FormUncontrolled';
+export { TextField } from '@/components/shared/TextField';
