@@ -1,7 +1,13 @@
 import cn from 'classnames';
+import React from 'react';
 
 import { Button, Checkbox, FormContainer, FormControl, Title } from '@/components/ui';
+import { RootState, useAppDispatch, useAppSelector } from '@/store';
+import { fetchCountries } from '@/store/countries';
 
+import { CountryAutocomplete } from '../CountryAutocomplete';
+import { FileInput } from '../FileInput';
+import { Select } from '../Select';
 import { TextField } from '../TextField';
 import classes from './form.uncontrolled.module.scss';
 
@@ -10,6 +16,19 @@ interface FormUncontrolledProps {
 }
 
 export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>) {
+  const [gender, setGender] = React.useState<string>('');
+  const [, setPicture] = React.useState<File | null>(null);
+
+  const dispatch = useAppDispatch();
+  const { countries } = useAppSelector((state: RootState) => state.countries);
+  const [selectedCountry, setSelectedCountry] = React.useState('');
+
+  React.useEffect(() => {
+    if (countries.length === 0) {
+      dispatch(fetchCountries());
+    }
+  }, [dispatch, countries]);
+
   return (
     <FormContainer className={cn(classes.root, className)}>
       <Title className={classes.title}>Form Uncontrolled</Title>
@@ -28,6 +47,29 @@ export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>)
         </FormControl>
         <FormControl>
           <TextField label="Repeat password" type="password" />
+        </FormControl>
+        <FormControl>
+          <Select
+            label="Gender"
+            options={[
+              { value: 'male', label: 'Male' },
+              { value: 'female', label: 'Female' },
+            ]}
+            value={gender}
+            onChange={setGender}
+            placeholder="Select gender"
+          />
+        </FormControl>
+        <FormControl>
+          <CountryAutocomplete
+            id="country"
+            label="Select Country"
+            value={selectedCountry}
+            onChange={setSelectedCountry}
+          />
+        </FormControl>
+        <FormControl>
+          <FileInput label="Picture" onChange={setPicture} maxSizeMB={10} accept="image/png, image/jpeg" />
         </FormControl>
         <FormControl>
           <Checkbox className={classes.checkbox} label="I accept terms and conditions" />

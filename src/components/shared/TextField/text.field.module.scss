@@ -1,3 +1,5 @@
+@import '@/styles/mixins';
+
 .root {
 }
 
@@ -9,8 +11,5 @@
 }
 
 .label {
-  font-size: 1.3rem;
-  display: block;
-  margin-bottom: 0.8rem;
-  padding-left: 1.5rem;
+  @include form-label;
 }

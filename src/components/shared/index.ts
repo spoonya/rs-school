@@ -8,3 +8,6 @@ export { ThemeSwitcher } from '@/components/shared/ThemeSwitcher';
 export { FormControlled } from '@/components/shared/FormControlled';
 export { FormUncontrolled } from '@/components/shared/FormUncontrolled';
 export { TextField } from '@/components/shared/TextField';
+export { FileInput } from '@/components/shared/FileInput';
+export { CountryAutocomplete } from '@/components/shared/CountryAutocomplete';
+export { Select } from '@/components/shared/Select';

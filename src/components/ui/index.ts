@@ -7,3 +7,4 @@ export { TabNav } from '@/components/ui/TabNav';
 export { FormControl } from '@/components/ui/FormControl';
 export { FormContainer } from '@/components/ui/FormContainer';
 export { Title } from './Title';
+export { Dropdown } from './Dropdown';
