@@ -2,7 +2,9 @@ import cn from 'classnames';
 import { ChevronDown } from 'lucide-react';
 import { DetailedHTMLProps, HTMLAttributes, useEffect, useRef, useState } from 'react';
 
-import { Dropdown } from '../../ui/Dropdown';
+import { FormControlError } from '@/components/ui';
+
+import { Dropdown } from '../Dropdown';
 import classes from './Select.module.scss';
 
 export interface SelectOption {
@@ -17,6 +19,8 @@ interface SelectProps extends Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivEleme
   placeholder?: string;
   disabled?: boolean;
   label?: string;
+  error?: boolean;
+  errorText?: string;
 }
 
 export function Select({
@@ -27,6 +31,8 @@ export function Select({
   placeholder,
   disabled,
   label,
+  error,
+  errorText,
   ...props
 }: Readonly<SelectProps>) {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,22 +70,18 @@ export function Select({
         })}
         ref={containerRef}
       >
-        <div className={classes.selected} onClick={handleToggle} role="button" tabIndex={0}>
+        <div className={cn(classes.selected, { [classes.errorInput]: error })} onClick={handleToggle} tabIndex={0}>
           <span className={classes.value}>
             {selectedLabel || <span className={classes.placeholder}>{placeholder}</span>}
           </span>
           <ChevronDown className={classes.arrow} />
         </div>
 
+        {error && <FormControlError className={classes.error}>{errorText}</FormControlError>}
+
         <Dropdown isOpen={isOpen} onClose={() => setIsOpen(false)}>
           {options.map((option) => (
-            <div
-              key={option.value}
-              className={classes.option}
-              onClick={() => handleSelect(option.value)}
-              role="option"
-              tabIndex={0}
-            >
+            <div key={option.value} className={classes.option} onClick={() => handleSelect(option.value)} tabIndex={0}>
               {option.label}
             </div>
           ))}

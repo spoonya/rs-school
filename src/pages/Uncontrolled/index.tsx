@@ -1,4 +1,5 @@
-import { Container, FormUncontrolled } from '@/components/shared';
+import { FormUncontrolled } from '@/components/shared';
+import { Container } from '@/components/ui';
 
 export function UncontrolledFormPage() {
   return (

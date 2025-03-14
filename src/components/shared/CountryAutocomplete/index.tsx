@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Dropdown, Input } from '@/components/ui';
+import { Dropdown, FormControlError, Input } from '@/components/ui';
 import { RootState } from '@/store';
 
 import classes from './country.autocomplete.module.scss';
@@ -13,10 +13,11 @@ interface AutocompleteProps {
   value: string;
   onChange: (value: string) => void;
   className?: string;
-  error?: string;
+  error?: boolean;
+  errorText?: string;
 }
 
-export function CountryAutocomplete({ id, label, value, onChange, className, error }: AutocompleteProps) {
+export function CountryAutocomplete({ id, label, value, onChange, className, error, errorText }: AutocompleteProps) {
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -53,7 +54,15 @@ export function CountryAutocomplete({ id, label, value, onChange, className, err
       </label>
 
       <div className={classes.inputWrapper}>
-        <Input id={id} type="text" value={inputValue} onChange={handleInputChange} />
+        <Input
+          className={cn({ [classes.errorInput]: error })}
+          id={id}
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+
+        {error && <FormControlError className={classes.error}>{errorText}</FormControlError>}
 
         <Dropdown isOpen={isOpen} onClose={() => setIsOpen(false)} className={classes.suggestions}>
           {loading ? (
@@ -75,8 +84,6 @@ export function CountryAutocomplete({ id, label, value, onChange, className, err
           )}
         </Dropdown>
       </div>
-
-      {error && <span className={classes.errorMessage}>{error}</span>}
     </div>
   );
 }

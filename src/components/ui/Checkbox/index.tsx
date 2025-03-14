@@ -1,7 +1,8 @@
 import cn from 'classnames';
 import { Check } from 'lucide-react';
-import { DetailedHTMLProps, InputHTMLAttributes, useState } from 'react'; // Добавлен импорт useState
+import { DetailedHTMLProps, InputHTMLAttributes, useState } from 'react';
 
+import { FormControlError } from '../FormControlError';
 import classes from './checkbox.module.scss';
 
 interface CheckboxProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -10,6 +11,8 @@ interface CheckboxProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputE
   icon?: React.ReactNode;
   checkedIcon?: React.ReactNode;
   label?: string;
+  error?: boolean;
+  errorText?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -22,6 +25,8 @@ export function Checkbox({
   label,
   disabled,
   defaultChecked,
+  error,
+  errorText,
   ...props
 }: Readonly<CheckboxProps>) {
   const [internalChecked, setInternalChecked] = useState(defaultChecked || false);
@@ -57,6 +62,7 @@ export function Checkbox({
         </span>
         {label && <span className={classes.text}>{label}</span>}
       </label>
+      {error && <FormControlError className={classes.error}>{errorText}</FormControlError>}
     </div>
   );
 }

@@ -1,6 +1,7 @@
-@import '@/styles/mixins';
+@use '@/styles/mixins' as *;
 
 .root {
+  position: relative;
 }
 
 .wrapper {
@@ -12,4 +13,12 @@
 
 .label {
   @include form-label;
+}
+
+.error {
+  padding-left: 1.5rem;
+}
+
+.errorInput {
+  @include form-error;
 }

@@ -1,6 +1,8 @@
 import cn from 'classnames';
 import { ChangeEvent, DragEvent, useRef, useState } from 'react';
 
+import { FormControlError } from '@/components/ui';
+
 import classes from './file.input.module.scss';
 
 interface ImageUploadProps {
@@ -9,7 +11,8 @@ interface ImageUploadProps {
   className?: string;
   accept?: string;
   maxSizeMB?: number;
-  error?: string;
+  error?: boolean;
+  errorText?: string;
 }
 
 export function FileInput({
@@ -19,6 +22,7 @@ export function FileInput({
   accept = 'image/*',
   maxSizeMB = 5,
   error,
+  errorText,
 }: Readonly<ImageUploadProps>) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -82,6 +86,8 @@ export function FileInput({
       >
         <input ref={inputRef} type="file" accept={accept} onChange={handleInputChange} className={classes.input} />
 
+        {error && <FormControlError className={classes.error}>{errorText}</FormControlError>}
+
         {preview ? (
           <>
             <img src={preview} alt="Preview" className={classes.preview} />
@@ -95,8 +101,6 @@ export function FileInput({
           </div>
         )}
       </div>
-
-      {error && <span className={classes.error}>{error}</span>}
     </div>
   );
 }

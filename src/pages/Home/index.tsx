@@ -1,4 +1,4 @@
-import { Container } from '@/components/shared';
+import { Container } from '@/components/ui';
 
 export function HomePage() {
   return (

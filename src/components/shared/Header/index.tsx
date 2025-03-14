@@ -1,6 +1,7 @@
 import cn from 'classnames';
 
-import { Container, Logo, MainMenu } from '@/components/shared';
+import { Logo, MainMenu } from '@/components/shared';
+import { Container } from '@/components/ui';
 
 import { ThemeSwitcher } from '../ThemeSwitcher';
 import classes from './header.module.scss';

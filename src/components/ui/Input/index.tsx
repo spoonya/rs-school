@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
+import { DetailedHTMLProps, forwardRef, InputHTMLAttributes } from 'react';
 
 import classes from './input.module.scss';
 
@@ -7,6 +7,8 @@ interface InputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElem
   className?: string;
 }
 
-export function Input({ className, ...props }: Readonly<InputProps>) {
-  return <input className={cn(classes.root, className)} {...props} />;
-}
+export const Input = forwardRef<HTMLInputElement, InputProps>(({ className, ...props }, ref) => {
+  return <input ref={ref} className={cn(classes.root, className)} {...props} />;
+});
+
+Input.displayName = 'Input';
