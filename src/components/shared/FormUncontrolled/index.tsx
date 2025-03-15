@@ -1,5 +1,6 @@
 import cn from 'classnames';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { CountryAutocomplete } from '@/components/shared';
@@ -7,6 +8,7 @@ import { Button, Checkbox, FileInput, FormContainer, FormControl, Select, TextFi
 import { FileInputHandle } from '@/components/ui/FileInput';
 import { RootState, useAppDispatch, useAppSelector } from '@/store';
 import { Country, fetchCountries } from '@/store/countries';
+import { addUser } from '@/store/users';
 
 import classes from './form.uncontrolled.module.scss';
 
@@ -101,6 +103,7 @@ const createFormSchema = (allowedCountries: Country[]) =>
     });
 
 export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>) {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { countries } = useAppSelector((state: RootState) => state.countries);
   const [gender, setGender] = React.useState<string>('');
@@ -155,7 +158,8 @@ export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>)
       setErrors(newErrors);
     } else {
       setErrors({});
-      console.log('Valid data:', validationResult.data);
+      dispatch(addUser(validationResult.data));
+      navigate('/');
     }
   };
 
