@@ -1,11 +1,11 @@
 import cn from 'classnames';
 import { Check } from 'lucide-react';
-import { DetailedHTMLProps, ForwardedRef, forwardRef, InputHTMLAttributes, useState } from 'react';
+import { ForwardedRef, forwardRef, useState } from 'react';
 
 import { FormControlError } from '../FormControlError';
 import classes from './checkbox.module.scss';
 
-interface CheckboxProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+interface CheckboxProps {
   className?: string;
   checked?: boolean;
   icon?: React.ReactNode;
@@ -13,7 +13,11 @@ interface CheckboxProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputE
   label?: string;
   error?: boolean;
   errorText?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
+  defaultChecked?: boolean;
+  name?: string;
+  onChange?: (checked: boolean) => void;
+  onBlur?: () => void;
 }
 
 export const Checkbox = forwardRef(
@@ -38,10 +42,11 @@ export const Checkbox = forwardRef(
     const isControlled = checked !== undefined;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newChecked = e.target.checked;
       if (!isControlled) {
-        setInternalChecked(e.target.checked);
+        setInternalChecked(newChecked);
       }
-      onChange?.(e);
+      onChange?.(newChecked);
     };
 
     return (

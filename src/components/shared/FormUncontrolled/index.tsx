@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { CountryAutocomplete } from '@/components/shared';
 import { Button, Checkbox, FileInput, FormContainer, FormControl, Select, TextField, Title } from '@/components/ui';
 import { FileInputHandle } from '@/components/ui/FileInput';
+import { AppRoutes } from '@/services';
 import { RootState, useAppDispatch, useAppSelector } from '@/store';
 import { Country, fetchCountries } from '@/store/countries';
 import { addUser } from '@/store/users';
@@ -159,7 +160,7 @@ export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>)
     } else {
       setErrors({});
       dispatch(addUser(validationResult.data));
-      navigate('/');
+      navigate(AppRoutes.HOME);
     }
   };
 

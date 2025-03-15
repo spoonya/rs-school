@@ -32,7 +32,7 @@ export function HomePage() {
     <div>
       <Container>
         <Title level={1}>User List</Title>
-        {users.length === 0 && <NoResults text="Forms data not found" />}
+        {users.length === 0 && <NoResults text="It's empty here 😔. Submit some data" />}
         <div className={classes.usersContainer}>
           {users.map((user, index) => (
             <div key={index} className={cn(classes.userCard, highlightedIds.has(index) && classes.highlighted)}>
