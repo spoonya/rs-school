@@ -14,5 +14,5 @@ export interface UserFormData {
   country: string;
   agreement: boolean;
   picture: Picture | null;
-  timestamp?: number;
+  timestamp: number;
 }

@@ -9,6 +9,7 @@ import {
   FileInput,
   FormContainer,
   FormControl,
+  FormControlGroup,
   PasswordStrength,
   Select,
   TextField,
@@ -71,25 +72,24 @@ export function FormUncontrolled({ className }: FormUncontrolledProps) {
       <Title className={classes.title}>Form Uncontrolled</Title>
       <form onSubmit={handleSubmit} noValidate>
         <FormControl>
-          <TextField
-            ref={nameRef}
-            placeholder="Valerij"
-            label="Name"
-            autoComplete="name"
-            error={!!errors.name}
-            errorText={errors.name}
-          />
-        </FormControl>
-
-        <FormControl>
-          <TextField
-            ref={ageRef}
-            placeholder="54"
-            label="Age"
-            type="number"
-            error={!!errors.age}
-            errorText={errors.age}
-          />
+          <FormControlGroup>
+            <TextField
+              ref={nameRef}
+              placeholder="Valerij"
+              label="Name"
+              autoComplete="name"
+              error={!!errors.name}
+              errorText={errors.name}
+            />
+            <TextField
+              ref={ageRef}
+              placeholder="54"
+              label="Age"
+              type="number"
+              error={!!errors.age}
+              errorText={errors.age}
+            />
+          </FormControlGroup>
         </FormControl>
 
         <FormControl>
@@ -105,50 +105,48 @@ export function FormUncontrolled({ className }: FormUncontrolledProps) {
         </FormControl>
 
         <FormControl>
-          <TextField
-            ref={passwordRef}
-            label="Password"
-            type="password"
-            error={!!errors.password}
-            errorText={errors.password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <PasswordStrength classname={classes.passwordStrength} password={password} />
+          <FormControlGroup>
+            <TextField
+              ref={passwordRef}
+              label="Password"
+              type="password"
+              error={!!errors.password}
+              errorText={errors.password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <TextField
+              ref={confirmPasswordRef}
+              label="Repeat password"
+              type="password"
+              error={!!errors.confirmPassword}
+              errorText={errors.confirmPassword}
+            />
+            <PasswordStrength classname={classes.passwordStrength} password={password} />
+          </FormControlGroup>
         </FormControl>
 
         <FormControl>
-          <TextField
-            ref={confirmPasswordRef}
-            label="Repeat password"
-            type="password"
-            error={!!errors.confirmPassword}
-            errorText={errors.confirmPassword}
-          />
-        </FormControl>
-
-        <FormControl>
-          <Select
-            label="Gender"
-            options={[
-              { value: 'male', label: 'Male' },
-              { value: 'female', label: 'Female' },
-            ]}
-            value={gender}
-            onChange={setGender}
-            placeholder="Select gender"
-            error={!!errors.gender}
-            errorText={errors.gender}
-          />
-        </FormControl>
-
-        <FormControl>
-          <CountryAutocomplete
-            ref={countryRef}
-            id="country"
-            label="Select Country"
-            error={!!errors.country}
-            errorText={errors.country}
-          />
+          <FormControlGroup>
+            <Select
+              label="Gender"
+              options={[
+                { value: 'male', label: 'Male' },
+                { value: 'female', label: 'Female' },
+              ]}
+              value={gender}
+              onChange={setGender}
+              placeholder="Select gender"
+              error={!!errors.gender}
+              errorText={errors.gender}
+            />
+            <CountryAutocomplete
+              ref={countryRef}
+              id="country"
+              label="Select Country"
+              error={!!errors.country}
+              errorText={errors.country}
+            />
+          </FormControlGroup>
         </FormControl>
 
         <FormControl>

@@ -11,6 +11,7 @@ import {
   FileInput,
   FormContainer,
   FormControl,
+  FormControlGroup,
   PasswordStrength,
   Select,
   TextField,
@@ -22,7 +23,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 type FormValues = z.infer<ReturnType<typeof createFormSchema>>;
 
-export function FormControlled({ className }: { className?: string }) {
+interface FormControlledProps {
+  className?: string;
+}
+
+export function FormControlled({ className }: FormControlledProps) {
   const countries = useCountries();
   const schema = React.useMemo(() => createFormSchema(countries), [countries]);
   const submitUser = useAuthFormSubmit();
@@ -58,25 +63,24 @@ export function FormControlled({ className }: { className?: string }) {
       <Title className={classes.title}>Form Controlled</Title>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <FormControl>
-          <TextField
-            {...register('name')}
-            placeholder="Valerij"
-            label="Name"
-            autoComplete="name"
-            error={!!errors.name}
-            errorText={errors.name?.message}
-          />
-        </FormControl>
-
-        <FormControl>
-          <TextField
-            {...register('age')}
-            placeholder="54"
-            label="Age"
-            type="number"
-            error={!!errors.age}
-            errorText={errors.age?.message}
-          />
+          <FormControlGroup>
+            <TextField
+              {...register('name')}
+              placeholder="Valerij"
+              label="Name"
+              autoComplete="name"
+              error={!!errors.name}
+              errorText={errors.name?.message}
+            />
+            <TextField
+              {...register('age')}
+              placeholder="54"
+              label="Age"
+              type="number"
+              error={!!errors.age}
+              errorText={errors.age?.message}
+            />
+          </FormControlGroup>
         </FormControl>
 
         <FormControl>
@@ -92,60 +96,58 @@ export function FormControlled({ className }: { className?: string }) {
         </FormControl>
 
         <FormControl>
-          <TextField
-            {...register('password')}
-            label="Password"
-            type="password"
-            error={!!errors.password}
-            errorText={errors.password?.message}
-          />
-          <PasswordStrength classname={classes.passwordStrength} password={watch('password') || ''} />
+          <FormControlGroup>
+            <TextField
+              {...register('password')}
+              label="Password"
+              type="password"
+              error={!!errors.password}
+              errorText={errors.password?.message}
+            />
+            <TextField
+              {...register('confirmPassword')}
+              label="Repeat password"
+              type="password"
+              error={!!errors.confirmPassword}
+              errorText={errors.confirmPassword?.message}
+            />
+            <PasswordStrength classname={classes.passwordStrength} password={watch('password') || ''} />
+          </FormControlGroup>
         </FormControl>
 
         <FormControl>
-          <TextField
-            {...register('confirmPassword')}
-            label="Repeat password"
-            type="password"
-            error={!!errors.confirmPassword}
-            errorText={errors.confirmPassword?.message}
-          />
-        </FormControl>
-
-        <FormControl>
-          <Controller
-            name="gender"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                label="Gender"
-                options={[
-                  { value: 'male', label: 'Male' },
-                  { value: 'female', label: 'Female' },
-                ]}
-                placeholder="Select gender"
-                error={!!errors.gender}
-                errorText={errors.gender?.message}
-              />
-            )}
-          />
-        </FormControl>
-
-        <FormControl>
-          <Controller
-            name="country"
-            control={control}
-            render={({ field }) => (
-              <CountryAutocomplete
-                {...field}
-                id="country"
-                label="Select Country"
-                error={!!errors.country}
-                errorText={errors.country?.message}
-              />
-            )}
-          />
+          <FormControlGroup>
+            <Controller
+              name="gender"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  label="Gender"
+                  options={[
+                    { value: 'male', label: 'Male' },
+                    { value: 'female', label: 'Female' },
+                  ]}
+                  placeholder="Select gender"
+                  error={!!errors.gender}
+                  errorText={errors.gender?.message}
+                />
+              )}
+            />
+            <Controller
+              name="country"
+              control={control}
+              render={({ field }) => (
+                <CountryAutocomplete
+                  {...field}
+                  id="country"
+                  label="Select Country"
+                  error={!!errors.country}
+                  errorText={errors.country?.message}
+                />
+              )}
+            />
+          </FormControlGroup>
         </FormControl>
 
         <FormControl>
