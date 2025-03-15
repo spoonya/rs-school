@@ -1,15 +1,18 @@
-export interface User {
+export interface Picture {
+  base64: string;
+  size: number;
+  type: string;
+}
+
+export interface UserFormData {
   name: string;
-  age: number;
+  age: number | undefined;
   email: string;
-  password: string;
+  password: string | undefined;
+  confirmPassword: string | undefined;
   gender: 'male' | 'female';
   country: string;
   agreement: boolean;
-  picture: {
-    base64: string;
-    size: number;
-    type: string;
-  } | null;
-  timestamp: number;
+  picture: Picture | null;
+  timestamp?: number;
 }

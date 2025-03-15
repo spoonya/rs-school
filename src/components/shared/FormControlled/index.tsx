@@ -1,10 +1,10 @@
 import cn from 'classnames';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { CountryAutocomplete } from '@/components/shared';
+import classes from '@/components/shared/forms.module.scss';
 import {
   Button,
   Checkbox,
@@ -16,83 +16,16 @@ import {
   TextField,
   Title,
 } from '@/components/ui';
-import { RootState, useAppDispatch, useAppSelector } from '@/store';
-import { Country, fetchCountries } from '@/store/countries';
-import { addUser } from '@/store/users';
+import { useAuthFormSubmit, useCountries } from '@/hooks';
+import { createFormSchema } from '@/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import classes from './form.controlled.module.scss';
-
-interface FormControlledProps {
-  className?: string;
-}
-
-const createFormSchema = (allowedCountries: Country[]) =>
-  z
-    .object({
-      name: z
-        .string()
-        .min(1, 'Name is required')
-        .refine((value) => value.trim()[0] === value.trim()[0]?.toUpperCase(), 'Name must start with a capital letter'),
-      age: z.coerce
-        .number({
-          invalid_type_error: 'Age must be a number',
-        })
-        .min(1, 'Age must be at least 1')
-        .max(120, 'Age must be at most 120'),
-      email: z.string({ required_error: 'Email is required' }).email(),
-      password: z.string({ required_error: 'Password is required' }).refine(
-        (value) => {
-          const errors = [];
-          if (!/[0-9]/.test(value)) errors.push('number');
-          if (!/[A-Z]/.test(value)) errors.push('uppercase letter');
-          if (!/[a-z]/.test(value)) errors.push('lowercase letter');
-          if (!/[^A-Za-z0-9]/.test(value)) errors.push('special character');
-          return errors.length === 0;
-        },
-        (value) => {
-          const errors = [];
-          if (!/[0-9]/.test(value)) errors.push('number');
-          if (!/[A-Z]/.test(value)) errors.push('uppercase letter');
-          if (!/[a-z]/.test(value)) errors.push('lowercase letter');
-          if (!/[^A-Za-z0-9]/.test(value)) errors.push('special character');
-          return { message: `Must contain ${errors.join(', ')}` };
-        }
-      ),
-      confirmPassword: z.string(),
-      gender: z.enum(['male', 'female'], { required_error: 'Select gender' }),
-      country: z
-        .string({ required_error: 'Country is required' })
-        .refine((val) => allowedCountries.some((country) => country.name.toLowerCase() === val.trim().toLowerCase()), {
-          message: 'Invalid country',
-        }),
-      agreement: z.boolean().refine((val) => val, 'You must accept terms and conditions'),
-      picture: z
-        .object({
-          base64: z.string(),
-          size: z.number(),
-          type: z.string(),
-        })
-        .nullable()
-        .refine((value) => value !== null, 'Picture is required')
-        .refine(
-          (value) => value === null || ['image/png', 'image/jpeg'].includes(value.type),
-          'Only PNG/JPEG files are allowed'
-        )
-        .refine((value) => value === null || value.size <= 1 * 1024 * 1024, 'Max file size is 1MB'),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords don't match",
-      path: ['confirmPassword'],
-    });
 
 type FormValues = z.infer<ReturnType<typeof createFormSchema>>;
 
-export function FormControlled({ className }: Readonly<FormControlledProps>) {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { countries } = useAppSelector((state: RootState) => state.countries);
+export function FormControlled({ className }: { className?: string }) {
+  const countries = useCountries();
   const schema = React.useMemo(() => createFormSchema(countries), [countries]);
+  const submitUser = useAuthFormSubmit();
 
   const {
     control,
@@ -116,19 +49,8 @@ export function FormControlled({ className }: Readonly<FormControlledProps>) {
     },
   });
 
-  React.useEffect(() => {
-    if (countries.length === 0) {
-      dispatch(fetchCountries());
-    }
-  }, [dispatch, countries]);
-
   const onSubmit = (data: FormValues) => {
-    dispatch(
-      addUser({
-        ...data,
-      })
-    );
-    navigate('/');
+    submitUser(data);
   };
 
   return (
@@ -177,7 +99,6 @@ export function FormControlled({ className }: Readonly<FormControlledProps>) {
             error={!!errors.password}
             errorText={errors.password?.message}
           />
-
           <PasswordStrength classname={classes.passwordStrength} password={watch('password') || ''} />
         </FormControl>
 

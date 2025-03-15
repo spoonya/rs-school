@@ -1,15 +1,15 @@
-import { User } from '@/types';
+import { UserFormData } from '@/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
-  users: [] as User[],
+  users: [] as UserFormData[],
 };
 
 export const userSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    addUser: (state, action: PayloadAction<Omit<User, 'timestamp'>>) => {
+    addUser: (state, action: PayloadAction<Omit<UserFormData, 'timestamp'>>) => {
       state.users.push({
         ...action.payload,
         timestamp: Date.now(),

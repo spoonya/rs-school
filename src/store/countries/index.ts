@@ -1,9 +1,5 @@
+import { Country } from '@/types';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
-export interface Country {
-  code: string;
-  name: string;
-}
 
 interface CountryState {
   countries: Country[];

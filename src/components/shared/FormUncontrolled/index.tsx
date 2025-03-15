@@ -1,9 +1,8 @@
 import cn from 'classnames';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { z } from 'zod';
 
 import { CountryAutocomplete } from '@/components/shared';
+import classes from '@/components/shared/forms.module.scss';
 import {
   Button,
   Checkbox,
@@ -16,107 +15,17 @@ import {
   Title,
 } from '@/components/ui';
 import { FileInputHandle } from '@/components/ui/FileInput';
-import { AppRoutes } from '@/services';
-import { RootState, useAppDispatch, useAppSelector } from '@/store';
-import { Country, fetchCountries } from '@/store/countries';
-import { addUser } from '@/store/users';
-
-import classes from './form.uncontrolled.module.scss';
+import { useAuthFormSubmit, useCountries } from '@/hooks';
+import { createFormSchema, formatZodErrors } from '@/utils';
 
 interface FormUncontrolledProps {
   className?: string;
 }
 
-const createFormSchema = (allowedCountries: Country[]) =>
-  z
-    .object({
-      name: z
-        .string()
-        .min(1, 'Name is required')
-        .refine((value) => value.trim()[0] === value.trim()[0]?.toUpperCase(), 'Name must start with a capital letter'),
-      age: z.coerce
-        .number({
-          invalid_type_error: 'Age must be a number',
-        })
-        .min(1, 'Age must be at least 1')
-        .max(120, 'Age must be at most 120'),
-      email: z.string({ required_error: 'Email is required' }).email(),
-      password: z.string({ required_error: 'Password is required' }).refine(
-        (value) => {
-          const errors = [];
-          if (!/[0-9]/.test(value)) errors.push('number');
-          if (!/[A-Z]/.test(value)) errors.push('uppercase letter');
-          if (!/[a-z]/.test(value)) errors.push('lowercase letter');
-          if (!/[^A-Za-z0-9]/.test(value)) errors.push('special character');
-          return errors.length === 0;
-        },
-        (value) => {
-          const errors = [];
-          if (!/[0-9]/.test(value)) errors.push('number');
-          if (!/[A-Z]/.test(value)) errors.push('uppercase letter');
-          if (!/[a-z]/.test(value)) errors.push('lowercase letter');
-          if (!/[^A-Za-z0-9]/.test(value)) errors.push('special character');
-          return { message: `Must contain ${errors.join(', ')}` };
-        }
-      ),
-      confirmPassword: z.string(),
-      gender: z.preprocess(
-        (val) => (val === '' ? undefined : val),
-        z.enum(['male', 'female'], { required_error: 'Select gender' })
-      ),
-      country: z.preprocess(
-        (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
-        z
-          .string({ required_error: 'Country is required' })
-          .refine(
-            (val) => allowedCountries.some((country) => country.name.toLowerCase() === val.trim().toLowerCase()),
-            { message: 'Invalid country' }
-          )
-      ),
-      agreement: z.boolean().refine((val) => val, 'You must accept terms and conditions'),
-      picture: z
-        .object({
-          base64: z.string(),
-          size: z.number(),
-          type: z.string(),
-        })
-        .nullable()
-        .superRefine((val, ctx) => {
-          if (!val) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: 'Picture is required',
-              path: ['picture'],
-            });
-            return;
-          }
+export function FormUncontrolled({ className }: FormUncontrolledProps) {
+  const countries = useCountries();
+  const submitUser = useAuthFormSubmit();
 
-          if (!['image/png', 'image/jpeg'].includes(val.type)) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: 'Only PNG/JPEG files are allowed',
-              path: ['picture'],
-            });
-          }
-
-          if (val.size > 1 * 1024 * 1024) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: 'Max file size is 1MB',
-              path: ['picture'],
-            });
-          }
-        }),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords don't match",
-      path: ['confirmPassword'],
-    });
-
-export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>) {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { countries } = useAppSelector((state: RootState) => state.countries);
   const [password, setPassword] = React.useState('');
   const [gender, setGender] = React.useState<string>('');
   const pictureRef = React.useRef<FileInputHandle>(null);
@@ -130,12 +39,6 @@ export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>)
   const agreementRef = React.useRef<HTMLInputElement>(null);
 
   const [errors, setErrors] = React.useState<Record<string, string>>({});
-
-  React.useEffect(() => {
-    if (countries.length === 0) {
-      dispatch(fetchCountries());
-    }
-  }, [dispatch, countries]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -156,22 +59,10 @@ export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>)
     const validationResult = schema.safeParse(formData);
 
     if (!validationResult.success) {
-      const newErrors = validationResult.error.errors.reduce(
-        (acc, curr) => {
-          if (curr.path[0] === 'password') {
-            acc.password = acc.password ? `${acc.password}, ${curr.message}` : curr.message;
-          } else {
-            acc[curr.path[0]] = curr.message;
-          }
-          return acc;
-        },
-        {} as Record<string, string>
-      );
-      setErrors(newErrors);
+      setErrors(formatZodErrors(validationResult.error.errors));
     } else {
       setErrors({});
-      dispatch(addUser(validationResult.data));
-      navigate(AppRoutes.HOME);
+      submitUser(validationResult.data);
     }
   };
 
