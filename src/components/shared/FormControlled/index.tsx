@@ -91,7 +91,7 @@ export function FormControlled({ className }: Readonly<FormControlledProps>) {
     formState: { errors, isValid, isSubmitting, isDirty },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    mode: 'onChange',
+    mode: 'all',
     defaultValues: {
       name: '',
       age: undefined,
@@ -163,7 +163,6 @@ export function FormControlled({ className }: Readonly<FormControlledProps>) {
             {...register('password')}
             label="Password"
             type="password"
-            autoComplete="new-password"
             error={!!errors.password}
             errorText={errors.password?.message}
           />
@@ -174,7 +173,6 @@ export function FormControlled({ className }: Readonly<FormControlledProps>) {
             {...register('confirmPassword')}
             label="Repeat password"
             type="password"
-            autoComplete="new-password"
             error={!!errors.confirmPassword}
             errorText={errors.confirmPassword?.message}
           />
@@ -240,6 +238,7 @@ export function FormControlled({ className }: Readonly<FormControlledProps>) {
             render={({ field }) => (
               <Checkbox
                 {...field}
+                className={classes.checkbox}
                 checked={field.value}
                 onChange={field.onChange}
                 label="I accept terms and conditions"

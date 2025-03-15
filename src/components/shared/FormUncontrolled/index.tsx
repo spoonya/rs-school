@@ -207,7 +207,6 @@ export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>)
             ref={passwordRef}
             label="Password"
             type="password"
-            autoComplete="new-password"
             error={!!errors.password}
             errorText={errors.password}
           />
@@ -218,7 +217,6 @@ export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>)
             ref={confirmPasswordRef}
             label="Repeat password"
             type="password"
-            autoComplete="new-password"
             error={!!errors.confirmPassword}
             errorText={errors.confirmPassword}
           />

@@ -5,7 +5,7 @@ import { DetailedHTMLProps, ForwardedRef, forwardRef, HTMLAttributes, useEffect,
 import { FormControlError } from '@/components/ui';
 
 import { Dropdown } from '../Dropdown';
-import classes from './Select.module.scss';
+import classes from './select.module.scss';
 
 export interface SelectOption {
   value: string;
