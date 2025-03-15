@@ -1,0 +1,71 @@
+@use '@/styles/mixins' as *;
+
+.root {
+  position: relative;
+  width: 100%;
+  font-size: 1.4rem;
+  text-align: left;
+}
+
+.selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-medium);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.placeholder {
+  color: var(--text-tertiary);
+}
+
+.arrow {
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-left: 0.8rem;
+  position: relative;
+
+  transition: transform 0.2s ease;
+}
+
+.option {
+  @include dropdown-item;
+}
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.open {
+  .selected {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-primary-dark);
+  }
+
+  .arrow {
+    transform: scale(-1, -1);
+  }
+}
+
+.label {
+  @include form-label;
+}
+
+.error {
+  padding-left: 1.5rem;
+}
+
+.errorInput {
+  @include form-error;
+}

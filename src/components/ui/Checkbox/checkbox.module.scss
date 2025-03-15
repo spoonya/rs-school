@@ -1,0 +1,64 @@
+.root {
+  display: inline-block;
+  position: relative;
+  font-size: 1.6rem;
+  color: var(--text-primary);
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--background-secondary);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.customIcon {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.label:hover .icon:not(.customIcon) {
+  border-color: var(--color-primary-dark);
+}
+
+.input:checked + .icon:not(.customIcon) {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--text-primary);
+}
+
+.input:focus + .icon:not(.customIcon) {
+  box-shadow: 0 0 0 3px rgba(76, 111, 255, 0.3);
+}
+
+.text {
+  margin-left: 0.8rem;
+}
+
+.defaultIcon {
+  stroke: var(--color-white);
+}

@@ -1,0 +1,35 @@
+.title {
+  margin-top: 0;
+  margin-bottom: 4rem;
+}
+
+.submit {
+  width: 100%;
+}
+
+.checkbox {
+  font-size: 1.4rem;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.label {
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+  margin-left: 0.4rem;
+}
+
+.selectContainer {
+  position: relative;
+  width: 100%;
+}
+
+.passwordStrength {
+  margin-top: 2.4rem;
+  padding-left: 1.5rem;
+}
