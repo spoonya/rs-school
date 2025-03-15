@@ -4,7 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { CountryAutocomplete } from '@/components/shared';
-import { Button, Checkbox, FileInput, FormContainer, FormControl, Select, TextField, Title } from '@/components/ui';
+import {
+  Button,
+  Checkbox,
+  FileInput,
+  FormContainer,
+  FormControl,
+  PasswordStrength,
+  Select,
+  TextField,
+  Title,
+} from '@/components/ui';
 import { FileInputHandle } from '@/components/ui/FileInput';
 import { AppRoutes } from '@/services';
 import { RootState, useAppDispatch, useAppSelector } from '@/store';
@@ -46,7 +56,7 @@ const createFormSchema = (allowedCountries: Country[]) =>
           if (!/[A-Z]/.test(value)) errors.push('uppercase letter');
           if (!/[a-z]/.test(value)) errors.push('lowercase letter');
           if (!/[^A-Za-z0-9]/.test(value)) errors.push('special character');
-          return { message: `Password must contain ${errors.join(', ')}` };
+          return { message: `Must contain ${errors.join(', ')}` };
         }
       ),
       confirmPassword: z.string(),
@@ -107,6 +117,7 @@ export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>)
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { countries } = useAppSelector((state: RootState) => state.countries);
+  const [password, setPassword] = React.useState('');
   const [gender, setGender] = React.useState<string>('');
   const pictureRef = React.useRef<FileInputHandle>(null);
 
@@ -209,7 +220,9 @@ export function FormUncontrolled({ className }: Readonly<FormUncontrolledProps>)
             type="password"
             error={!!errors.password}
             errorText={errors.password}
+            onChange={(e) => setPassword(e.target.value)}
           />
+          <PasswordStrength classname={classes.passwordStrength} password={password} />
         </FormControl>
 
         <FormControl>

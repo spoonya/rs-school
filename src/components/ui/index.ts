@@ -13,3 +13,4 @@ export { Select } from './Select';
 export { TextField } from './TextField';
 export { Container } from './Container';
 export { FileInput } from './FileInput';
+export { PasswordStrength } from './PasswordStrength';

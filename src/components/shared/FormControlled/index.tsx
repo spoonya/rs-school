@@ -5,7 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { CountryAutocomplete } from '@/components/shared';
-import { Button, Checkbox, FileInput, FormContainer, FormControl, Select, TextField, Title } from '@/components/ui';
+import {
+  Button,
+  Checkbox,
+  FileInput,
+  FormContainer,
+  FormControl,
+  PasswordStrength,
+  Select,
+  TextField,
+  Title,
+} from '@/components/ui';
 import { RootState, useAppDispatch, useAppSelector } from '@/store';
 import { Country, fetchCountries } from '@/store/countries';
 import { addUser } from '@/store/users';
@@ -46,7 +56,7 @@ const createFormSchema = (allowedCountries: Country[]) =>
           if (!/[A-Z]/.test(value)) errors.push('uppercase letter');
           if (!/[a-z]/.test(value)) errors.push('lowercase letter');
           if (!/[^A-Za-z0-9]/.test(value)) errors.push('special character');
-          return { message: `Password must contain ${errors.join(', ')}` };
+          return { message: `Must contain ${errors.join(', ')}` };
         }
       ),
       confirmPassword: z.string(),
@@ -87,6 +97,7 @@ export function FormControlled({ className }: Readonly<FormControlledProps>) {
   const {
     control,
     register,
+    watch,
     handleSubmit,
     formState: { errors, isValid, isSubmitting, isDirty },
   } = useForm<FormValues>({
@@ -166,6 +177,8 @@ export function FormControlled({ className }: Readonly<FormControlledProps>) {
             error={!!errors.password}
             errorText={errors.password?.message}
           />
+
+          <PasswordStrength classname={classes.passwordStrength} password={watch('password') || ''} />
         </FormControl>
 
         <FormControl>
