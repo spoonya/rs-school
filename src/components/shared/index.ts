@@ -8,3 +8,4 @@ export { FormControlled } from './FormControlled';
 export { FormUncontrolled } from './FormUncontrolled';
 export { CountryAutocomplete } from './CountryAutocomplete';
 export { NoResults } from './NoResults';
+export { UserCard } from './UserCard';
