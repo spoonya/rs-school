@@ -1,0 +1,92 @@
+@use '@/styles/mixins' as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.label {
+  @include form-label;
+}
+
+.uploadArea {
+  position: relative;
+  width: 100%;
+  height: 12rem;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--border-radius-medium);
+  cursor: pointer;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+    background-color: var(--background-tertiary);
+  }
+
+  &.dragging {
+    border-color: var(--color-accent);
+    background-color: var(--color-primary-dark);
+  }
+
+  &.hasError {
+    border-color: var(--color-error);
+  }
+
+  &.hasPreview {
+    border-style: solid;
+    padding: 4px;
+  }
+}
+
+.input {
+  display: none;
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--border-radius-small);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: var(--border-radius-small);
+
+  .hasPreview:hover & {
+    opacity: 1;
+  }
+}
+
+.overlayText {
+  color: var(--color-white);
+  font-weight: 500;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  font-size: 14px;
+  padding: 16px;
+  text-align: center;
+}
+
+.error {
+  padding-left: 1.5rem;
+}

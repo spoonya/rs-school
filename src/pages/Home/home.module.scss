@@ -1,0 +1,12 @@
+.usersContainer {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
