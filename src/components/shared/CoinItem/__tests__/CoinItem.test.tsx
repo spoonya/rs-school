@@ -1,75 +1,132 @@
 import '@testing-library/jest-dom';
 
 import { BrowserRouter } from 'react-router-dom';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { CoinItem } from '@/components/shared';
-import { mockCoins } from '@/components/shared/CoinTable/__tests__/mock';
+import classes from '@/components/shared/CoinItem/coin.item.module.scss';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { addFavorite, removeFavorite } from '@/store/favorites/slice';
+import { mockCoinsMarket } from '@/utils';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 const mockNavigate = vi.fn();
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
+  useNavigate: () => mockNavigate,
+  useLocation: () => ({ search: '?page=1' }),
+}));
+
+vi.mock('@/store', () => ({
+  useAppSelector: vi.fn(),
+  useAppDispatch: vi.fn(),
+}));
+
+vi.mock('@/utils', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/utils')>();
   return {
     ...actual,
-    useNavigate: () => mockNavigate,
-    useLocation: () => ({ search: '?page=1' }),
+    formatNumber: (value: number) => `$${value.toFixed(2)}`,
+    formatPercent: (value: number) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`,
   };
 });
 
-// Изменённая функция для рендеринга с корректной обёрткой таблицы
-const renderWithRouter = (component: React.ReactNode) => {
-  return render(
-    <BrowserRouter>
-      <table>
-        <tbody>{component}</tbody>
-      </table>
-    </BrowserRouter>
-  );
-};
+const mockDispatch = vi.fn();
 
 describe('CoinItem', () => {
-  const mockCoin = mockCoins[0];
+  const mockCoin = {
+    ...mockCoinsMarket[0],
+    price: 50000,
+    priceChange1h: 5.5,
+    priceChange1d: -3.2,
+    priceChange1w: 10,
+  };
 
-  it('renders coin data correctly', () => {
-    renderWithRouter(<CoinItem data={mockCoin} />);
+  beforeEach(() => {
+    vi.clearAllMocks();
+    (useAppDispatch as Mock).mockReturnValue(mockDispatch);
+    (useAppSelector as Mock).mockImplementation((selector) =>
+      selector({
+        favorites: {
+          coins: [{ id: 'bitcoin' }],
+        },
+      })
+    );
+  });
+
+  const renderComponent = () =>
+    render(
+      <BrowserRouter>
+        <table>
+          <tbody>
+            <CoinItem data={mockCoin} className="test-class" />
+          </tbody>
+        </table>
+      </BrowserRouter>
+    );
+
+  it('displays all coin data correctly', () => {
+    renderComponent();
 
     expect(screen.getByText(mockCoin.name)).toBeInTheDocument();
     expect(screen.getByText(mockCoin.symbol)).toBeInTheDocument();
-    expect(screen.getByText('$50,000.00')).toBeInTheDocument();
-    expect(screen.getByText('+5.50%')).toBeInTheDocument();
-
-    const image = screen.getByAltText(mockCoin.name) as HTMLImageElement;
-    expect(image).toBeInTheDocument();
-    expect(image.src).toContain(mockCoin.image);
+    expect(screen.getByText('$50000.00')).toBeInTheDocument();
+    expect(screen.getByText('+5.5%')).toBeInTheDocument();
+    expect(screen.getByText('-3.2%')).toBeInTheDocument();
+    expect(screen.getByText('+10.0%')).toBeInTheDocument();
   });
 
-  it('navigates to details page when clicked', () => {
-    renderWithRouter(<CoinItem data={mockCoin} />);
-
-    const coinItem = screen.getByTestId('coin-item');
-    fireEvent.click(coinItem);
-
+  it('calls navigation when clicking on a row', () => {
+    renderComponent();
+    fireEvent.click(screen.getByTestId('coin-item'));
     expect(mockNavigate).toHaveBeenCalledWith('/details/bitcoin?page=1');
   });
 
-  it('applies correct styling for positive price change', () => {
-    renderWithRouter(<CoinItem data={mockCoin} />);
+  it('toggles favorites without event bubbling', () => {
+    const { rerender } = renderComponent();
 
-    const changeCell = screen.getByText('+5.50%').closest('td');
-    expect(changeCell).toHaveAttribute('data-type', 'positive');
+    const checkbox = screen.getByRole('checkbox');
+
+    fireEvent.click(checkbox);
+    expect(mockDispatch).toHaveBeenCalledWith(removeFavorite('bitcoin'));
+
+    (useAppSelector as Mock).mockImplementation((selector) => selector({ favorites: { coins: [] } }));
+
+    rerender(
+      <BrowserRouter>
+        <table>
+          <tbody>
+            <CoinItem data={mockCoin} className="test-class" />
+          </tbody>
+        </table>
+      </BrowserRouter>
+    );
+
+    fireEvent.click(checkbox);
+    expect(mockDispatch).toHaveBeenCalledWith(addFavorite(mockCoin));
   });
 
-  it('applies correct styling for negative price change', () => {
-    const negativeCoin = {
-      ...mockCoin,
-      price_change_percentage_24h: -5.5,
-    };
+  it('applies correct styles for price changes', () => {
+    renderComponent();
 
-    renderWithRouter(<CoinItem data={negativeCoin} />);
+    const getCellType = (text: string) => screen.getByText(text).closest('td')?.getAttribute('data-type');
 
-    const changeCell = screen.getByText('-5.50%').closest('td');
-    expect(changeCell).toHaveAttribute('data-type', 'negative');
+    expect(getCellType('+5.5%')).toBe('positive');
+    expect(getCellType('-3.2%')).toBe('negative');
+    expect(getCellType('+10.0%')).toBe('positive');
+  });
+
+  it('displays the correct icon', () => {
+    renderComponent();
+
+    const img = screen.getByAltText(mockCoin.name) as HTMLImageElement;
+    expect(img.src).toContain(mockCoin.icon);
+    expect(img).toHaveClass(classes.logo);
+  });
+
+  it('applies the passed class', () => {
+    renderComponent();
+    expect(screen.getByTestId('coin-item')).toHaveClass('test-class');
   });
 });

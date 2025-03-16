@@ -2,9 +2,7 @@
   td {
     padding: 1.6rem;
     font-size: 1.4rem;
-    color: var(--color-text-primary);
-    background-color: var(--surface-card);
-    transition: background-color 0.2s ease;
+    color: var(--text-primary);
 
     &:first-child {
       border-top-left-radius: var(--border-radius-medium);
@@ -15,10 +13,6 @@
       border-top-right-radius: var(--border-radius-medium);
       border-bottom-right-radius: var(--border-radius-medium);
     }
-  }
-
-  &:hover td {
-    background-color: var(--background-secondary);
   }
 }
 
@@ -43,11 +37,11 @@
 
 .name {
   font-weight: 500;
-  color: var(--color-text-primary);
+  color: var(--text-primary);
 }
 
 .symbol {
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   font-size: 1.2rem;
   text-transform: uppercase;
 }
@@ -58,10 +52,10 @@
 
 .change {
   &[data-type='positive'] {
-    color: var(--color-success);
+    color: var(--color-profit);
   }
 
   &[data-type='negative'] {
-    color: var(--color-error);
+    color: var(--color-loss);
   }
 }

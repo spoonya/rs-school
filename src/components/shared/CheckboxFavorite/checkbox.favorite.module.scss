@@ -1,0 +1,17 @@
+.favoriteCheckbox {
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.favoriteChecked {
+  opacity: 1;
+  fill: var(--color-primary);
+  stroke: var(--color-primary);
+}
+
+.favoriteUnchecked {
+  opacity: 0.5;
+}
