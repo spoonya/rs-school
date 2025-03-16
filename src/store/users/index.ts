@@ -10,7 +10,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     addUser: (state, action: PayloadAction<Omit<UserFormData, 'timestamp'>>) => {
-      state.users.push({
+      state.users.unshift({
         ...action.payload,
         timestamp: Date.now(),
       });
