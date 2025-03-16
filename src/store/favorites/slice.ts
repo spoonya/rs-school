@@ -3,19 +3,24 @@ import { Coin } from '@/types';
 import { createSlice } from '@reduxjs/toolkit';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
-
 export interface FavoritesState {
   coins: Coin[];
 }
 
 const initialState: FavoritesState = {
-  coins: JSON.parse(localStorage.getItem(FAVORITES_KEY) ?? '[]'),
+  coins: [],
 };
 
 export const favoritesSlice = createSlice({
   name: 'favorites',
   initialState,
   reducers: {
+    initializeFavorites: (state) => {
+      if (typeof window !== 'undefined') {
+        const storedFavorites = localStorage.getItem(FAVORITES_KEY);
+        state.coins = storedFavorites ? JSON.parse(storedFavorites) : [];
+      }
+    },
     addFavorite: (state, action: PayloadAction<Coin>) => {
       state.coins.push(action.payload);
       localStorage.setItem(FAVORITES_KEY, JSON.stringify(state.coins));
@@ -31,5 +36,5 @@ export const favoritesSlice = createSlice({
   },
 });
 
-export const { addFavorite, removeFavorite, removeAllFavorites } = favoritesSlice.actions;
+export const { addFavorite, removeFavorite, removeAllFavorites, initializeFavorites } = favoritesSlice.actions;
 export default favoritesSlice.reducer;

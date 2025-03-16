@@ -1,23 +1,28 @@
 import { X } from 'lucide-react';
-import { useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 import { Preloader } from '@/components/shared';
-import { useCloseDetails } from '@/hooks';
-import { Page404 } from '@/pages';
-import { useGetCoinDetailsQuery } from '@/services';
+import Page404 from '@/pages/404';
+import { AppRoutes, useGetCoinDetailsQuery } from '@/services';
 import { extractDomain, formatNumber, formatPercent } from '@/utils';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 
 import classes from './coin-details.module.scss';
 
-export function CoinDetailsPage() {
-  const { id } = useParams();
+type CoinDetailsProps = {
+  coinId: string | number | undefined;
+};
 
-  const { data, isFetching, error } = useGetCoinDetailsQuery(id ?? skipToken, {
-    skip: !id,
+export function CoinDetails({ coinId }: CoinDetailsProps) {
+  const router = useRouter();
+
+  const { data, isFetching, error } = useGetCoinDetailsQuery(typeof coinId === 'string' ? coinId : skipToken, {
+    skip: !coinId,
   });
 
-  const handleClose = useCloseDetails();
+  const handleClose = () => {
+    router.push(AppRoutes.HOME, undefined, { shallow: true });
+  };
 
   if (isFetching) {
     return (

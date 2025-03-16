@@ -14,48 +14,48 @@
       border-bottom-right-radius: var(--border-radius-medium);
     }
   }
-}
 
-.mainInfo {
-  display: flex;
-  align-items: center;
-  text-align: left;
-  gap: 1.2rem;
-}
-
-.logo {
-  width: 3.2rem;
-  height: 3.2rem;
-  border-radius: var(--border-radius-small);
-}
-
-.nameBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.name {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.symbol {
-  color: var(--text-secondary);
-  font-size: 1.2rem;
-  text-transform: uppercase;
-}
-
-.center {
-  text-align: center;
-}
-
-.change {
-  &[data-type='positive'] {
-    color: var(--color-profit);
+  .mainInfo {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    gap: 1.2rem;
   }
 
-  &[data-type='negative'] {
-    color: var(--color-loss);
+  .logo {
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: var(--border-radius-small);
+  }
+
+  .nameBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .name {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .symbol {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .change {
+    &[data-type='positive'] {
+      color: var(--color-profit);
+    }
+
+    &[data-type='negative'] {
+      color: var(--color-loss);
+    }
   }
 }

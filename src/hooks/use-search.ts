@@ -1,57 +1,62 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { useQueryParams, useSearchState } from '@/hooks';
 import { DefaultCoinsApiParams, useSearchQuery } from '@/services';
 
 export const useSearch = () => {
-  const { setMultipleParams, clearParams } = useQueryParams();
+  const { setMultipleParams } = useQueryParams();
   const { state, setSearch } = useSearchState();
 
   const handleSearch = useCallback(
     (query: string) => {
       const trimmedQuery = query.trim();
 
-      if (trimmedQuery !== state.query) {
-        setSearch(trimmedQuery, 1);
-        if (trimmedQuery) {
-          setMultipleParams({ search: trimmedQuery, page: 1 });
-        } else {
-          clearParams();
-        }
-      }
+      setSearch(trimmedQuery, 1);
+      setMultipleParams({
+        search: trimmedQuery || undefined,
+        page: undefined,
+      });
     },
-    [state.query, setSearch, setMultipleParams, clearParams]
+    [setSearch, setMultipleParams]
   );
 
   const changeSearchPage = useCallback(
     (page: number) => {
       if (page !== state.page) {
         setSearch(state.query, page);
-        setMultipleParams({ search: state.query, page });
+
+        setMultipleParams({
+          ...(state.query && { search: state.query }),
+          ...(page > 1 && { page }),
+        });
       }
     },
     [state.query, state.page, setSearch, setMultipleParams]
   );
 
-  const {
-    data: searchData,
-    error: searchError,
-    isFetching,
-  } = useSearchQuery(
+  const { data, error, isFetching } = useSearchQuery(
     {
       query: state.query,
       page: state.page,
       limit: Number(DefaultCoinsApiParams.PER_PAGE),
     },
-    { skip: state.query.length === 0 }
+    { skip: !state.query }
   );
+
+  useEffect(() => {
+    if (!isFetching && data) {
+      if (data.meta.page > data.meta.pageCount && data.meta.pageCount > 0) {
+        changeSearchPage(data.meta.pageCount);
+      }
+    }
+  }, [isFetching, data]);
 
   return {
     searchQuery: state.query,
-    searchResults: searchData?.result ?? [],
+    searchResults: data?.result ?? [],
     isSearchLoading: isFetching,
-    searchError,
-    totalSearchResults: searchData?.meta.itemCount ?? 0,
+    searchError: error,
+    totalSearchResults: data?.meta.itemCount ?? 0,
     currentSearchPage: state.page,
     handleSearch,
     changeSearchPage,

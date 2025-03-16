@@ -1,8 +1,8 @@
 import cn from 'classnames';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 import { CheckboxFavorite } from '@/components/shared';
-import { AppRoutes, SearchParams } from '@/services';
+import { AppRoutes, QueryParams } from '@/services';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { addFavorite, removeFavorite } from '@/store/favorites/slice';
 import { Coin } from '@/types';
@@ -16,22 +16,25 @@ interface CoinItemProps {
 }
 
 export function CoinItem({ data, className }: Readonly<CoinItemProps>) {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const { query } = router;
 
   const favorites = useAppSelector((state) => state.favorites.coins);
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
-    const searchParams = new URLSearchParams(location.search);
-    const currentPage = searchParams.get(SearchParams.PAGE);
-
-    let url = `${AppRoutes.HOME}${AppRoutes.COIN_DETAILS.replace(':id', data.id)}`;
-    if (currentPage) {
-      url += `?${SearchParams.PAGE}=${currentPage}`;
-    }
-
-    navigate(url);
+    const currentPage = query[QueryParams.PAGE];
+    router.push(
+      {
+        pathname: AppRoutes.HOME,
+        query: {
+          ...(currentPage ? { [QueryParams.PAGE]: currentPage } : {}),
+          details: data.id,
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
   };
 
   const isFavorite = favorites.some((coin) => coin.id === data.id);

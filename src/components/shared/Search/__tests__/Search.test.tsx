@@ -1,58 +1,75 @@
-import '@testing-library/jest-dom';
-
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { Search } from '@/components/shared';
-import { SEARCH_QUERY_KEY } from '@/services/constants';
 import { fireEvent, render, screen } from '@testing-library/react';
 
-describe('Search', () => {
+import { Search } from '../';
+
+describe('Search component', () => {
   const mockOnSearch = vi.fn();
-  const testSearchValue = 'bitcoin';
+  const placeholderText = 'Search something...';
 
   beforeEach(() => {
-    localStorage.clear();
-    mockOnSearch.mockClear();
+    vi.clearAllMocks();
   });
 
-  it('saves search query to localStorage when searching', () => {
-    render(<Search onSearch={mockOnSearch} />);
+  it('should render all elements with correct structure', () => {
+    render(<Search placeholder={placeholderText} onSearch={mockOnSearch} />);
 
+    expect(screen.getByTestId('search-form')).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(placeholderText)).toBeInTheDocument();
+
+    expect(screen.getByTestId('search-icon')).toBeInTheDocument();
+  });
+
+  it('should update search query when typing', () => {
+    render(<Search onSearch={mockOnSearch} />);
     const input = screen.getByRole('textbox');
-    const searchButton = screen.getByRole('button', { name: /search/i });
+    const testValue = 'test query';
 
-    fireEvent.change(input, { target: { value: testSearchValue } });
-    fireEvent.click(searchButton);
+    fireEvent.change(input, { target: { value: testValue } });
 
-    expect(JSON.parse(localStorage.getItem(SEARCH_QUERY_KEY) || '')).toBe(testSearchValue);
-    expect(mockOnSearch).toHaveBeenCalledWith(testSearchValue);
+    expect(input).toHaveValue(testValue);
   });
 
-  it('retrieves search query from localStorage on mount', () => {
-    localStorage.setItem(SEARCH_QUERY_KEY, JSON.stringify(testSearchValue));
-
+  it('should call onSearch with empty string when input is cleared', () => {
     render(<Search onSearch={mockOnSearch} />);
-
-    const input = screen.getByRole('textbox') as HTMLInputElement;
-    expect(input.value).toBe(testSearchValue);
-    expect(mockOnSearch).toHaveBeenCalledWith(testSearchValue);
-  });
-
-  it('clears search when input is emptied', () => {
-    localStorage.setItem(SEARCH_QUERY_KEY, JSON.stringify(testSearchValue));
-
-    render(<Search onSearch={mockOnSearch} />);
-
     const input = screen.getByRole('textbox');
+
+    fireEvent.change(input, { target: { value: 'test' } });
     fireEvent.change(input, { target: { value: '' } });
 
-    expect(localStorage.getItem(SEARCH_QUERY_KEY)).toBeNull();
     expect(mockOnSearch).toHaveBeenCalledWith('');
   });
 
-  it('does not call onSearch on mount if localStorage is empty', () => {
+  it('should call onSearch with query when form is submitted via button click', () => {
     render(<Search onSearch={mockOnSearch} />);
+    const input = screen.getByRole('textbox');
+    const testValue = 'submit test';
 
-    expect(mockOnSearch).not.toHaveBeenCalled();
+    fireEvent.change(input, { target: { value: testValue } });
+    fireEvent.click(screen.getByRole('button', { name: /search/i }));
+
+    expect(mockOnSearch).toHaveBeenCalledWith(testValue);
+  });
+
+  it('should call onSearch with query when form is submitted via enter key', () => {
+    render(<Search onSearch={mockOnSearch} />);
+    const input = screen.getByRole('textbox');
+    const testValue = 'enter test';
+
+    fireEvent.change(input, { target: { value: testValue } });
+    fireEvent.submit(screen.getByTestId('search-form'));
+
+    expect(mockOnSearch).toHaveBeenCalledWith(testValue);
+  });
+
+  it('should apply custom className to form element', () => {
+    const customClass = 'custom-search';
+    render(<Search className={customClass} onSearch={mockOnSearch} />);
+
+    const form = screen.getByTestId('search-form');
+    expect(form).toHaveClass(customClass);
   });
 });
