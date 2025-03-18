@@ -1,0 +1,45 @@
+.root {
+  td {
+    padding: 1.6rem;
+    font-size: 1.4rem;
+    color: var(--text-primary);
+
+    &:first-child {
+      border-top-left-radius: var(--border-radius-medium);
+      border-bottom-left-radius: var(--border-radius-medium);
+    }
+
+    &:last-child {
+      border-top-right-radius: var(--border-radius-medium);
+      border-bottom-right-radius: var(--border-radius-medium);
+    }
+  }
+}
+
+.mainInfo {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  gap: 1.2rem;
+}
+
+.logo {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: var(--border-radius-small);
+}
+
+.nameBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.center {
+  text-align: center;
+}

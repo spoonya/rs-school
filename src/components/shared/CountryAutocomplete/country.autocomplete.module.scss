@@ -1,0 +1,54 @@
+@use '@/styles/mixins' as *;
+
+.wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.label {
+  @include form-label;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-small);
+  color: var(--text-primary);
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-primary-dark);
+  }
+
+  &.error {
+    border-color: var(--color-error);
+  }
+}
+
+.suggestionItem {
+  @include dropdown-item;
+}
+
+.loading,
+.noResults {
+  font-size: 1.4rem;
+  padding: 0.8rem 1rem;
+  color: var(--text-secondary);
+}
+
+.error {
+  padding-left: 1.5rem;
+}
+
+.errorInput {
+  @include form-error;
+}
