@@ -1,0 +1,28 @@
+.root {
+  margin-bottom: 5rem;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 2rem 0;
+
+  border-bottom: 1px solid var(--background-tertiary);
+
+  transition: border-color 0.2s ease;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  margin-right: 10rem;
+}
+
+.menu {
+  margin-right: 4rem;
+}

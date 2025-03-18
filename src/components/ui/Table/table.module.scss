@@ -1,0 +1,40 @@
+.root {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.8rem;
+}
+
+tbody {
+  tr {
+    background-color: var(--surface-card);
+    transition: background-color 0.2s ease;
+
+    &:nth-child(even) {
+      background-color: var(--table-row-even);
+    }
+
+    &:hover {
+      background-color: var(--table-row-hover);
+    }
+  }
+}
+
+th {
+  padding: 0 1.6rem;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  text-align: right;
+  font-weight: 500;
+}
+
+td {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
+}
