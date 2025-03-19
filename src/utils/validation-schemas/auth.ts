@@ -56,18 +56,25 @@ export const createFormSchema = (allowedCountries: Country[]) =>
         .nullable()
         .superRefine((val, ctx) => {
           if (!val) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Picture is required', path: ['picture'] });
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'Picture is required',
+            });
             return;
           }
+
           if (!['image/png', 'image/jpeg'].includes(val.type)) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
               message: 'Only PNG/JPEG files are allowed',
-              path: ['picture'],
             });
           }
+
           if (val.size > 1 * 1024 * 1024) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Max file size is 1MB', path: ['picture'] });
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'Max file size is 1MB',
+            });
           }
         }),
     })

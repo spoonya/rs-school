@@ -29,6 +29,8 @@ export const FileInput = forwardRef<FileInputHandle, ImageUploadProps>(
       type: string;
     } | null>(null);
 
+    console.log(errorText);
+
     useImperativeHandle(ref, () => ({
       getValue: () => fileInfo,
     }));
