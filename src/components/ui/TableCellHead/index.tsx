@@ -1,16 +1,16 @@
 import cn from 'classnames';
 
-import classes from './table.cell.module.scss';
+import classes from './table.cell.head.module.scss';
 
-interface TableCellProps {
+interface TableCellHeadProps {
   className?: string;
   children?: React.ReactNode;
   align?: 'center' | 'left' | 'right';
 }
 
-export function TableCell({ className, children, align }: Readonly<TableCellProps>) {
+export function TableCellHead({ className, children, align }: Readonly<TableCellHeadProps>) {
   return (
-    <td
+    <th
       className={cn(
         classes.root,
         className,
@@ -20,6 +20,6 @@ export function TableCell({ className, children, align }: Readonly<TableCellProp
       )}
     >
       {children}
-    </td>
+    </th>
   );
 }

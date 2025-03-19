@@ -1,6 +1,6 @@
 import cn from 'classnames';
 
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@/components/ui';
+import { Table, TableBody, TableCell, TableCellHead, TableContainer, TableHead, TableRow } from '@/components/ui';
 
 import classes from './table.countries.module.scss';
 
@@ -15,10 +15,10 @@ export function TableCountries({ className }: Readonly<TableProps>) {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Region</TableCell>
-              <TableCell>Capital</TableCell>
-              <TableCell>Population</TableCell>
+              <TableCellHead>Name</TableCellHead>
+              <TableCellHead>Region</TableCellHead>
+              <TableCellHead>Capital</TableCellHead>
+              <TableCellHead>Population</TableCellHead>
             </TableRow>
           </TableHead>
           <TableBody>
