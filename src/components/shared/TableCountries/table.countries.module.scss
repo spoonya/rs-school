@@ -1,2 +1,25 @@
 .root {
 }
+
+.flag {
+  max-width: 3rem;
+  height: auto;
+
+  margin-right: 1rem;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+}
+
+.col {
+  line-height: 1.5;
+}
+
+.controls {
+  display: flex;
+  max-width: 60%;
+  gap: 2rem;
+  margin-bottom: 3.5rem;
+}

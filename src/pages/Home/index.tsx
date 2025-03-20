@@ -7,7 +7,7 @@ export function HomePage() {
   return (
     <div>
       <Container>
-        <Title>Awesome Countries</Title>
+        <Title className={classes.title}>Awesome Countries</Title>
         <TableCountries />
       </Container>
     </div>

@@ -1,9 +1,8 @@
 import cn from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Dropdown, Input } from '@/components/ui';
-import { RootState } from '@/store';
+import { useFetchCountriesQuery } from '@/services/api';
 
 import classes from './country.autocomplete.module.scss';
 
@@ -21,18 +20,18 @@ export const CountryAutocomplete = React.forwardRef<HTMLInputElement, Autocomple
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const { countries, loading } = useSelector((state: RootState) => state.countries);
+    const { data: countries, isFetching: loading } = useFetchCountriesQuery();
 
     useEffect(() => {
       if (value) {
-        const selectedCountry = countries.find((c) => c.name === value);
-        setInputValue(selectedCountry?.name || '');
+        const selectedCountry = countries?.find((c) => c.name.common === value);
+        setInputValue(selectedCountry?.name.common || '');
       }
     }, [value, countries]);
 
-    const filteredCountries = countries.filter((country) =>
-      country.name.toLowerCase().includes(inputValue.toLowerCase())
-    );
+    const filteredCountries = countries
+      ?.filter((country) => country.name.common.toLowerCase().includes(inputValue.toLowerCase()))
+      .sort((a, b) => a.name.common.localeCompare(b.name.common));
 
     const handleSelect = (countryName: string) => {
       setInputValue(countryName);
@@ -77,10 +76,14 @@ export const CountryAutocomplete = React.forwardRef<HTMLInputElement, Autocomple
           <Dropdown isOpen={isOpen} onClose={() => setIsOpen(false)} className={classes.suggestions}>
             {loading ? (
               <div className={classes.loading}>Loading...</div>
-            ) : filteredCountries.length > 0 ? (
-              filteredCountries.map((country) => (
-                <div key={country.code} onClick={() => handleSelect(country.name)} className={classes.suggestionItem}>
-                  {country.name}
+            ) : filteredCountries && filteredCountries.length > 0 ? (
+              filteredCountries?.map((country) => (
+                <div
+                  key={country.cca2}
+                  onClick={() => handleSelect(country.name.common)}
+                  className={classes.suggestionItem}
+                >
+                  {country.name.common}
                 </div>
               ))
             ) : (

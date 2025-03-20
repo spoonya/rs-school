@@ -1,14 +1,17 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
+import { countryApi } from '@/services/api';
 import { configureStore } from '@reduxjs/toolkit';
-
-import { countrySlice } from './countries';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
 export const store = configureStore({
   reducer: {
-    countries: countrySlice.reducer,
+    [countryApi.reducerPath]: countryApi.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(countryApi.middleware),
 });
+
+setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
