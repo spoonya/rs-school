@@ -7,29 +7,21 @@ export const useCountryFilters = (
   sortField: 'name' | 'population',
   sortOrder: 'asc' | 'desc'
 ) => {
-  const filterByRegion = (): Country[] => {
-    if (region === 'All') return countries || [];
-    return (countries || []).filter((c) => c.region === region);
-  };
+  if (!countries) return [];
 
-  const filterBySearch = (data: Country[]): Country[] => {
-    if (!searchQuery) return data;
+  let filtered = region === 'All' ? countries : countries.filter((country) => country.region === region);
+
+  if (searchQuery) {
     const query = searchQuery.toLowerCase();
-    return data.filter((c) => c.name.common.toLowerCase().includes(query));
-  };
+    filtered = filtered.filter((country) => country.name.common.toLowerCase().includes(query));
+  }
 
-  const sortData = (data: Country[]): Country[] => {
-    return [...data].sort((a, b) => {
-      if (sortField === 'name') {
-        return sortOrder === 'asc'
-          ? a.name.common.localeCompare(b.name.common)
-          : b.name.common.localeCompare(a.name.common);
-      }
-      return sortOrder === 'asc' ? a.population - b.population : b.population - a.population;
-    });
-  };
-
-  const regionFiltered = filterByRegion();
-  const searchFiltered = filterBySearch(regionFiltered);
-  return sortData(searchFiltered);
+  return [...filtered].sort((a, b) => {
+    if (sortField === 'name') {
+      return sortOrder === 'asc'
+        ? a.name.common.localeCompare(b.name.common)
+        : b.name.common.localeCompare(a.name.common);
+    }
+    return sortOrder === 'asc' ? a.population - b.population : b.population - a.population;
+  });
 };

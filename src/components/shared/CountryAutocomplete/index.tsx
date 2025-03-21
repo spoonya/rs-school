@@ -23,11 +23,8 @@ export const CountryAutocomplete = React.forwardRef<HTMLInputElement, Autocomple
     const { data: countries, isFetching: loading } = useFetchCountriesQuery();
 
     useEffect(() => {
-      if (value) {
-        const selectedCountry = countries?.find((c) => c.name.common === value);
-        setInputValue(selectedCountry?.name.common || '');
-      }
-    }, [value, countries]);
+      setInputValue(value || '');
+    }, [value]);
 
     const filteredCountries = countries
       ?.filter((country) => country.name.common.toLowerCase().includes(inputValue.toLowerCase()))
@@ -42,7 +39,7 @@ export const CountryAutocomplete = React.forwardRef<HTMLInputElement, Autocomple
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setInputValue(value);
-      onChange?.('');
+      onChange?.(value);
       if (!isOpen) setIsOpen(true);
     };
 

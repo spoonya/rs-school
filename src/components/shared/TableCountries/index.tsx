@@ -16,7 +16,7 @@ import { useFetchCountriesQuery } from '@/services/api';
 import { Regions } from '@/types';
 import { createRegions, formatByRanks } from '@/utils';
 
-import { CountryAutocomplete, Preloader } from '../';
+import { CountryAutocomplete, NoResults, Preloader } from '../';
 import classes from './table.countries.module.scss';
 
 interface TableProps {
@@ -28,18 +28,14 @@ type SortField = 'name' | 'population';
 
 export function TableCountries({ className }: Readonly<TableProps>) {
   const { data, isFetching } = useFetchCountriesQuery();
-  const [selectedRegion, setSelectedRegion] = React.useState<Regions>('All');
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [selectedRegion, setSelectedRegion] = React.useState<Regions>('All');
   const [sortField, setSortField] = React.useState<SortField>('population');
   const [sortOrder, setSortOrder] = React.useState<SortOrder>('desc');
   const filteredCountries = useCountryFilters(data, selectedRegion, searchQuery, sortField, sortOrder);
 
   if (isFetching) {
     return <Preloader />;
-  }
-
-  if (!filteredCountries) {
-    return null;
   }
 
   return (
@@ -77,53 +73,58 @@ export function TableCountries({ className }: Readonly<TableProps>) {
           label="Order"
         />
       </div>
-      <div className={cn(classes.root, className)}>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCellHead align="center">#</TableCellHead>
-                <TableCellHead align="left">Name</TableCellHead>
-                <TableCellHead>Region</TableCellHead>
-                <TableCellHead>Capital</TableCellHead>
-                <TableCellHead>
-                  Area, km<sup>2</sup>
-                </TableCellHead>
-                <TableCellHead>Population</TableCellHead>
-                <TableCellHead>Currency</TableCellHead>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredCountries?.map((country, idx) => (
-                <TableRow key={country.cca2}>
-                  <TableCell align="center" className={classes.col}>
-                    {idx + 1}
-                  </TableCell>
-                  <TableCell className={classes.col} align="left">
-                    <div className={classes.name}>
-                      {country.flags.png && (
-                        <img className={classes.flag} src={country.flags.png} alt={country.name.common} />
-                      )}
-                      {country.name.common}
-                    </div>
-                  </TableCell>
-                  <TableCell className={classes.col}>{country.region}</TableCell>
-                  <TableCell className={classes.col}>{country.capital}</TableCell>
-                  <TableCell className={classes.col}>{formatByRanks(country.area)}</TableCell>
-                  <TableCell className={classes.col}>{formatByRanks(country.population)}</TableCell>
-                  <TableCell className={classes.col}>
-                    {Object.entries(country.currencies).map(([code, currency]) => (
-                      <div key={code}>
-                        {currency.name} ({currency.symbol})
-                      </div>
-                    ))}
-                  </TableCell>
+
+      {!filteredCountries.length && !isFetching ? (
+        <NoResults text="No countries found" />
+      ) : (
+        <div className={cn(classes.root, className)}>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCellHead align="center">#</TableCellHead>
+                  <TableCellHead align="left">Name</TableCellHead>
+                  <TableCellHead>Region</TableCellHead>
+                  <TableCellHead>Capital</TableCellHead>
+                  <TableCellHead>
+                    Area, km<sup>2</sup>
+                  </TableCellHead>
+                  <TableCellHead>Population</TableCellHead>
+                  <TableCellHead>Currency</TableCellHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
+              </TableHead>
+              <TableBody>
+                {filteredCountries?.map((country, idx) => (
+                  <TableRow key={country.cca2}>
+                    <TableCell align="center" className={classes.col}>
+                      {idx + 1}
+                    </TableCell>
+                    <TableCell className={classes.col} align="left">
+                      <div className={classes.name}>
+                        {country.flags.png && (
+                          <img className={classes.flag} src={country.flags.png} alt={country.name.common} />
+                        )}
+                        {country.name.common}
+                      </div>
+                    </TableCell>
+                    <TableCell className={classes.col}>{country.region}</TableCell>
+                    <TableCell className={classes.col}>{country.capital}</TableCell>
+                    <TableCell className={classes.col}>{formatByRanks(country.area)}</TableCell>
+                    <TableCell className={classes.col}>{formatByRanks(country.population)}</TableCell>
+                    <TableCell className={classes.col}>
+                      {Object.entries(country.currencies).map(([code, currency]) => (
+                        <div key={code}>
+                          {currency.name} ({currency.symbol})
+                        </div>
+                      ))}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      )}
     </>
   );
 }
