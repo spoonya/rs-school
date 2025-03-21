@@ -2,13 +2,13 @@ import cn from 'classnames';
 
 import classes from './table.cell.head.module.scss';
 
-interface TableCellHeadProps {
+interface TableCellHeadProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
   className?: string;
   children?: React.ReactNode;
   align?: 'center' | 'left' | 'right';
 }
 
-export function TableCellHead({ className, children, align }: Readonly<TableCellHeadProps>) {
+export function TableCellHead({ className, children, align, ...props }: Readonly<TableCellHeadProps>) {
   return (
     <th
       className={cn(
@@ -18,6 +18,7 @@ export function TableCellHead({ className, children, align }: Readonly<TableCell
         { [classes.left]: align === 'left' },
         { [classes.right]: align === 'right' }
       )}
+      {...props}
     >
       {children}
     </th>

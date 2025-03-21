@@ -6,3 +6,4 @@ export { ThemeSwitcher } from './ThemeSwitcher';
 export { CountryAutocomplete } from './CountryAutocomplete';
 export { NoResults } from './NoResults';
 export { TableCountries } from './TableCountries';
+export { CheckboxVisited } from './CheckboxVisited';

@@ -13,10 +13,12 @@ import {
 } from '@/components/ui';
 import { useCountryFilters } from '@/hooks';
 import { useFetchCountriesQuery } from '@/services/api';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { addVisited, removeVisited } from '@/store/visited/slice';
 import { Regions } from '@/types';
 import { createRegions, formatByRanks } from '@/utils';
 
-import { CountryAutocomplete, NoResults, Preloader } from '../';
+import { CheckboxVisited, CountryAutocomplete, NoResults, Preloader } from '../';
 import classes from './table.countries.module.scss';
 
 interface TableProps {
@@ -33,6 +35,8 @@ export function TableCountries({ className }: Readonly<TableProps>) {
   const [sortField, setSortField] = React.useState<SortField>('population');
   const [sortOrder, setSortOrder] = React.useState<SortOrder>('desc');
   const filteredCountries = useCountryFilters(data, selectedRegion, searchQuery, sortField, sortOrder);
+  const visitedCountries = useAppSelector((state) => state.visited.countries);
+  const dispatch = useAppDispatch();
 
   if (isFetching) {
     return <Preloader />;
@@ -82,6 +86,7 @@ export function TableCountries({ className }: Readonly<TableProps>) {
             <Table>
               <TableHead>
                 <TableRow>
+                  <TableCellHead aria-label="visited"></TableCellHead>
                   <TableCellHead align="center">#</TableCellHead>
                   <TableCellHead align="left">Name</TableCellHead>
                   <TableCellHead>Region</TableCellHead>
@@ -95,7 +100,26 @@ export function TableCountries({ className }: Readonly<TableProps>) {
               </TableHead>
               <TableBody>
                 {filteredCountries?.map((country, idx) => (
-                  <TableRow key={country.cca2}>
+                  <TableRow
+                    key={country.cca2}
+                    onClick={() => {
+                      dispatch(addVisited(country));
+                    }}
+                  >
+                    <TableCell className={classes.col} onClick={(e) => e.stopPropagation()}>
+                      <CheckboxVisited
+                        className={classes.checkbox}
+                        isVisited={visitedCountries.some((c) => c.cca2 === country.cca2)}
+                        onVisited={() => {
+                          const isVisited = visitedCountries.some((c) => c.cca2 === country.cca2);
+                          if (isVisited) {
+                            dispatch(removeVisited(country.cca2));
+                          } else {
+                            dispatch(addVisited(country));
+                          }
+                        }}
+                      />
+                    </TableCell>
                     <TableCell align="center" className={classes.col}>
                       {idx + 1}
                     </TableCell>

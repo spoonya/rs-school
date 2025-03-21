@@ -14,3 +14,4 @@ export enum Themes {
 }
 
 export const THEME_KEY = `${prefix}-theme`;
+export const VISITED_KEY = `${prefix}-visited`;

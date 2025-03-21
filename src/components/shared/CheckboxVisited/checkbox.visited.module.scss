@@ -1,0 +1,16 @@
+.visitedCheckbox {
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.visitedChecked {
+  opacity: 1;
+  stroke: var(--color-primary);
+}
+
+.visitedUnchecked {
+  opacity: 0.5;
+}
