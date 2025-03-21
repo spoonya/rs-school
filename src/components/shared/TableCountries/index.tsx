@@ -11,9 +11,10 @@ import {
   TableHead,
   TableRow,
 } from '@/components/ui';
+import { useCountryFilters } from '@/hooks';
 import { useFetchCountriesQuery } from '@/services/api';
 import { Regions } from '@/types';
-import { formatByRanks } from '@/utils';
+import { createRegions, formatByRanks } from '@/utils';
 
 import { CountryAutocomplete, Preloader } from '../';
 import classes from './table.countries.module.scss';
@@ -31,43 +32,15 @@ export function TableCountries({ className }: Readonly<TableProps>) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [sortField, setSortField] = React.useState<SortField>('population');
   const [sortOrder, setSortOrder] = React.useState<SortOrder>('desc');
+  const filteredCountries = useCountryFilters(data, selectedRegion, searchQuery, sortField, sortOrder);
 
   if (isFetching) {
     return <Preloader />;
   }
 
-  const createRegions = () => {
-    const regions = new Set<Regions>(data?.map((country) => country.region));
-    regions.add('All');
-    return Array.from(regions).sort();
-  };
-
-  const filterByRegion = (countries: typeof data, region: string) => {
-    if (region === 'All') return countries;
-    return countries?.filter((country) => country.region === region);
-  };
-
-  const filterBySearchQuery = (countries: typeof data, query: string) => {
-    if (!query) return countries;
-    return countries?.filter((country) => country.name.common.toLowerCase().includes(query.toLowerCase()));
-  };
-
-  const sortCountries = (countries: typeof data, field: SortField, order: SortOrder) => {
-    if (!countries) return [];
-    return [...countries].sort((a, b) => {
-      if (field === 'name') {
-        const nameA = a.name.common.toLowerCase();
-        const nameB = b.name.common.toLowerCase();
-        return order === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
-      } else {
-        return order === 'asc' ? a.population - b.population : b.population - a.population;
-      }
-    });
-  };
-
-  const regionFiltered = filterByRegion(data, selectedRegion);
-  const searchFiltered = filterBySearchQuery(regionFiltered, searchQuery);
-  const sortedData = sortCountries(searchFiltered, sortField, sortOrder);
+  if (!filteredCountries) {
+    return null;
+  }
 
   return (
     <>
@@ -79,7 +52,7 @@ export function TableCountries({ className }: Readonly<TableProps>) {
           id="country-autocomplete"
         />
         <Select<Regions>
-          options={createRegions().map((region) => ({ value: region, label: region }))}
+          options={createRegions(data || []).map((region) => ({ value: region, label: region }))}
           onChange={(value) => setSelectedRegion(value)}
           value={selectedRegion}
           label="Filter by region"
@@ -121,7 +94,7 @@ export function TableCountries({ className }: Readonly<TableProps>) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {sortedData?.map((country, idx) => (
+              {filteredCountries?.map((country, idx) => (
                 <TableRow key={country.cca2}>
                   <TableCell align="center" className={classes.col}>
                     {idx + 1}
