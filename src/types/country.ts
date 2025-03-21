@@ -1,3 +1,5 @@
+export type Regions = 'All' | 'Antarctic' | 'Africa' | 'Americas' | 'Asia' | 'Europe' | 'Oceania';
+
 export interface CountryName {
   common: string;
   official: string;
@@ -21,7 +23,7 @@ export interface Country {
   cca2: string;
   population: number;
   capital: string[];
-  region: string;
+  region: Regions;
   continents: string[];
   area: number;
   languages: {

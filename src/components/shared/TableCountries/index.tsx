@@ -12,6 +12,7 @@ import {
   TableRow,
 } from '@/components/ui';
 import { useFetchCountriesQuery } from '@/services/api';
+import { Regions } from '@/types';
 import { formatByRanks } from '@/utils';
 
 import { CountryAutocomplete, Preloader } from '../';
@@ -21,35 +22,52 @@ interface TableProps {
   className?: string;
 }
 
+type SortOrder = 'asc' | 'desc';
+type SortField = 'name' | 'population';
+
 export function TableCountries({ className }: Readonly<TableProps>) {
   const { data, isFetching } = useFetchCountriesQuery();
-  const [selectedRegion, setSelectedRegion] = React.useState('');
+  const [selectedRegion, setSelectedRegion] = React.useState<Regions>('All');
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
+  const [sortField, setSortField] = React.useState<SortField>('population');
+  const [sortOrder, setSortOrder] = React.useState<SortOrder>('desc');
 
   if (isFetching) {
     return <Preloader />;
   }
 
   const createRegions = () => {
-    const regions = new Set(data?.map((country) => country.region)).add('All');
+    const regions = new Set<Regions>(data?.map((country) => country.region));
+    regions.add('All');
     return Array.from(regions).sort();
   };
 
-  const sortCountries = (countries: typeof data, order: 'asc' | 'desc') => {
+  const filterByRegion = (countries: typeof data, region: string) => {
+    if (region === 'All') return countries;
+    return countries?.filter((country) => country.region === region);
+  };
+
+  const filterBySearchQuery = (countries: typeof data, query: string) => {
+    if (!query) return countries;
+    return countries?.filter((country) => country.name.common.toLowerCase().includes(query.toLowerCase()));
+  };
+
+  const sortCountries = (countries: typeof data, field: SortField, order: SortOrder) => {
     if (!countries) return [];
     return [...countries].sort((a, b) => {
-      const nameA = a.name.common.toLowerCase();
-      const nameB = b.name.common.toLowerCase();
-      if (order === 'asc') {
-        return nameA.localeCompare(nameB);
+      if (field === 'name') {
+        const nameA = a.name.common.toLowerCase();
+        const nameB = b.name.common.toLowerCase();
+        return order === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
       } else {
-        return nameB.localeCompare(nameA);
+        return order === 'asc' ? a.population - b.population : b.population - a.population;
       }
     });
   };
 
-  const sortedData = sortCountries(data, sortOrder);
+  const regionFiltered = filterByRegion(data, selectedRegion);
+  const searchFiltered = filterBySearchQuery(regionFiltered, searchQuery);
+  const sortedData = sortCountries(searchFiltered, sortField, sortOrder);
 
   return (
     <>
@@ -60,21 +78,30 @@ export function TableCountries({ className }: Readonly<TableProps>) {
           label="Search by name"
           id="country-autocomplete"
         />
-        <Select
-          options={[...createRegions().map((region) => ({ value: region, label: region }))]}
+        <Select<Regions>
+          options={createRegions().map((region) => ({ value: region, label: region }))}
           onChange={(value) => setSelectedRegion(value)}
           value={selectedRegion}
           label="Filter by region"
           placeholder="Select region"
         />
-        <Select<'asc' | 'desc'>
+        <Select<SortField>
+          options={[
+            { value: 'name', label: 'Name' },
+            { value: 'population', label: 'Population' },
+          ]}
+          onChange={(value) => setSortField(value)}
+          value={sortField}
+          label="Sort by"
+        />
+        <Select<SortOrder>
           options={[
             { value: 'asc', label: 'Ascending' },
             { value: 'desc', label: 'Descending' },
           ]}
           onChange={(value) => setSortOrder(value)}
           value={sortOrder}
-          label="Sort by name"
+          label="Order"
         />
       </div>
       <div className={cn(classes.root, className)}>
@@ -110,11 +137,11 @@ export function TableCountries({ className }: Readonly<TableProps>) {
                   <TableCell className={classes.col}>{country.region}</TableCell>
                   <TableCell className={classes.col}>{country.capital}</TableCell>
                   <TableCell className={classes.col}>{formatByRanks(country.area)}</TableCell>
-                  <TableCell className={classes.col}>{formatByRanks(country.population)} </TableCell>
+                  <TableCell className={classes.col}>{formatByRanks(country.population)}</TableCell>
                   <TableCell className={classes.col}>
-                    {Object.keys(country.currencies).map((currencyCode) => (
-                      <div key={currencyCode}>
-                        {country.currencies[currencyCode].name} ({country.currencies[currencyCode].symbol})
+                    {Object.entries(country.currencies).map(([code, currency]) => (
+                      <div key={code}>
+                        {currency.name} ({currency.symbol})
                       </div>
                     ))}
                   </TableCell>
