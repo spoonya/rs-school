@@ -7,3 +7,4 @@ export { CountryAutocomplete } from './CountryAutocomplete';
 export { NoResults } from './NoResults';
 export { TableCountries } from './TableCountries';
 export { CheckboxVisited } from './CheckboxVisited';
+export { CountryTableRow } from './CountryTableRow';
