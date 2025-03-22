@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { CheckboxVisited } from '@/components/shared';
 import { TableCell, TableRow } from '@/components/ui';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -12,27 +14,31 @@ interface CountryTableRowProps {
   idx: number;
 }
 
-export const CountryTableRow: React.FC<CountryTableRowProps> = ({ country, idx }) => {
+export const CountryTableRow: React.FC<CountryTableRowProps> = React.memo(({ country, idx }) => {
   const visitedCountries = useAppSelector((state) => state.visited.countries);
   const dispatch = useAppDispatch();
 
   const isVisited = visitedCountries.some((c) => c.cca2 === country.cca2);
 
-  const handleRowClick = () => {
+  const handleRowClick = React.useCallback(() => {
     dispatch(addVisited(country));
-  };
+  }, [dispatch, country]);
 
-  const handleCheckboxClick = () => {
+  const handleCheckboxClick = React.useCallback(() => {
     if (isVisited) {
       dispatch(removeVisited(country.cca2));
     } else {
       dispatch(addVisited(country));
     }
-  };
+  }, [dispatch, country, isVisited]);
+
+  const handleStopPropagation = React.useCallback((e: React.MouseEvent<HTMLTableCellElement>) => {
+    e.stopPropagation();
+  }, []);
 
   return (
     <TableRow onClick={handleRowClick}>
-      <TableCell className={classes.col} onClick={(e) => e.stopPropagation()}>
+      <TableCell className={classes.col} onClick={handleStopPropagation}>
         <CheckboxVisited className={classes.checkbox} isVisited={isVisited} onVisited={handleCheckboxClick} />
       </TableCell>
       <TableCell align="center" className={classes.col}>
@@ -57,4 +63,4 @@ export const CountryTableRow: React.FC<CountryTableRowProps> = ({ country, idx }
       </TableCell>
     </TableRow>
   );
-};
+});

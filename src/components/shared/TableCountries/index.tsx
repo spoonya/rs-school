@@ -25,6 +25,22 @@ export function TableCountries({ className }: Readonly<TableProps>) {
   const [sortOrder, setSortOrder] = React.useState<SortOrder>('desc');
   const filteredCountries = useCountryFilters(data, selectedRegion, searchQuery, sortField, sortOrder);
 
+  const handleSetSearchQuery = React.useCallback((value: string) => {
+    setSearchQuery(value);
+  }, []);
+
+  const handleSetSelectedRegion = React.useCallback((value: Regions) => {
+    setSelectedRegion(value);
+  }, []);
+
+  const handleSetSortField = React.useCallback((value: SortField) => {
+    setSortField(value);
+  }, []);
+
+  const handleSetSortOrder = React.useCallback((value: SortOrder) => {
+    setSortOrder(value);
+  }, []);
+
   if (isFetching) {
     return <Preloader />;
   }
@@ -33,14 +49,14 @@ export function TableCountries({ className }: Readonly<TableProps>) {
     <>
       <div className={classes.controls}>
         <CountryAutocomplete
-          onChange={setSearchQuery}
+          onChange={handleSetSearchQuery}
           value={searchQuery}
           label="Search by name"
           id="country-autocomplete"
         />
         <Select<Regions>
           options={createRegions(data || []).map((region) => ({ value: region, label: region }))}
-          onChange={(value) => setSelectedRegion(value)}
+          onChange={handleSetSelectedRegion}
           value={selectedRegion}
           label="Filter by region"
           placeholder="Select region"
@@ -50,7 +66,7 @@ export function TableCountries({ className }: Readonly<TableProps>) {
             { value: 'name', label: 'Name' },
             { value: 'population', label: 'Population' },
           ]}
-          onChange={(value) => setSortField(value)}
+          onChange={handleSetSortField}
           value={sortField}
           label="Sort by"
         />
@@ -59,7 +75,7 @@ export function TableCountries({ className }: Readonly<TableProps>) {
             { value: 'asc', label: 'Ascending' },
             { value: 'desc', label: 'Descending' },
           ]}
-          onChange={(value) => setSortOrder(value)}
+          onChange={handleSetSortOrder}
           value={sortOrder}
           label="Order"
         />
