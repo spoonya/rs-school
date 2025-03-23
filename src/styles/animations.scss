@@ -1,0 +1,38 @@
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    visibility: hidden;
+    transform: translateX(-150%);
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(150%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-right {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    visibility: hidden;
+    transform: translateX(150%);
+  }
+}

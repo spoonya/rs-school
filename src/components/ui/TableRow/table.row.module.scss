@@ -1,0 +1,12 @@
+.root {
+  background-color: var(--surface-card);
+  transition: background-color 0.2s ease;
+
+  &:nth-child(even) {
+    background-color: var(--table-row-even);
+  }
+
+  &:hover {
+    background-color: var(--table-row-hover);
+  }
+}

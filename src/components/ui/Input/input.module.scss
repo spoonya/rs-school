@@ -1,0 +1,41 @@
+@use '@/styles/mixins' as *;
+
+.root {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-medium);
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  transition: border-color 0.2s ease;
+
+  &::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--background-tertiary);
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-primary);
+  }
+
+  &[type='number'] {
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
